@@ -1,0 +1,4069 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>L'Officina dei Bit</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: #f5efe0;
+    color: #1a2540;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font-family: inherit; }
+  input { font-family: inherit; }
+  @media (max-width: 600px) {
+    .card-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
+
+<!-- React + Babel via CDN -->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useCallback } = React;
+
+// ============================================================================
+// PALETTE E TIPOGRAFIA
+// ============================================================================
+
+const PALETTE = {
+  cream: '#f5efe0',
+  creamDeep: '#ebe2cc',
+  ink: '#1a2540',
+  inkSoft: '#3c4866',
+  amber: '#e8a317',
+  amberGlow: '#ffd566',
+  rust: '#c0432a',
+  moss: '#4a8a5c',
+  warmGray: '#9a9285',
+  paperLine: '#d9cfb8',
+};
+
+const FONT_DISPLAY = "'Fraunces', Georgia, serif";
+const FONT_BODY = "'DM Sans', system-ui, sans-serif";
+const FONT_MONO = "'Space Mono', 'Courier New', monospace";
+
+// ============================================================================
+// ICONE INLINE (sostituiscono lucide-react in standalone)
+// ============================================================================
+
+const ICONS = {
+  'arrow-left': <><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></>,
+  'lightbulb': <><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></>,
+  'search': <><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></>,
+  'sparkles': <><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.582a.5.5 0 0 1 0 .962L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/></>,
+  'trophy': <><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></>,
+  'lock': <><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></>,
+  'chevron-right': <><path d="m9 18 6-6-6-6"/></>,
+  'rotate-ccw': <><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></>,
+  'check-circle': <><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></>,
+  'star': <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>,
+  'cpu': <><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></>,
+  'hard-drive': <><line x1="22" x2="2" y1="12" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><circle cx="6" cy="16" r="0.5" fill="currentColor"/><circle cx="10" cy="16" r="0.5" fill="currentColor"/></>,
+  'memory-stick': <><path d="M6 19v-3"/><path d="M10 19v-3"/><path d="M14 19v-3"/><path d="M18 19v-3"/><path d="M8 11V9"/><path d="M16 11V9"/><path d="M12 11V9"/><path d="M2 15h20"/><path d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v1.1a2 2 0 0 0 0 3.8V17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-5.1a2 2 0 0 0 0-3.8Z"/></>,
+  'monitor': <><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></>,
+  'smartphone': <><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></>,
+  'zap': <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>,
+  'play': <polygon points="6 3 20 12 6 21 6 3"/>,
+  'palette': <><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></>,
+  'image': <><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></>,
+  'eye': <><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></>,
+  'grid': <><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></>,
+  'zoom-in': <><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="11" x2="11" y1="8" y2="14"/><line x1="8" x2="14" y1="11" y2="11"/></>,
+  'bot': <><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></>,
+  'globe': <><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></>,
+  'shield': <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>,
+  'message-circle': <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>,
+  'key': <><path d="m15.5 7.5 3 3L22 7l-3-3"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></>,
+  'arrow-up': <><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></>,
+};
+
+function Icon({ name, size = 24, fill = 'none', strokeWidth = 2, style, color }) {
+  const paths = ICONS[name];
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill={fill}
+      stroke={color || 'currentColor'}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={style}
+    >
+      {paths}
+    </svg>
+  );
+}
+
+// ============================================================================
+// UTILITY
+// ============================================================================
+
+function letterToBinary(char) {
+  return char.charCodeAt(0).toString(2).padStart(8, '0');
+}
+
+function normalize(char) {
+  return char.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+}
+
+function generateDecodeRounds() {
+  const pool = 'ABCDEFGHILMNOPRSTUV';
+  const rounds = [];
+  const used = new Set();
+  while (rounds.length < 6) {
+    const ch = pool[Math.floor(Math.random() * pool.length)];
+    if (used.has(ch)) continue;
+    used.add(ch);
+    const distractors = new Set();
+    while (distractors.size < 3) {
+      const d = pool[Math.floor(Math.random() * pool.length)];
+      if (d !== ch) distractors.add(d);
+    }
+    const options = [ch, ...Array.from(distractors)].sort(() => Math.random() - 0.5);
+    rounds.push({ answer: ch, binary: letterToBinary(ch), options });
+  }
+  return rounds;
+}
+
+// ============================================================================
+// PERSISTENT STORAGE (localStorage) — MULTI-PROFILO
+// ============================================================================
+
+const STORE_KEY = 'officina-bit-store-v2';
+const OLD_KEY = 'officina-bit-progress-v1';
+
+const PROFILE_COLORS = ['#e8a317', '#4a8a5c', '#c0432a', '#2d7dd2', '#9b59b6', '#e91e8c'];
+const PROFILE_AVATARS = ['🦊', '🐱', '🐯', '🦉', '🐢', '🦄', '🐙', '🦁', '🐧', '🦋'];
+
+function makeId() {
+  return 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function freshProgress() {
+  return {
+    module1: { pagesDone: [], userName: '', bestDecode: 0 },
+    module2: { pagesDone: [] },
+    module3: { pagesDone: [], pixelArt: null },
+    module4: { pagesDone: [] },
+  };
+}
+
+const MODULE_KEYS = ['module1', 'module2', 'module3', 'module4'];
+const PAGES_PER_MODULE = 7;
+
+function loadStore() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const p = JSON.parse(raw);
+      return {
+        profiles: p.profiles || [],
+        activeId: p.activeId || null,
+        progressByProfile: p.progressByProfile || {},
+      };
+    }
+    // Migrazione dal vecchio schema a profilo singolo
+    const old = localStorage.getItem(OLD_KEY);
+    if (old) {
+      const oldProg = { ...freshProgress(), ...JSON.parse(old) };
+      const id = makeId();
+      const name = (oldProg.module1 && oldProg.module1.userName) ? oldProg.module1.userName : 'Esploratore';
+      return {
+        profiles: [{ id, name, avatar: PROFILE_AVATARS[0], color: PROFILE_COLORS[0] }],
+        activeId: null,
+        progressByProfile: { [id]: oldProg },
+      };
+    }
+  } catch (e) { /* ignora */ }
+  return { profiles: [], activeId: null, progressByProfile: {} };
+}
+
+function saveStore(store) {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) { /* ignora */ }
+}
+
+// ============================================================================
+// APP
+// ============================================================================
+
+function App() {
+  const [view, setView] = useState('hub');
+  const [module1Page, setModule1Page] = useState(0);
+  const [module2Page, setModule2Page] = useState(0);
+  const [module3Page, setModule3Page] = useState(0);
+  const [module4Page, setModule4Page] = useState(0);
+  const [store, setStore] = useState(loadStore());
+
+  const activeId = store.activeId;
+  const activeProfile = store.profiles.find(p => p.id === activeId) || null;
+  const progress = (activeId && store.progressByProfile[activeId]) ? store.progressByProfile[activeId] : freshProgress();
+
+  // Aggiorna il progress del profilo attivo
+  const updateProgress = useCallback((updater) => {
+    setStore(prev => {
+      if (!prev.activeId) return prev;
+      const cur = prev.progressByProfile[prev.activeId] || freshProgress();
+      const updated = updater(cur);
+      const next = { ...prev, progressByProfile: { ...prev.progressByProfile, [prev.activeId]: updated } };
+      saveStore(next);
+      return next;
+    });
+  }, []);
+
+  const markPageDone = useCallback((moduleKey, pageIdx) => {
+    updateProgress(prog => {
+      const done = new Set(prog[moduleKey].pagesDone);
+      done.add(pageIdx);
+      return { ...prog, [moduleKey]: { ...prog[moduleKey], pagesDone: Array.from(done) } };
+    });
+  }, [updateProgress]);
+
+  const updateUserName = useCallback((name) => {
+    updateProgress(prog => ({ ...prog, module1: { ...prog.module1, userName: name } }));
+  }, [updateProgress]);
+
+  const updateBestDecode = useCallback((score) => {
+    updateProgress(prog => (score <= prog.module1.bestDecode ? prog : { ...prog, module1: { ...prog.module1, bestDecode: score } }));
+  }, [updateProgress]);
+
+  const updatePixelArt = useCallback((art) => {
+    updateProgress(prog => ({ ...prog, module3: { ...prog.module3, pixelArt: art } }));
+  }, [updateProgress]);
+
+  const resetModule = useCallback((key) => {
+    updateProgress(prog => ({ ...prog, [key]: freshProgress()[key] }));
+  }, [updateProgress]);
+
+  // --- Gestione profili ---
+  const createProfile = useCallback((name, avatar, color) => {
+    setStore(prev => {
+      const id = makeId();
+      const next = {
+        profiles: [...prev.profiles, { id, name, avatar, color }],
+        activeId: id,
+        progressByProfile: { ...prev.progressByProfile, [id]: freshProgress() },
+      };
+      saveStore(next);
+      return next;
+    });
+    setView('hub');
+  }, []);
+
+  const selectProfile = useCallback((id) => {
+    setStore(prev => {
+      const progressByProfile = prev.progressByProfile[id]
+        ? prev.progressByProfile
+        : { ...prev.progressByProfile, [id]: freshProgress() };
+      const next = { ...prev, activeId: id, progressByProfile };
+      saveStore(next);
+      return next;
+    });
+    setView('hub');
+  }, []);
+
+  const switchProfile = useCallback(() => {
+    setStore(prev => {
+      const next = { ...prev, activeId: null };
+      saveStore(next);
+      return next;
+    });
+    setView('hub');
+  }, []);
+
+  const deleteProfile = useCallback((id) => {
+    setStore(prev => {
+      const progressByProfile = { ...prev.progressByProfile };
+      delete progressByProfile[id];
+      const next = {
+        profiles: prev.profiles.filter(p => p.id !== id),
+        activeId: prev.activeId === id ? null : prev.activeId,
+        progressByProfile,
+      };
+      saveStore(next);
+      return next;
+    });
+  }, []);
+
+  return (
+    <div style={{
+      background: PALETTE.cream,
+      backgroundImage: `radial-gradient(${PALETTE.paperLine} 1px, transparent 1px)`,
+      backgroundSize: '24px 24px',
+      backgroundPosition: '0 0',
+      minHeight: '100vh',
+      fontFamily: FONT_BODY,
+      color: PALETTE.ink,
+      padding: '24px 16px 60px',
+    }}>
+      <div style={{ maxWidth: 880, margin: '0 auto' }}>
+        {!activeId && (
+          <ProfileSelectView
+            profiles={store.profiles}
+            progressByProfile={store.progressByProfile}
+            onSelect={selectProfile}
+            onCreate={createProfile}
+            onDelete={deleteProfile}
+          />
+        )}
+        {activeId && view === 'hub' && (
+          <HubView
+            progress={progress}
+            activeProfile={activeProfile}
+            onSwitchProfile={switchProfile}
+            onEnterModule1={() => { setView('module1'); setModule1Page(0); }}
+            onEnterModule2={() => { setView('module2'); setModule2Page(0); }}
+            onEnterModule3={() => { setView('module3'); setModule3Page(0); }}
+            onEnterModule4={() => { setView('module4'); setModule4Page(0); }}
+          />
+        )}
+        {activeId && view === 'module1' && (
+          <ModuleOneView
+            page={module1Page}
+            setPage={setModule1Page}
+            progress={progress}
+            markPageDone={(idx) => markPageDone('module1', idx)}
+            onResetModule={() => { resetModule('module1'); setModule1Page(0); }}
+            updateUserName={updateUserName}
+            updateBestDecode={updateBestDecode}
+            onExit={() => setView('hub')}
+          />
+        )}
+        {activeId && view === 'module2' && (
+          <ModuleTwoView
+            page={module2Page}
+            setPage={setModule2Page}
+            progress={progress}
+            markPageDone={(idx) => markPageDone('module2', idx)}
+            onResetModule={() => { resetModule('module2'); setModule2Page(0); }}
+            onExit={() => setView('hub')}
+          />
+        )}
+        {activeId && view === 'module3' && (
+          <ModuleThreeView
+            page={module3Page}
+            setPage={setModule3Page}
+            progress={progress}
+            markPageDone={(idx) => markPageDone('module3', idx)}
+            onResetModule={() => { resetModule('module3'); setModule3Page(0); }}
+            updatePixelArt={updatePixelArt}
+            onExit={() => setView('hub')}
+          />
+        )}
+        {activeId && view === 'module4' && (
+          <ModuleFourView
+            page={module4Page}
+            setPage={setModule4Page}
+            progress={progress}
+            markPageDone={(idx) => markPageDone('module4', idx)}
+            onResetModule={() => { resetModule('module4'); setModule4Page(0); }}
+            onExit={() => setView('hub')}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// SELEZIONE PROFILI
+// ============================================================================
+
+function profileStats(prog) {
+  const p = prog || freshProgress();
+  let modulesDone = 0;
+  MODULE_KEYS.forEach(k => {
+    const n = (p[k] && p[k].pagesDone) ? p[k].pagesDone.length : 0;
+    if (n >= PAGES_PER_MODULE) modulesDone++;
+  });
+  return { modulesDone, total: MODULE_KEYS.length };
+}
+
+function ProfileSelectView({ profiles, progressByProfile, onSelect, onCreate, onDelete }) {
+  const [creating, setCreating] = useState(profiles.length === 0);
+  const [name, setName] = useState('');
+  const [avatar, setAvatar] = useState(PROFILE_AVATARS[0]);
+  const [color, setColor] = useState(PROFILE_COLORS[0]);
+
+  const submit = () => {
+    const clean = name.trim().slice(0, 16);
+    if (clean.length < 1) return;
+    onCreate(clean, avatar, color);
+  };
+
+  return (
+    <div>
+      <header style={{ textAlign: 'center', padding: '32px 12px 28px' }}>
+        <div style={{
+          display: 'inline-block', padding: '4px 14px', background: PALETTE.ink, color: PALETTE.cream,
+          fontFamily: FONT_MONO, fontSize: 12, letterSpacing: 2, marginBottom: 20, borderRadius: 2,
+        }}>
+          L'OFFICINA DEI BIT
+        </div>
+        <h1 style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 'clamp(32px, 6vw, 50px)', lineHeight: 1.05, margin: 0, letterSpacing: '-0.02em' }}>
+          Chi sta esplorando<br /><span style={{ fontStyle: 'italic', fontWeight: 500, color: PALETTE.amber }}>oggi?</span>
+        </h1>
+      </header>
+
+      {!creating && (
+        <div>
+          <div className="card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 14, marginBottom: 24 }}>
+            {profiles.map(p => {
+              const st = profileStats(progressByProfile[p.id]);
+              return (
+                <div key={p.id} style={{ position: 'relative' }}>
+                  <button onClick={() => onSelect(p.id)} style={{
+                    width: '100%', background: '#fff', border: `2px solid ${PALETTE.ink}`,
+                    borderRadius: 8, padding: '22px 14px 16px', cursor: 'pointer',
+                    boxShadow: `4px 4px 0 ${p.color}`, display: 'flex', flexDirection: 'column',
+                    alignItems: 'center', gap: 8, fontFamily: FONT_BODY,
+                  }}>
+                    <div style={{
+                      width: 64, height: 64, borderRadius: '50%', background: p.color,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36,
+                      border: `2px solid ${PALETTE.ink}`,
+                    }}>{p.avatar}</div>
+                    <div style={{ fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 20, color: PALETTE.ink }}>{p.name}</div>
+                    <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft }}>
+                      🏅 {st.modulesDone}/{st.total} moduli
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => { if (window.confirm(`Eliminare il profilo di ${p.name}? Tutti i suoi progressi andranno persi.`)) onDelete(p.id); }}
+                    title="elimina profilo"
+                    style={{
+                      position: 'absolute', top: -8, right: -8, width: 24, height: 24, borderRadius: '50%',
+                      background: PALETTE.cream, border: `1.5px solid ${PALETTE.warmGray}`, color: PALETTE.inkSoft,
+                      cursor: 'pointer', fontSize: 13, lineHeight: 1, padding: 0,
+                    }}
+                  >×</button>
+                </div>
+              );
+            })}
+
+            {/* Nuovo profilo */}
+            <button onClick={() => { setCreating(true); setName(''); }} style={{
+              background: PALETTE.creamDeep, border: `2px dashed ${PALETTE.inkSoft}`,
+              borderRadius: 8, padding: '22px 14px', cursor: 'pointer',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              gap: 8, minHeight: 150, fontFamily: FONT_BODY, color: PALETTE.inkSoft,
+            }}>
+              <div style={{ fontSize: 36 }}>＋</div>
+              <div style={{ fontWeight: 600, fontSize: 15 }}>nuovo detective</div>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {creating && (
+        <div style={{ background: '#fff', border: `2px solid ${PALETTE.ink}`, borderRadius: 8, boxShadow: `6px 6px 0 ${PALETTE.ink}`, padding: '28px 26px', maxWidth: 460, margin: '0 auto' }}>
+          <h2 style={{ fontFamily: FONT_DISPLAY, fontWeight: 800, fontSize: 24, margin: '0 0 18px', textAlign: 'center' }}>
+            Crea il tuo profilo
+          </h2>
+
+          {/* Anteprima */}
+          <div style={{ textAlign: 'center', marginBottom: 18 }}>
+            <div style={{
+              width: 72, height: 72, borderRadius: '50%', background: color, margin: '0 auto',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40,
+              border: `2px solid ${PALETTE.ink}`,
+            }}>{avatar}</div>
+          </div>
+
+          <label style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 1, fontWeight: 700 }}>IL TUO NOME</label>
+          <input
+            type="text" value={name} onChange={e => setName(e.target.value.slice(0, 16))}
+            placeholder="scrivi qui..." autoFocus
+            onKeyDown={e => { if (e.key === 'Enter') submit(); }}
+            style={{
+              width: '100%', fontSize: 20, padding: '10px 14px', marginTop: 6, marginBottom: 16,
+              fontFamily: FONT_DISPLAY, fontWeight: 700, background: PALETTE.cream,
+              border: `2px solid ${PALETTE.ink}`, borderRadius: 4, color: PALETTE.ink, outline: 'none',
+            }}
+          />
+
+          <label style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 1, fontWeight: 700 }}>SCEGLI UN ANIMALE</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, margin: '6px 0 16px' }}>
+            {PROFILE_AVATARS.map(a => (
+              <button key={a} onClick={() => setAvatar(a)} style={{
+                width: 40, height: 40, fontSize: 22, borderRadius: 6, cursor: 'pointer',
+                background: avatar === a ? PALETTE.amber : PALETTE.cream,
+                border: `2px solid ${avatar === a ? PALETTE.ink : PALETTE.paperLine}`,
+              }}>{a}</button>
+            ))}
+          </div>
+
+          <label style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 1, fontWeight: 700 }}>SCEGLI UN COLORE</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, margin: '6px 0 22px' }}>
+            {PROFILE_COLORS.map(c => (
+              <button key={c} onClick={() => setColor(c)} style={{
+                width: 36, height: 36, borderRadius: '50%', background: c, cursor: 'pointer',
+                border: `3px solid ${color === c ? PALETTE.ink : '#fff'}`,
+                boxShadow: `0 0 0 1px ${PALETTE.paperLine}`,
+              }} />
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button onClick={submit} disabled={name.trim().length < 1}
+              style={{ ...btnPrimary(), opacity: name.trim().length < 1 ? 0.4 : 1, cursor: name.trim().length < 1 ? 'not-allowed' : 'pointer' }}>
+              entra nell'officina →
+            </button>
+            {profiles.length > 0 && (
+              <button onClick={() => setCreating(false)} style={btnGhost()}>← indietro</button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Seme didattico privacy */}
+      <div style={{ marginTop: 28, textAlign: 'center', maxWidth: 480, margin: '28px auto 0' }}>
+        <p style={{ fontSize: 13, color: PALETTE.inkSoft, fontStyle: 'italic', lineHeight: 1.5 }}>
+          🔒 Ogni detective ha il <strong>suo</strong> profilo, con i suoi progressi e i suoi disegni.<br />
+          Nel modulo <strong>"Lo Scudo Segreto"</strong> imparerai a proteggerlo con un codice tutto tuo.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// HUB
+// ============================================================================
+
+function HubView({ progress, activeProfile, onSwitchProfile, onEnterModule1, onEnterModule2, onEnterModule3, onEnterModule4 }) {
+  const m1Done = progress.module1.pagesDone.length;
+  const m1Total = 7;
+  const m1Pct = Math.round((m1Done / m1Total) * 100);
+  const m2Done = progress.module2.pagesDone.length;
+  const m2Total = 7;
+  const m2Pct = Math.round((m2Done / m2Total) * 100);
+  const m3Done = progress.module3.pagesDone.length;
+  const m3Total = 7;
+  const m3Pct = Math.round((m3Done / m3Total) * 100);
+  const m4Done = progress.module4.pagesDone.length;
+  const m4Total = 7;
+  const m4Pct = Math.round((m4Done / m4Total) * 100);
+
+  return (
+    <div>
+      {/* Barra profilo attivo */}
+      {activeProfile && (
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          background: '#fff', border: `2px solid ${PALETTE.ink}`, borderRadius: 8,
+          padding: '8px 12px', marginBottom: 8,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 38, height: 38, borderRadius: '50%', background: activeProfile.color,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
+              border: `2px solid ${PALETTE.ink}`,
+            }}>{activeProfile.avatar}</div>
+            <div>
+              <div style={{ fontFamily: FONT_MONO, fontSize: 10, color: PALETTE.inkSoft, letterSpacing: 1 }}>STAI ESPLORANDO COME</div>
+              <div style={{ fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 18, color: PALETTE.ink, lineHeight: 1 }}>{activeProfile.name}</div>
+            </div>
+          </div>
+          <button onClick={onSwitchProfile} style={{
+            background: 'transparent', border: `1.5px solid ${PALETTE.ink}`, borderRadius: 4,
+            padding: '6px 12px', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+            color: PALETTE.ink, fontFamily: FONT_BODY,
+          }}>
+            cambia detective
+          </button>
+        </div>
+      )}
+
+      <header style={{ textAlign: 'center', padding: '32px 12px 40px' }}>
+        <div style={{
+          display: 'inline-block', padding: '4px 14px',
+          background: PALETTE.ink, color: PALETTE.cream,
+          fontFamily: FONT_MONO, fontSize: 12, letterSpacing: 2,
+          marginBottom: 20, borderRadius: 2,
+        }}>
+          LABORATORIO · N° 01
+        </div>
+        <h1 style={{
+          fontFamily: FONT_DISPLAY, fontWeight: 900,
+          fontSize: 'clamp(40px, 7vw, 64px)', lineHeight: 1,
+          margin: 0, letterSpacing: '-0.02em', color: PALETTE.ink,
+        }}>
+          L'Officina<br />
+          <span style={{ fontStyle: 'italic', fontWeight: 500, color: PALETTE.amber }}>dei Bit</span>
+        </h1>
+        <p style={{
+          marginTop: 18, fontSize: 17, color: PALETTE.inkSoft,
+          maxWidth: 520, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.5,
+        }}>
+          Esplorazioni nel mondo segreto dei computer.<br />
+          <span style={{ fontStyle: 'italic' }}>Per giovani esploratori curiosi.</span>
+        </p>
+      </header>
+
+      {/* CAPITOLO 1 */}
+      <ChapterHeader num="CAPITOLO 1" title="Com'è fatto" done={m1Done >= m1Total && m2Done >= m2Total && m3Done >= m3Total} />
+      <div className="card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16, marginBottom: 36 }}>
+        <ModuleCard
+          number="01" iconName="lightbulb"
+          title="Il Linguaggio Segreto"
+          subtitle="Come parlano i computer? Solo con 0 e 1."
+          status={m1Done === 0 ? 'new' : m1Done >= m1Total ? 'done' : 'progress'}
+          progress={m1Pct} onClick={onEnterModule1} accent={PALETTE.amber}
+        />
+        <ModuleCard
+          number="02" iconName="search"
+          title="Dentro la Scatola"
+          subtitle="Cosa c'è davvero in un computer?"
+          status={m2Done === 0 ? 'new' : m2Done >= m2Total ? 'done' : 'progress'}
+          progress={m2Pct} onClick={onEnterModule2} accent={PALETTE.moss}
+        />
+        <ModuleCard
+          number="03" iconName="sparkles"
+          title="I Pixel Magici"
+          subtitle="Le immagini sono fatte di puntini."
+          status={m3Done === 0 ? 'new' : m3Done >= m3Total ? 'done' : 'progress'}
+          progress={m3Pct} onClick={onEnterModule3} accent={PALETTE.rust}
+        />
+      </div>
+
+      {/* CAPITOLO 2 */}
+      <ChapterHeader num="CAPITOLO 2" title="Come pensa e parla" done={m4Done >= m4Total} />
+      <div className="card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16, marginBottom: 36 }}>
+        <ModuleCard
+          number="04" iconName="bot"
+          title="Le Istruzioni Magiche"
+          subtitle="Come si comanda un computer, passo per passo."
+          status={m4Done === 0 ? 'new' : m4Done >= m4Total ? 'done' : 'progress'}
+          progress={m4Pct} onClick={onEnterModule4} accent={PALETTE.moss}
+        />
+        <ModuleCard
+          number="05" iconName="globe"
+          title="La Grande Ragnatela"
+          subtitle="Internet: come i dati fanno il giro del mondo."
+          status="locked" accent={PALETTE.amber}
+        />
+      </div>
+
+      {/* CAPITOLO 3 */}
+      <ChapterHeader num="CAPITOLO 3" title="Usarlo da padroni" done={false} />
+      <div className="card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
+        <ModuleCard
+          number="06" iconName="shield"
+          title="Lo Scudo Segreto"
+          subtitle="Password, privacy e come riconoscere le trappole."
+          status="locked" accent={PALETTE.rust}
+        />
+        <ModuleCard
+          number="07" iconName="message-circle"
+          title="La Mente Finta"
+          subtitle="Cos'è l'AI, e soprattutto cosa NON è."
+          status="locked" accent={PALETTE.moss}
+        />
+        <ModuleCard
+          number="08" iconName="key"
+          title="I Messaggi Cifrati"
+          subtitle="Scrivere in codice segreto. Per i più grandi."
+          status="locked" accent={PALETTE.amber}
+        />
+      </div>
+
+      <footer style={{ marginTop: 48, textAlign: 'center', fontSize: 13, color: PALETTE.inkSoft }}>
+        <p style={{ fontFamily: FONT_MONO, fontSize: 11, letterSpacing: 1.5, marginBottom: 0 }}>
+          ░ I PROGRESSI DI OGNI DETECTIVE SI SALVANO DA SOLI ░
+        </p>
+      </footer>
+    </div>
+  );
+}
+
+function ModuleCard({ number, iconName, title, subtitle, status, progress, onClick, accent }) {
+  const locked = status === 'locked';
+  const done = status === 'done';
+  const [hover, setHover] = useState(false);
+
+  return (
+    <button
+      onClick={locked ? undefined : onClick}
+      disabled={locked}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        textAlign: 'left',
+        background: locked ? PALETTE.creamDeep : '#fff',
+        border: `2px solid ${locked ? PALETTE.warmGray + '60' : PALETTE.ink}`,
+        borderRadius: 4,
+        padding: '22px 22px 18px',
+        cursor: locked ? 'not-allowed' : 'pointer',
+        opacity: locked ? 0.55 : 1,
+        position: 'relative',
+        boxShadow: locked ? 'none' : `${hover ? 6 : 4}px ${hover ? 6 : 4}px 0 ${PALETTE.ink}`,
+        transform: hover && !locked ? 'translate(-2px, -2px)' : 'translate(0, 0)',
+        transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+        fontFamily: FONT_BODY,
+        color: PALETTE.ink,
+        width: '100%',
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
+        <span style={{ fontFamily: FONT_MONO, fontSize: 12, color: PALETTE.inkSoft, letterSpacing: 1.5 }}>
+          MODULO {number}
+        </span>
+        <div style={{ color: accent }}>
+          <Icon name={iconName} size={28} strokeWidth={1.8} />
+        </div>
+      </div>
+      <h3 style={{ fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 26, margin: '0 0 6px', letterSpacing: '-0.01em', lineHeight: 1.1 }}>
+        {title}
+      </h3>
+      <p style={{ fontSize: 14, color: PALETTE.inkSoft, margin: '0 0 16px', lineHeight: 1.45 }}>
+        {subtitle}
+      </p>
+
+      {locked && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: PALETTE.warmGray, fontFamily: FONT_MONO }}>
+          <Icon name="lock" size={12} /> IN ARRIVO
+        </div>
+      )}
+      {!locked && done && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: PALETTE.moss, fontWeight: 600 }}>
+          <Icon name="check-circle" size={15} /> Completato!
+        </div>
+      )}
+      {!locked && !done && (
+        <div>
+          {progress > 0 && (
+            <div style={{ marginBottom: 8 }}>
+              <div style={{ height: 6, background: PALETTE.creamDeep, borderRadius: 3, overflow: 'hidden' }}>
+                <div style={{ width: `${progress}%`, height: '100%', background: accent, transition: 'width 0.3s ease' }} />
+              </div>
+              <div style={{ marginTop: 4, fontSize: 11, color: PALETTE.inkSoft, fontFamily: FONT_MONO }}>{progress}% COMPLETO</div>
+            </div>
+          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 600 }}>
+            {progress > 0 ? 'continua' : 'entra'} <Icon name="chevron-right" size={16} />
+          </div>
+        </div>
+      )}
+    </button>
+  );
+}
+
+// ============================================================================
+// MODULO 1
+// ============================================================================
+
+function ModuleOneView({ page, setPage, progress, markPageDone, updateUserName, updateBestDecode, onExit, onResetModule }) {
+  const pages = [
+    { id: 0, component: IntroPage },
+    { id: 1, component: LightbulbsPage },
+    { id: 2, component: FingersPage },
+    { id: 3, component: NamePage },
+    { id: 4, component: DecodePage },
+    { id: 5, component: TriviaPage },
+    { id: 6, component: CompletePage },
+  ];
+
+  const Current = pages[page].component;
+  const done = new Set(progress.module1.pagesDone);
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <button onClick={onExit} style={{
+          background: 'transparent', border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', gap: 6,
+          color: PALETTE.inkSoft, fontSize: 14, padding: 4,
+        }}>
+          <Icon name="arrow-left" size={16} /> all'officina
+        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 1.5 }}>
+            MODULO 01 · IL LINGUAGGIO SEGRETO
+          </div>
+          <ModuleResetButton onReset={onResetModule} />
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: 6, marginBottom: 28, justifyContent: 'center' }}>
+        {pages.map((p, i) => (
+          <button
+            key={p.id}
+            onClick={() => setPage(i)}
+            style={{
+              width: i === page ? 36 : 14, height: 14, borderRadius: 7,
+              background: i === page ? PALETTE.amber : done.has(i) ? PALETTE.moss : PALETTE.creamDeep,
+              border: `1.5px solid ${i === page ? PALETTE.ink : 'transparent'}`,
+              cursor: 'pointer', transition: 'all 0.2s ease', padding: 0,
+            }}
+          />
+        ))}
+      </div>
+
+      <div style={{
+        background: '#fff', border: `2px solid ${PALETTE.ink}`,
+        borderRadius: 4, boxShadow: `6px 6px 0 ${PALETTE.ink}`,
+        padding: '36px 32px', minHeight: 460,
+      }}>
+        <Current
+          progress={progress}
+          markDone={() => markPageDone(page)}
+          updateUserName={updateUserName}
+          updateBestDecode={updateBestDecode}
+          goNext={() => setPage(Math.min(page + 1, pages.length - 1))}
+          goPrev={() => setPage(Math.max(page - 1, 0))}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA 0 — INTRO
+// ----------------------------------------------------------------------------
+
+function IntroPage({ markDone, goNext }) {
+  useEffect(() => { markDone(); }, []);
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 1 di 7" title="Una storia" />
+      <div style={{ fontSize: 18, lineHeight: 1.65, color: PALETTE.ink, marginBottom: 20 }}>
+        <p>
+          Il computer è una macchina molto strana.<br />
+          Conosce <em>tante</em> cose, ma sa parlare solo con <strong>due lettere</strong>: <BinChip>0</BinChip> e <BinChip>1</BinChip>.
+        </p>
+        <p style={{ marginTop: 18 }}>Solo queste due. Per sempre.</p>
+        <p style={{ marginTop: 18 }}>
+          Eppure con solo queste due lettere riesce a contare, a disegnare le foto, a far girare i film, a giocare con te.<br />
+          <span style={{ fontStyle: 'italic', color: PALETTE.inkSoft }}>Come fa?</span>
+        </p>
+        <div style={{
+          marginTop: 28, background: PALETTE.cream,
+          border: `1.5px dashed ${PALETTE.amber}`,
+          padding: '18px 22px', borderRadius: 4,
+        }}>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.amber, fontWeight: 700, letterSpacing: 2, marginBottom: 8 }}>
+            ░ IL SEGRETO ░
+          </div>
+          <p style={{ margin: 0, fontSize: 17 }}>
+            Dentro il computer ci sono <strong>milioni di piccolissime lampadine</strong>.<br />
+            Ognuna può essere <BinChip>0</BinChip> (spenta) o <BinChip>1</BinChip> (accesa).<br />
+            Tutto quello che il computer sa, è scritto con queste lampadine.
+          </p>
+        </div>
+        <p style={{ marginTop: 24, fontSize: 17, fontStyle: 'italic', color: PALETTE.inkSoft }}>
+          Adesso ti insegniamo come funziona. Giriamo pagina →
+        </p>
+      </div>
+      <NavButtons goNext={goNext} nextLabel="vai alle lampadine" />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA 1 — LAMPADINE
+// ----------------------------------------------------------------------------
+
+function LightbulbsPage({ markDone, goNext, goPrev }) {
+  const [bits, setBits] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
+  const values = [128, 64, 32, 16, 8, 4, 2, 1];
+  const total = bits.reduce((sum, b, i) => sum + (b ? values[i] : 0), 0);
+
+  const [challengeTarget, setChallengeTarget] = useState(13);
+  const [challengesWon, setChallengesWon] = useState([]);
+
+  const toggle = (i) => setBits(prev => {
+    const next = [...prev];
+    next[i] = next[i] ? 0 : 1;
+    return next;
+  });
+
+  const reset = () => setBits([0, 0, 0, 0, 0, 0, 0, 0]);
+
+  useEffect(() => {
+    if (total === challengeTarget && !challengesWon.includes(challengeTarget)) {
+      setChallengesWon(prev => [...prev, challengeTarget]);
+    }
+  }, [total, challengeTarget]);
+
+  useEffect(() => {
+    if (challengesWon.length >= 2) markDone();
+  }, [challengesWon]);
+
+  const challenges = [13, 25, 7, 42, 100];
+  const remaining = challenges.filter(c => !challengesWon.includes(c));
+
+  const tryNewChallenge = () => {
+    if (remaining.length > 0) {
+      setChallengeTarget(remaining[0]);
+      reset();
+    }
+  };
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 2 di 7" title="Le 8 lampadine" />
+      <p style={{ fontSize: 17, lineHeight: 1.6, marginBottom: 8 }}>
+        Ogni lampadina ha un <strong>valore</strong>. Accendile e <strong>somma</strong> i loro valori per fare un numero.
+      </p>
+      <p style={{ fontSize: 15, color: PALETTE.inkSoft, marginBottom: 24 }}>
+        Tocca le lampadine per accenderle o spegnerle.
+      </p>
+
+      <div style={{
+        background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`,
+        borderRadius: 6, padding: '24px 12px 18px', marginBottom: 20,
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'flex-end', gap: 4, flexWrap: 'wrap' }}>
+          {bits.map((b, i) => (
+            <Lightbulb8 key={i} on={b === 1} value={values[i]} onClick={() => toggle(i)} />
+          ))}
+        </div>
+
+        <div style={{ marginTop: 22, textAlign: 'center' }}>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 13, color: PALETTE.inkSoft, letterSpacing: 2, marginBottom: 2 }}>
+            NUMERO CHE HAI FATTO:
+          </div>
+          <div style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 56, lineHeight: 1, color: PALETTE.ink }}>
+            {total}
+          </div>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 16, color: PALETTE.amber, marginTop: 6 }}>
+            {bits.join('')}
+          </div>
+        </div>
+      </div>
+
+      <div style={{
+        background: challengesWon.includes(challengeTarget) ? `${PALETTE.moss}15` : PALETTE.creamDeep,
+        border: `2px solid ${challengesWon.includes(challengeTarget) ? PALETTE.moss : PALETTE.ink}`,
+        borderRadius: 4, padding: '16px 18px', marginBottom: 18,
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+          <span style={{ fontFamily: FONT_MONO, fontSize: 11, letterSpacing: 1.5, color: PALETTE.inkSoft, fontWeight: 700 }}>
+            ░ SFIDA ░
+          </span>
+          <span style={{ fontSize: 12, color: PALETTE.inkSoft }}>
+            sfide vinte: {challengesWon.length} / {challenges.length}
+          </span>
+        </div>
+        {challengesWon.includes(challengeTarget) ? (
+          <div>
+            <div style={{ fontSize: 18, color: PALETTE.moss, fontWeight: 600, marginBottom: 8 }}>
+              <Icon name="check-circle" size={20} style={{ verticalAlign: 'middle', marginRight: 6 }} />
+              Bravissimo! Hai fatto {challengeTarget}.
+            </div>
+            {remaining.length > 0 ? (
+              <button onClick={tryNewChallenge} style={btnPrimary()}>prossima sfida →</button>
+            ) : (
+              <div style={{ fontSize: 16, color: PALETTE.ink, marginTop: 6 }}>🏆 Hai vinto tutte le sfide!</div>
+            )}
+          </div>
+        ) : (
+          <div style={{ fontSize: 17 }}>
+            Riesci a fare il numero <strong style={{ fontSize: 22, color: PALETTE.amber }}>{challengeTarget}</strong>?
+            <button onClick={reset} style={{ ...btnGhost(), marginLeft: 10, fontSize: 13 }}>
+              <Icon name="rotate-ccw" size={12} style={{ display: 'inline-block', marginRight: 4, verticalAlign: 'middle' }} />
+              spegni tutte
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div style={{ fontSize: 14, color: PALETTE.inkSoft, fontStyle: 'italic', marginBottom: 20 }}>
+        💡 <strong>Suggerimento:</strong> per fare 13, cerca le lampadine che sommate fanno 13. Tipo 8+4+1 = 13!
+      </div>
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="conta con le dita →" />
+    </div>
+  );
+}
+
+function Lightbulb8({ on, value, onClick }) {
+  return (
+    <button onClick={onClick} style={{
+      background: 'transparent', border: 'none', cursor: 'pointer',
+      padding: 6, display: 'flex', flexDirection: 'column',
+      alignItems: 'center', gap: 6,
+    }}>
+      <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, fontWeight: 700 }}>
+        {value}
+      </div>
+      <div style={{ width: 44, height: 56, position: 'relative' }}>
+        <svg viewBox="0 0 44 56" width="44" height="56" style={{ overflow: 'visible' }}>
+          {on && (
+            <circle cx="22" cy="20" r="22" fill={PALETTE.amberGlow} opacity="0.5">
+              <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite" />
+            </circle>
+          )}
+          <ellipse cx="22" cy="20" rx="14" ry="16"
+            fill={on ? PALETTE.amber : PALETTE.creamDeep}
+            stroke={PALETTE.ink} strokeWidth="2" />
+          <path d={`M 16 22 Q 22 ${on ? 14 : 18} 28 22`}
+            stroke={on ? PALETTE.rust : PALETTE.warmGray}
+            strokeWidth="1.5" fill="none" />
+          <rect x="17" y="34" width="10" height="4" fill={PALETTE.ink} />
+          <rect x="18" y="38" width="8" height="3" fill={PALETTE.inkSoft} />
+          <rect x="18" y="41" width="8" height="3" fill={PALETTE.ink} />
+        </svg>
+      </div>
+      <div style={{
+        fontFamily: FONT_MONO, fontSize: 18, fontWeight: 700,
+        color: on ? PALETTE.amber : PALETTE.warmGray,
+      }}>
+        {on ? '1' : '0'}
+      </div>
+    </button>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA 2 — DITA
+// ----------------------------------------------------------------------------
+
+function FingersPage({ markDone, goNext, goPrev }) {
+  const [fingers, setFingers] = useState([0, 0, 0, 0, 0]);
+  const values = [1, 2, 4, 8, 16];
+  const names = ['Pollice', 'Indice', 'Medio', 'Anulare', 'Mignolo'];
+  const total = fingers.reduce((sum, f, i) => sum + (f ? values[i] : 0), 0);
+
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    if (total >= 16 && revealed) markDone();
+  }, [total, revealed]);
+
+  const toggle = (i) => setFingers(prev => {
+    const next = [...prev];
+    next[i] = next[i] ? 0 : 1;
+    return next;
+  });
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 3 di 7" title="Conta con le dita" />
+      <p style={{ fontSize: 17, lineHeight: 1.6, marginBottom: 10 }}>
+        Con una mano sola si conta fino a <strong>5</strong>, vero?<br />
+        I computer userebbero la stessa mano per contare fino a <strong style={{ color: PALETTE.amber, fontSize: 22 }}>31</strong>.
+      </p>
+      <p style={{ fontSize: 16, color: PALETTE.inkSoft, marginBottom: 24 }}>
+        Tocca le dita per alzarle o abbassarle.
+      </p>
+
+      <div style={{
+        background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`,
+        borderRadius: 6, padding: '22px 16px 18px', marginBottom: 20,
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: 10, flexWrap: 'wrap' }}>
+          {fingers.map((f, i) => (
+            <FingerToggle key={i} up={f === 1} value={values[i]} name={names[i]} onClick={() => toggle(i)} />
+          ))}
+        </div>
+
+        <div style={{ marginTop: 22, textAlign: 'center' }}>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 13, color: PALETTE.inkSoft, letterSpacing: 2, marginBottom: 2 }}>
+            NUMERO:
+          </div>
+          <div style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 54, lineHeight: 1, color: PALETTE.ink }}>
+            {total}
+          </div>
+        </div>
+      </div>
+
+      <div style={{
+        background: PALETTE.creamDeep, border: `2px solid ${PALETTE.ink}`,
+        borderRadius: 4, padding: '16px 18px', marginBottom: 18,
+      }}>
+        <div style={{ fontFamily: FONT_MONO, fontSize: 11, letterSpacing: 1.5, color: PALETTE.inkSoft, fontWeight: 700, marginBottom: 8 }}>
+          ░ SFIDA ░
+        </div>
+        <p style={{ margin: 0, fontSize: 16 }}>
+          Prova ad alzare <strong>tutte e 5 le dita</strong>. Che numero viene?
+        </p>
+        {total === 31 && (
+          <div style={{ marginTop: 12, color: PALETTE.moss, fontSize: 16, fontWeight: 600 }}>
+            <Icon name="check-circle" size={18} style={{ verticalAlign: 'middle', marginRight: 6 }} />
+            31! Sei riuscito a contare fino a 31 con una mano sola.
+          </div>
+        )}
+      </div>
+
+      <button onClick={() => setRevealed(true)} style={{ ...btnGhost(), marginBottom: 16 }}>
+        {revealed ? '🤯 Curiosità rivelata' : 'Vuoi sapere quanto si conta con DUE mani?'}
+      </button>
+
+      {revealed && (
+        <div style={{
+          background: `${PALETTE.amber}15`,
+          border: `1.5px dashed ${PALETTE.amber}`,
+          padding: '16px 18px', borderRadius: 4, marginBottom: 20,
+        }}>
+          <p style={{ margin: 0, fontSize: 17 }}>
+            Con <strong>due mani</strong> in binario si conta fino a <strong style={{ color: PALETTE.amber, fontSize: 26 }}>1.023</strong>.<br />
+            Con <strong>due mani e due piedi</strong> arrivi oltre <strong style={{ color: PALETTE.amber, fontSize: 26 }}>un milione</strong>!
+          </p>
+        </div>
+      )}
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="il tuo nome →" />
+    </div>
+  );
+}
+
+function FingerToggle({ up, value, name, onClick }) {
+  return (
+    <button onClick={onClick} style={{
+      background: 'transparent', border: 'none', cursor: 'pointer',
+      padding: 4, display: 'flex', flexDirection: 'column',
+      alignItems: 'center', gap: 4,
+    }}>
+      <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, fontWeight: 700 }}>
+        {value}
+      </div>
+      <svg viewBox="0 0 32 80" width="36" height="80" style={{ overflow: 'visible' }}>
+        <rect
+          x="9" y={up ? 6 : 28}
+          width="14" height={up ? 48 : 26} rx="7"
+          fill={up ? PALETTE.amber : PALETTE.warmGray}
+          stroke={PALETTE.ink} strokeWidth="1.8"
+          style={{ transition: 'all 0.25s ease' }}
+        />
+        {up && (
+          <rect x="11" y="8" width="10" height="4" rx="2"
+            fill={PALETTE.cream} stroke={PALETTE.ink} strokeWidth="1" />
+        )}
+        <rect x="4" y="56" width="24" height="20" rx="4"
+          fill={PALETTE.creamDeep} stroke={PALETTE.ink} strokeWidth="1.8" />
+      </svg>
+      <div style={{ fontSize: 10, color: PALETTE.inkSoft }}>{name}</div>
+      <div style={{
+        fontFamily: FONT_MONO, fontSize: 16, fontWeight: 700,
+        color: up ? PALETTE.amber : PALETTE.warmGray,
+      }}>
+        {up ? '1' : '0'}
+      </div>
+    </button>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA 3 — NOME
+// ----------------------------------------------------------------------------
+
+function NamePage({ markDone, goNext, goPrev, progress, updateUserName }) {
+  const [name, setName] = useState(progress.module1.userName || '');
+
+  const handleChange = (e) => {
+    const cleaned = e.target.value.slice(0, 12).split('').map(normalize).join('').replace(/[^A-Z0-9]/g, '');
+    setName(cleaned);
+    if (cleaned.length >= 2) {
+      updateUserName(cleaned);
+      markDone();
+    }
+  };
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 4 di 7" title="Il tuo nome segreto" />
+      <p style={{ fontSize: 17, lineHeight: 1.6, marginBottom: 10 }}>
+        Anche le <strong>lettere</strong> sono fatte di 0 e 1.<br />
+        Scrivi il tuo nome e guarda come lo vede il computer.
+      </p>
+      <p style={{ fontSize: 14, color: PALETTE.inkSoft, marginBottom: 20, fontStyle: 'italic' }}>
+        (solo lettere A-Z e numeri, max 12 caratteri)
+      </p>
+
+      <input
+        type="text"
+        value={name}
+        onChange={handleChange}
+        placeholder="SCRIVI QUI..."
+        style={{
+          width: '100%', fontSize: 24, padding: '14px 18px',
+          fontFamily: FONT_DISPLAY, fontWeight: 700,
+          letterSpacing: '0.1em', background: PALETTE.cream,
+          border: `2px solid ${PALETTE.ink}`, borderRadius: 4,
+          color: PALETTE.ink, outline: 'none', marginBottom: 24,
+          textTransform: 'uppercase',
+        }}
+      />
+
+      {name.length === 0 && (
+        <div style={{ padding: 30, textAlign: 'center', color: PALETTE.warmGray, fontStyle: 'italic' }}>
+          ← Scrivi qualcosa per vedere la magia
+        </div>
+      )}
+
+      {name.length > 0 && (
+        <div style={{
+          background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`,
+          borderRadius: 6, padding: 18,
+        }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 10 }}>
+            {name.split('').map((ch, i) => (
+              <div key={i} style={{
+                background: '#fff', border: `1.5px solid ${PALETTE.ink}`,
+                borderRadius: 4, padding: '10px 6px', textAlign: 'center',
+              }}>
+                <div style={{ fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 28, color: PALETTE.amber, lineHeight: 1 }}>
+                  {ch}
+                </div>
+                <div style={{ fontFamily: FONT_MONO, fontSize: 11, marginTop: 6, color: PALETTE.ink, letterSpacing: 1 }}>
+                  {letterToBinary(ch)}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 14, fontSize: 13, color: PALETTE.inkSoft, fontStyle: 'italic', textAlign: 'center' }}>
+            Ogni lettera è fatta di <strong>8 zeri e uno</strong> (= 1 byte). Tutte le lettere e i simboli del mondo si scrivono così!
+          </div>
+        </div>
+      )}
+
+      <div style={{ marginTop: 20 }}>
+        <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="decifra il messaggio →" disableNext={name.length < 2} />
+      </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA 4 — DECODIFICA
+// ----------------------------------------------------------------------------
+
+function DecodePage({ markDone, goNext, goPrev, progress, updateBestDecode }) {
+  const [rounds, setRounds] = useState(() => generateDecodeRounds());
+  const [roundIdx, setRoundIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const [feedback, setFeedback] = useState(null);
+  const [finished, setFinished] = useState(false);
+
+  const round = rounds[roundIdx];
+
+  const handleAnswer = (choice) => {
+    if (feedback) return;
+    const correct = choice === round.answer;
+    setFeedback(correct ? 'right' : 'wrong');
+    if (correct) setScore(s => s + 1);
+    setTimeout(() => {
+      setFeedback(null);
+      if (roundIdx + 1 >= rounds.length) {
+        setFinished(true);
+        const finalScore = score + (correct ? 1 : 0);
+        updateBestDecode(finalScore);
+        if (finalScore >= 4) markDone();
+      } else {
+        setRoundIdx(roundIdx + 1);
+      }
+    }, 900);
+  };
+
+  const restart = () => {
+    setRounds(generateDecodeRounds());
+    setRoundIdx(0);
+    setScore(0);
+    setFinished(false);
+    setFeedback(null);
+  };
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 5 di 7" title="Decifra il messaggio" />
+
+      {!finished && (
+        <>
+          <p style={{ fontSize: 17, lineHeight: 1.6, marginBottom: 8 }}>
+            Quale lettera si nasconde dietro questi 0 e 1?
+          </p>
+          <p style={{ fontSize: 14, color: PALETTE.inkSoft, marginBottom: 22 }}>
+            Round {roundIdx + 1} di {rounds.length} · punteggio: {score}
+          </p>
+
+          <div style={{
+            background: PALETTE.ink, borderRadius: 6,
+            padding: '32px 16px', textAlign: 'center', marginBottom: 28,
+          }}>
+            <div style={{
+              fontFamily: FONT_MONO,
+              fontSize: 'clamp(28px, 6vw, 44px)',
+              fontWeight: 700, color: PALETTE.amber,
+              letterSpacing: 'clamp(4px, 1.5vw, 12px)',
+            }}>
+              {round.binary.split('').join(' ')}
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: 10, marginBottom: 22 }}>
+            {round.options.map((opt) => {
+              const showRight = feedback === 'right' && opt === round.answer;
+              const showWrong = feedback === 'wrong' && opt === round.answer;
+              return (
+                <button
+                  key={opt}
+                  onClick={() => handleAnswer(opt)}
+                  disabled={!!feedback}
+                  style={{
+                    background: (showRight || showWrong) ? PALETTE.moss : '#fff',
+                    border: `2px solid ${PALETTE.ink}`, borderRadius: 4,
+                    padding: '18px 12px',
+                    fontFamily: FONT_DISPLAY, fontWeight: 900, fontSize: 34,
+                    cursor: feedback ? 'default' : 'pointer',
+                    color: (showRight || showWrong) ? '#fff' : PALETTE.ink,
+                    boxShadow: feedback ? 'none' : `3px 3px 0 ${PALETTE.ink}`,
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  {opt}
+                </button>
+              );
+            })}
+          </div>
+
+          {feedback === 'right' && (
+            <div style={{ color: PALETTE.moss, fontSize: 17, fontWeight: 600, textAlign: 'center' }}>
+              <Icon name="check-circle" size={20} style={{ verticalAlign: 'middle', marginRight: 6 }} />
+              Esatto!
+            </div>
+          )}
+          {feedback === 'wrong' && (
+            <div style={{ color: PALETTE.rust, fontSize: 17, textAlign: 'center' }}>
+              Era <strong>{round.answer}</strong>. Niente paura, capita!
+            </div>
+          )}
+        </>
+      )}
+
+      {finished && (
+        <div style={{ textAlign: 'center', padding: '20px 0' }}>
+          <div style={{ fontSize: 56, marginBottom: 12 }}>
+            {score >= 5 ? '🏆' : score >= 4 ? '⭐' : score >= 2 ? '😊' : '💪'}
+          </div>
+          <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 32, fontWeight: 800, margin: '0 0 8px' }}>
+            Hai fatto {score} su {rounds.length}!
+          </h3>
+          <p style={{ fontSize: 16, color: PALETTE.inkSoft, marginBottom: 6 }}>
+            {score >= 5 ? 'Sei un decifratore esperto.' : score >= 4 ? 'Ottimo lavoro!' : score >= 2 ? 'Bel tentativo, puoi rifarlo.' : 'Riprova, ci prendi la mano!'}
+          </p>
+          {progress.module1.bestDecode > 0 && (
+            <p style={{ fontSize: 13, color: PALETTE.warmGray, fontFamily: FONT_MONO, marginBottom: 22 }}>
+              record: {progress.module1.bestDecode} / {rounds.length}
+            </p>
+          )}
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button onClick={restart} style={btnGhost()}>
+              <Icon name="rotate-ccw" size={14} style={{ display: 'inline-block', marginRight: 6, verticalAlign: 'middle' }} />
+              riprova
+            </button>
+            <button onClick={goNext} style={btnPrimary()}>avanti →</button>
+          </div>
+        </div>
+      )}
+
+      {!finished && (
+        <div style={{ marginTop: 28 }}>
+          <NavButtons goPrev={goPrev} hideNext />
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA 5 — CURIOSITÀ
+// ----------------------------------------------------------------------------
+
+function TriviaPage({ markDone, goNext, goPrev }) {
+  const [opened, setOpened] = useState([false, false, false, false]);
+
+  useEffect(() => {
+    if (opened.filter(Boolean).length >= 3) markDone();
+  }, [opened]);
+
+  const cards = [
+    {
+      front: 'Perché solo 0 e 1?',
+      back: 'Perché il computer funziona con la corrente elettrica. La corrente o passa (1) o non passa (0). Non c\'è una via di mezzo. Per questo i computer parlano solo con due lettere.',
+      icon: '⚡',
+    },
+    {
+      front: 'Una foto è fatta di numeri',
+      back: 'Quando scatti una foto, ogni puntino (pixel) viene salvato come un numero. Una foto del cellulare ha milioni di puntini = milioni di numeri = miliardi di 0 e 1!',
+      icon: '📸',
+    },
+    {
+      front: 'Quanto è 1 byte?',
+      back: '8 bit insieme si chiamano "byte". Con 1 byte puoi scrivere 256 cose diverse (lettere, numeri, simboli). Il tuo nome è circa 5 byte. Un libro intero pesa qualche milione di byte!',
+      icon: '📦',
+    },
+    {
+      front: 'Anche la musica è 0 e 1',
+      back: 'Quando ascolti una canzone, il computer legge migliaia di numeri al secondo e li trasforma in suono. Tutta la musica del mondo, nello smartphone, è una lunghissima fila di 0 e 1.',
+      icon: '🎵',
+    },
+  ];
+
+  const toggle = (i) => setOpened(prev => {
+    const next = [...prev];
+    next[i] = !next[i];
+    return next;
+  });
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 6 di 7" title="Lo sapevi che..." />
+      <p style={{ fontSize: 16, color: PALETTE.inkSoft, marginBottom: 20, fontStyle: 'italic' }}>
+        Tocca le carte per scoprire i segreti.
+      </p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
+        {cards.map((c, i) => (
+          <button key={i} onClick={() => toggle(i)} style={{
+            background: opened[i] ? PALETTE.ink : '#fff',
+            color: opened[i] ? PALETTE.cream : PALETTE.ink,
+            border: `2px solid ${PALETTE.ink}`, borderRadius: 4,
+            padding: '20px 18px', cursor: 'pointer',
+            boxShadow: `3px 3px 0 ${PALETTE.ink}`,
+            minHeight: 140, textAlign: 'left',
+            transition: 'all 0.2s ease',
+          }}>
+            <div style={{ fontSize: 32, marginBottom: 10 }}>{c.icon}</div>
+            {!opened[i] ? (
+              <>
+                <div style={{ fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 18, lineHeight: 1.2 }}>
+                  {c.front}
+                </div>
+                <div style={{ fontFamily: FONT_MONO, fontSize: 10, marginTop: 12, color: PALETTE.inkSoft, letterSpacing: 1.5 }}>
+                  TOCCA PER SCOPRIRE →
+                </div>
+              </>
+            ) : (
+              <div style={{ fontSize: 14, lineHeight: 1.5 }}>{c.back}</div>
+            )}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ marginTop: 24 }}>
+        <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="hai finito! →" />
+      </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA 6 — COMPLETATO
+// ----------------------------------------------------------------------------
+
+function CompletePage({ markDone, progress, goPrev }) {
+  useEffect(() => { markDone(); }, []);
+
+  const name = progress.module1.userName || 'Esploratore';
+
+  return (
+    <div style={{ textAlign: 'center', padding: '10px 0' }}>
+      <PageHeader eyebrow="Pagina 7 di 7" title="Hai imparato!" centered />
+
+      <div style={{ marginBottom: 12 }}>
+        <Icon name="trophy" size={68} strokeWidth={1.5} color={PALETTE.amber} />
+      </div>
+
+      <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 32, fontWeight: 800, margin: '0 0 8px', letterSpacing: '-0.01em' }}>
+        Bravissimo, {name}!
+      </h3>
+      <p style={{ fontSize: 17, color: PALETTE.inkSoft, marginBottom: 28, maxWidth: 500, margin: '0 auto 28px' }}>
+        Hai scoperto il <strong>linguaggio segreto</strong> dei computer.<br />
+        Adesso sai cose che pochi adulti conoscono!
+      </p>
+
+      <div style={{
+        background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`,
+        borderRadius: 6, padding: '22px 24px',
+        marginBottom: 28, textAlign: 'left',
+        maxWidth: 540, marginLeft: 'auto', marginRight: 'auto',
+      }}>
+        <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 2, marginBottom: 12, fontWeight: 700 }}>
+          ░ COSA HAI IMPARATO ░
+        </div>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 16, lineHeight: 2 }}>
+          <li><Icon name="star" size={14} fill={PALETTE.amber} color={PALETTE.amber} style={{ verticalAlign: 'middle', marginRight: 8 }} /> I computer parlano solo con <strong>0 e 1</strong></li>
+          <li><Icon name="star" size={14} fill={PALETTE.amber} color={PALETTE.amber} style={{ verticalAlign: 'middle', marginRight: 8 }} /> 8 lampadine = 1 byte = 256 cose diverse</li>
+          <li><Icon name="star" size={14} fill={PALETTE.amber} color={PALETTE.amber} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Sai contare fino a 31 con una mano sola</li>
+          <li><Icon name="star" size={14} fill={PALETTE.amber} color={PALETTE.amber} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Sai scrivere il tuo nome in binario</li>
+          <li><Icon name="star" size={14} fill={PALETTE.amber} color={PALETTE.amber} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Anche foto, musica e film sono solo 0 e 1</li>
+        </ul>
+      </div>
+
+      <div style={{ fontStyle: 'italic', fontSize: 15, color: PALETTE.inkSoft, marginBottom: 20 }}>
+        Il prossimo modulo sarà <strong>Dentro la Scatola</strong>. Scopriremo<br />
+        cosa c'è davvero dentro il computer.
+      </div>
+
+      <NavButtons goPrev={goPrev} hideNext />
+    </div>
+  );
+}
+
+// ============================================================================
+// MODULO 2 — DENTRO LA SCATOLA
+// ============================================================================
+
+function ModuleTwoView({ page, setPage, progress, markPageDone, onExit, onResetModule }) {
+  const pages = [
+    { component: M2_IntroPage },
+    { component: M2_ComponentsPage },
+    { component: M2_KitchenPage },
+    { component: M2_JourneyPage },
+    { component: M2_SpeedRacePage },
+    { component: M2_SmartphonePage },
+    { component: M2_CompletePage },
+  ];
+
+  const Current = pages[page].component;
+  const done = new Set(progress.module2.pagesDone);
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <button onClick={onExit} style={{
+          background: 'transparent', border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', gap: 6,
+          color: PALETTE.inkSoft, fontSize: 14, padding: 4,
+        }}>
+          <Icon name="arrow-left" size={16} /> all'officina
+        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 1.5 }}>
+            MODULO 02 · DENTRO LA SCATOLA
+          </div>
+          <ModuleResetButton onReset={onResetModule} />
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: 6, marginBottom: 28, justifyContent: 'center' }}>
+        {pages.map((p, i) => (
+          <button key={i} onClick={() => setPage(i)} style={{
+            width: i === page ? 36 : 14, height: 14, borderRadius: 7,
+            background: i === page ? PALETTE.moss : done.has(i) ? PALETTE.moss : PALETTE.creamDeep,
+            opacity: i === page ? 1 : done.has(i) ? 0.6 : 1,
+            border: `1.5px solid ${i === page ? PALETTE.ink : 'transparent'}`,
+            cursor: 'pointer', transition: 'all 0.2s ease', padding: 0,
+          }} />
+        ))}
+      </div>
+
+      <div style={{
+        background: '#fff', border: `2px solid ${PALETTE.ink}`,
+        borderRadius: 4, boxShadow: `6px 6px 0 ${PALETTE.ink}`,
+        padding: '36px 32px', minHeight: 460,
+      }}>
+        <Current
+          progress={progress}
+          markDone={() => markPageDone(page)}
+          goNext={() => setPage(Math.min(page + 1, pages.length - 1))}
+          goPrev={() => setPage(Math.max(page - 1, 0))}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M2-0 — APRI LA SCATOLA
+// ----------------------------------------------------------------------------
+
+function M2_IntroPage({ markDone, goNext }) {
+  const [opened, setOpened] = useState(false);
+
+  useEffect(() => { markDone(); }, []);
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 1 di 7" title="Apri la scatola" accent={PALETTE.moss} />
+      <div style={{ fontSize: 18, lineHeight: 1.65, color: PALETTE.ink, marginBottom: 20 }}>
+        <p>
+          I computer ti sembrano <strong>scatole nere</strong>: schiacci un bottone, e <em>magia</em>, succede qualcosa.
+        </p>
+        <p style={{ marginTop: 18 }}>
+          Ma dentro la scatola non c'è magia. C'è una <strong>piccola città</strong>, con i suoi abitanti che lavorano insieme.
+        </p>
+
+        <div style={{
+          marginTop: 28, marginBottom: 12,
+          background: PALETTE.cream,
+          border: `1.5px solid ${PALETTE.paperLine}`,
+          borderRadius: 6, padding: '24px 16px', textAlign: 'center',
+        }}>
+          <ComputerBoxIllustration opened={opened} />
+          <button
+            onClick={() => setOpened(true)}
+            disabled={opened}
+            style={{
+              ...btnPrimary(),
+              marginTop: 18,
+              background: opened ? PALETTE.moss : PALETTE.ink,
+              boxShadow: opened ? 'none' : `3px 3px 0 ${PALETTE.moss}`,
+              opacity: opened ? 0.7 : 1,
+            }}
+          >
+            {opened ? '✨ scatola aperta!' : '👆 tocca per aprire'}
+          </button>
+        </div>
+
+        {opened && (
+          <div style={{
+            background: `${PALETTE.moss}15`,
+            border: `1.5px dashed ${PALETTE.moss}`,
+            padding: '16px 20px', borderRadius: 4, marginTop: 12,
+            animation: 'fadeIn 0.5s ease',
+          }}>
+            <p style={{ margin: 0, fontSize: 17 }}>
+              Ecco i pezzi del computer. Ognuno ha un compito diverso.<br />
+              Ora andiamo a conoscerli uno per uno →
+            </p>
+          </div>
+        )}
+      </div>
+      <NavButtons goNext={goNext} nextLabel="conosciamoli →" disableNext={!opened} />
+
+      <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+    </div>
+  );
+}
+
+function ComputerBoxIllustration({ opened }) {
+  return (
+    <svg viewBox="0 0 280 200" width="100%" style={{ maxWidth: 320, height: 'auto' }}>
+      {/* Monitor */}
+      <rect x="60" y="20" width="160" height="100" rx="4" fill={PALETTE.inkSoft} stroke={PALETTE.ink} strokeWidth="2.5" />
+      <rect x="70" y="30" width="140" height="78" rx="2" fill={opened ? PALETTE.amber : PALETTE.creamDeep} stroke={PALETTE.ink} strokeWidth="1.5" />
+      {opened && (
+        <>
+          <text x="140" y="58" textAnchor="middle" fontFamily={FONT_MONO} fontSize="9" fill={PALETTE.ink} fontWeight="700">CIAO!</text>
+          <text x="140" y="75" textAnchor="middle" fontFamily={FONT_MONO} fontSize="7" fill={PALETTE.ink}>01001000 01101001</text>
+        </>
+      )}
+      <rect x="125" y="120" width="30" height="6" fill={PALETTE.ink} />
+      <rect x="115" y="126" width="50" height="4" fill={PALETTE.ink} />
+
+      {/* Case (chiuso) */}
+      {!opened && (
+        <g style={{ transition: 'opacity 0.4s ease' }}>
+          <rect x="50" y="140" width="180" height="50" rx="4" fill={PALETTE.warmGray} stroke={PALETTE.ink} strokeWidth="2.5" />
+          <circle cx="70" cy="165" r="4" fill={PALETTE.ink} />
+          <rect x="90" y="158" width="60" height="14" rx="2" fill={PALETTE.inkSoft} />
+          <text x="140" y="180" textAnchor="middle" fontFamily={FONT_MONO} fontSize="8" fill={PALETTE.ink}>SCATOLA CHIUSA</text>
+        </g>
+      )}
+
+      {/* Case (aperto) - vista esplosa con componenti */}
+      {opened && (
+        <g style={{ animation: 'explode 0.6s ease' }}>
+          <rect x="50" y="140" width="180" height="50" rx="4" fill="none" stroke={PALETTE.ink} strokeWidth="2" strokeDasharray="3,3" />
+          {/* CPU */}
+          <rect x="62" y="152" width="26" height="26" rx="3" fill={PALETTE.rust} stroke={PALETTE.ink} strokeWidth="1.5" />
+          <text x="75" y="168" textAnchor="middle" fontFamily={FONT_MONO} fontSize="8" fill="#fff" fontWeight="700">CPU</text>
+          {/* RAM */}
+          <rect x="100" y="148" width="6" height="36" fill={PALETTE.moss} stroke={PALETTE.ink} strokeWidth="1" />
+          <rect x="110" y="148" width="6" height="36" fill={PALETTE.moss} stroke={PALETTE.ink} strokeWidth="1" />
+          <text x="108" y="178" textAnchor="middle" fontFamily={FONT_MONO} fontSize="7" fill={PALETTE.ink} fontWeight="700">RAM</text>
+          {/* Disco */}
+          <rect x="128" y="150" width="36" height="30" rx="2" fill={PALETTE.amber} stroke={PALETTE.ink} strokeWidth="1.5" />
+          <circle cx="146" cy="165" r="9" fill={PALETTE.cream} stroke={PALETTE.ink} strokeWidth="1" />
+          <circle cx="146" cy="165" r="2" fill={PALETTE.ink} />
+          <text x="146" y="178" textAnchor="middle" fontFamily={FONT_MONO} fontSize="6" fill={PALETTE.ink} fontWeight="700">DISCO</text>
+          {/* GPU */}
+          <rect x="172" y="160" width="48" height="14" rx="2" fill={PALETTE.ink} stroke={PALETTE.ink} strokeWidth="1.5" />
+          <rect x="176" y="163" width="40" height="8" fill={PALETTE.warmGray} />
+          <text x="196" y="180" textAnchor="middle" fontFamily={FONT_MONO} fontSize="7" fill={PALETTE.ink} fontWeight="700">GPU</text>
+        </g>
+      )}
+
+      <style>{`@keyframes explode { 0% { opacity: 0; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }`}</style>
+    </svg>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M2-1 — I 5 ABITANTI (vista esplosa)
+// ----------------------------------------------------------------------------
+
+function M2_ComponentsPage({ markDone, goNext, goPrev }) {
+  const [opened, setOpened] = useState(new Set());
+  const [selected, setSelected] = useState(null);
+
+  const components = [
+    {
+      id: 'cpu', name: 'Il Cervello', tech: 'CPU · Processore', icon: 'cpu', color: PALETTE.rust,
+      what: 'Pensa e fa i calcoli. È il vero capo del computer: tutto passa da qui.',
+      fun: 'Riesce a fare miliardi di calcoli al secondo. Mentre tu sbatti gli occhi, lui ha già fatto 100 milioni di "1+1".',
+    },
+    {
+      id: 'ram', name: 'La Scrivania', tech: 'RAM · Memoria', icon: 'memory-stick', color: PALETTE.moss,
+      what: 'Lo spazio dove il cervello tiene le cose che gli servono ADESSO. Veloce, ma non grande.',
+      fun: 'Quando spegni il computer, la scrivania si svuota! Per questo i lavori vanno salvati prima di chiudere.',
+    },
+    {
+      id: 'disk', name: 'La Libreria', tech: 'SSD · Disco', icon: 'hard-drive', color: PALETTE.amber,
+      what: 'Tiene salvato TUTTO: foto, video, giochi, programmi. Anche quando spegni rimane.',
+      fun: 'Una libreria di un computer moderno può tenere milioni di foto. Senza mai dimenticarne una.',
+    },
+    {
+      id: 'gpu', name: 'Il Pittore', tech: 'GPU · Scheda Grafica', icon: 'monitor', color: PALETTE.ink,
+      what: 'Disegna tutto quello che vedi sullo schermo. Più potente è, più belli sono i giochi.',
+      fun: 'Per i giochi 3D, il pittore ridisegna lo schermo intero 60 volte ogni secondo!',
+    },
+    {
+      id: 'mobo', name: 'Il Tavolo', tech: 'Scheda Madre', icon: 'cpu', color: PALETTE.inkSoft,
+      what: 'Il tavolo che tiene tutti i pezzi insieme e li fa parlare tra loro. Senza, si perderebbero.',
+      fun: 'Ha decine di "stradine" di rame disegnate sopra, dove corrono i segnali elettrici. Una piccola città.',
+    },
+  ];
+
+  const handleClick = (id) => {
+    setOpened(prev => new Set([...prev, id]));
+    setSelected(id);
+  };
+
+  useEffect(() => {
+    if (opened.size >= 4) markDone();
+  }, [opened]);
+
+  const selectedComp = components.find(c => c.id === selected);
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 2 di 7" title="I 5 abitanti" accent={PALETTE.moss} />
+      <p style={{ fontSize: 17, lineHeight: 1.6, marginBottom: 8 }}>
+        Dentro la scatola vivono <strong>5 abitanti</strong>. Ognuno ha un nome strano e un nome vero.
+      </p>
+      <p style={{ fontSize: 15, color: PALETTE.inkSoft, marginBottom: 22 }}>
+        Tocca ciascuno per conoscerlo. ({opened.size}/{components.length} scoperti)
+      </p>
+
+      {/* Vista esplosa */}
+      <div style={{
+        background: PALETTE.cream,
+        backgroundImage: `linear-gradient(${PALETTE.paperLine}40 1px, transparent 1px), linear-gradient(90deg, ${PALETTE.paperLine}40 1px, transparent 1px)`,
+        backgroundSize: '20px 20px',
+        border: `1.5px solid ${PALETTE.paperLine}`,
+        borderRadius: 6, padding: '24px 16px', marginBottom: 18,
+      }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12, justifyItems: 'center' }}>
+          {components.map(c => (
+            <ComponentBlock
+              key={c.id}
+              comp={c}
+              isOpened={opened.has(c.id)}
+              isSelected={selected === c.id}
+              onClick={() => handleClick(c.id)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Pannello dettaglio */}
+      {selectedComp ? (
+        <div style={{
+          background: '#fff',
+          border: `2px solid ${selectedComp.color}`,
+          borderRadius: 4,
+          padding: '18px 22px',
+          marginBottom: 18,
+          boxShadow: `4px 4px 0 ${selectedComp.color}30`,
+          animation: 'slideUp 0.3s ease',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+            <div style={{
+              background: selectedComp.color, color: '#fff',
+              width: 44, height: 44, borderRadius: 4,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Icon name={selectedComp.icon} size={22} />
+            </div>
+            <div>
+              <div style={{ fontFamily: FONT_DISPLAY, fontWeight: 800, fontSize: 22, color: PALETTE.ink, lineHeight: 1 }}>
+                {selectedComp.name}
+              </div>
+              <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 1, marginTop: 3 }}>
+                {selectedComp.tech.toUpperCase()}
+              </div>
+            </div>
+          </div>
+          <p style={{ margin: '12px 0 8px', fontSize: 16, lineHeight: 1.5 }}>{selectedComp.what}</p>
+          <div style={{
+            background: PALETTE.cream, padding: '10px 14px', borderRadius: 3,
+            fontSize: 14, color: PALETTE.inkSoft, fontStyle: 'italic',
+          }}>
+            🧠 <strong>Lo sapevi?</strong> {selectedComp.fun}
+          </div>
+        </div>
+      ) : (
+        <div style={{
+          padding: '18px 22px', textAlign: 'center',
+          color: PALETTE.warmGray, fontStyle: 'italic', fontSize: 15,
+        }}>
+          ↑ Tocca un abitante per conoscerlo
+        </div>
+      )}
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="la cucina del computer →" disableNext={opened.size < 4} />
+
+      <style>{`@keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+    </div>
+  );
+}
+
+function ComponentBlock({ comp, isOpened, isSelected, onClick }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        background: isSelected ? comp.color : isOpened ? '#fff' : PALETTE.creamDeep,
+        color: isSelected ? '#fff' : PALETTE.ink,
+        border: `2px solid ${isOpened ? comp.color : PALETTE.warmGray}`,
+        borderRadius: 4,
+        padding: '14px 10px',
+        cursor: 'pointer',
+        width: '100%',
+        minHeight: 96,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 6,
+        boxShadow: hover ? `3px 3px 0 ${comp.color}` : isOpened ? `2px 2px 0 ${comp.color}40` : 'none',
+        transform: hover ? 'translate(-1px, -1px)' : 'translate(0, 0)',
+        transition: 'all 0.15s ease',
+      }}
+    >
+      <Icon name={comp.icon} size={28} strokeWidth={1.8} />
+      <div style={{ fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 14, lineHeight: 1.1, textAlign: 'center' }}>
+        {comp.name}
+      </div>
+      {!isOpened && (
+        <div style={{ fontSize: 10, fontFamily: FONT_MONO, color: PALETTE.warmGray, letterSpacing: 1 }}>?</div>
+      )}
+      {isOpened && !isSelected && (
+        <Icon name="check-circle" size={12} color={comp.color} />
+      )}
+    </button>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M2-2 — LA CUCINA
+// ----------------------------------------------------------------------------
+
+function M2_KitchenPage({ markDone, goNext, goPrev }) {
+  const [phase, setPhase] = useState('idle'); // idle | cooking | done | shutdown
+  const [pantry, setPantry] = useState(['🥚', '🍎', '🥛', '🍫', '🌾']);
+  const [counter, setCounter] = useState([]);
+  const [cake, setCake] = useState(false);
+
+  const doCooking = () => {
+    setPhase('cooking');
+    // Sposta ingredienti uno per uno con delay
+    const ingredients = ['🥚', '🍫', '🌾'];
+    ingredients.forEach((ing, idx) => {
+      setTimeout(() => {
+        setCounter(prev => [...prev, ing]);
+      }, 400 * (idx + 1));
+    });
+    setTimeout(() => {
+      setCake(true);
+      setPhase('done');
+      markDone();
+    }, 400 * (ingredients.length + 1) + 500);
+  };
+
+  const doShutdown = () => {
+    setPhase('shutdown');
+    setTimeout(() => {
+      setCounter([]);
+      setCake(false);
+    }, 600);
+  };
+
+  const reset = () => {
+    setPhase('idle');
+    setCounter([]);
+    setCake(false);
+  };
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 3 di 7" title="La cucina del computer" accent={PALETTE.moss} />
+      <p style={{ fontSize: 17, lineHeight: 1.6, marginBottom: 8 }}>
+        Il computer è una <strong>cucina</strong>. Lo chef è la <strong>CPU</strong>. Per cucinare gli servono ingredienti — ma deve prenderli dal posto giusto.
+      </p>
+      <p style={{ fontSize: 15, color: PALETTE.inkSoft, marginBottom: 22 }}>
+        Tocca <strong>"facciamo una torta"</strong> per vedere come lavora.
+      </p>
+
+      {/* Scena cucina */}
+      <div style={{
+        background: PALETTE.cream,
+        border: `2px solid ${PALETTE.ink}`,
+        borderRadius: 6, padding: '20px 18px', marginBottom: 18,
+      }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, alignItems: 'stretch' }}>
+
+          {/* DISPENSA (Disco) */}
+          <div style={{
+            background: '#fff',
+            border: `2px solid ${PALETTE.amber}`,
+            borderRadius: 4, padding: '12px 10px',
+            display: 'flex', flexDirection: 'column', minHeight: 180,
+          }}>
+            <div style={{ fontFamily: FONT_MONO, fontSize: 10, color: PALETTE.amber, fontWeight: 700, letterSpacing: 1, marginBottom: 6, textAlign: 'center' }}>
+              DISPENSA<br /><span style={{ color: PALETTE.inkSoft, fontWeight: 400 }}>(DISCO)</span>
+            </div>
+            <div style={{
+              flex: 1, background: PALETTE.cream, borderRadius: 3, padding: 8,
+              display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 4,
+              alignContent: 'flex-start',
+            }}>
+              {pantry.map((ing, i) => (
+                <div key={i} style={{ fontSize: 22, textAlign: 'center', opacity: phase === 'shutdown' ? 1 : 1 }}>
+                  {ing}
+                </div>
+              ))}
+            </div>
+            <div style={{ fontSize: 10, textAlign: 'center', color: PALETTE.inkSoft, marginTop: 6, fontStyle: 'italic' }}>
+              {phase === 'shutdown' ? '✓ resta piena' : 'tiene tutto'}
+            </div>
+          </div>
+
+          {/* BANCO DI LAVORO (RAM) */}
+          <div style={{
+            background: '#fff',
+            border: `2px solid ${PALETTE.moss}`,
+            borderRadius: 4, padding: '12px 10px',
+            display: 'flex', flexDirection: 'column', minHeight: 180,
+          }}>
+            <div style={{ fontFamily: FONT_MONO, fontSize: 10, color: PALETTE.moss, fontWeight: 700, letterSpacing: 1, marginBottom: 6, textAlign: 'center' }}>
+              BANCO<br /><span style={{ color: PALETTE.inkSoft, fontWeight: 400 }}>(RAM)</span>
+            </div>
+            <div style={{
+              flex: 1, background: PALETTE.cream, borderRadius: 3, padding: 8,
+              display: 'flex', flexWrap: 'wrap', alignContent: 'flex-start', gap: 4,
+              minHeight: 80,
+            }}>
+              {counter.map((ing, i) => (
+                <div key={i} style={{
+                  fontSize: 22,
+                  animation: 'slideIn 0.4s ease',
+                }}>{ing}</div>
+              ))}
+            </div>
+            <div style={{ fontSize: 10, textAlign: 'center', color: PALETTE.inkSoft, marginTop: 6, fontStyle: 'italic' }}>
+              {phase === 'shutdown' ? '✗ si svuota!' : counter.length === 0 ? 'vuoto' : 'cose di adesso'}
+            </div>
+          </div>
+
+          {/* CHEF (CPU) */}
+          <div style={{
+            background: '#fff',
+            border: `2px solid ${PALETTE.rust}`,
+            borderRadius: 4, padding: '12px 10px',
+            display: 'flex', flexDirection: 'column', minHeight: 180,
+          }}>
+            <div style={{ fontFamily: FONT_MONO, fontSize: 10, color: PALETTE.rust, fontWeight: 700, letterSpacing: 1, marginBottom: 6, textAlign: 'center' }}>
+              CHEF<br /><span style={{ color: PALETTE.inkSoft, fontWeight: 400 }}>(CPU)</span>
+            </div>
+            <div style={{
+              flex: 1, background: PALETTE.cream, borderRadius: 3, padding: 8,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 48,
+            }}>
+              {cake ? '🎂' : phase === 'cooking' ? '👨‍🍳' : '🧑‍🍳'}
+            </div>
+            <div style={{ fontSize: 10, textAlign: 'center', color: PALETTE.inkSoft, marginTop: 6, fontStyle: 'italic' }}>
+              {cake ? 'torta pronta!' : phase === 'cooking' ? 'sta cucinando...' : 'aspetta'}
+            </div>
+          </div>
+        </div>
+
+        {/* Controlli */}
+        <div style={{ marginTop: 16, textAlign: 'center', display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+          {phase === 'idle' && (
+            <button onClick={doCooking} style={{ ...btnPrimary(), background: PALETTE.moss, boxShadow: `3px 3px 0 ${PALETTE.amber}` }}>
+              🎂 facciamo una torta
+            </button>
+          )}
+          {phase === 'cooking' && (
+            <div style={{ fontFamily: FONT_MONO, color: PALETTE.moss, fontSize: 14, fontWeight: 600 }}>
+              ⏳ ingredienti in arrivo dalla dispensa...
+            </div>
+          )}
+          {phase === 'done' && (
+            <>
+              <button onClick={doShutdown} style={{ ...btnGhost(), borderColor: PALETTE.rust, color: PALETTE.rust }}>
+                ⚡ spegni il computer
+              </button>
+              <button onClick={reset} style={btnGhost()}>↻ rifai</button>
+            </>
+          )}
+          {phase === 'shutdown' && (
+            <button onClick={reset} style={btnPrimary()}>↻ riaccendi e rifai</button>
+          )}
+        </div>
+      </div>
+
+      {/* Spiegazione */}
+      <div style={{
+        background: phase === 'shutdown' ? `${PALETTE.rust}10` : PALETTE.creamDeep,
+        border: `1.5px dashed ${phase === 'shutdown' ? PALETTE.rust : PALETTE.ink}`,
+        padding: '14px 18px', borderRadius: 4, marginBottom: 20, fontSize: 15, lineHeight: 1.5,
+      }}>
+        {phase === 'idle' && (
+          <span><strong>Ecco la regola:</strong> lo chef (CPU) non prende mai gli ingredienti direttamente dalla dispensa — è troppo lontana e ci mette tanto. Prima li porta sul banco di lavoro (RAM), poi cucina.</span>
+        )}
+        {phase === 'cooking' && (
+          <span>Gli ingredienti dalla <strong style={{ color: PALETTE.amber }}>dispensa</strong> stanno arrivando sul <strong style={{ color: PALETTE.moss }}>banco</strong>. Solo da lì lo chef può prenderli velocemente.</span>
+        )}
+        {phase === 'done' && (
+          <span>✨ <strong>Fatto!</strong> Adesso prova a spegnere il computer e guarda cosa succede al banco di lavoro...</span>
+        )}
+        {phase === 'shutdown' && (
+          <span><strong style={{ color: PALETTE.rust }}>BOOM!</strong> Il banco di lavoro (RAM) si è svuotato. <strong>Ecco perché</strong> se non salvi un disegno sul computer e lo spegni, lo perdi! Il banco si svuota, ma la dispensa (disco) resta piena.</span>
+        )}
+      </div>
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="il viaggio di WhatsApp →" />
+
+      <style>{`@keyframes slideIn { from { opacity: 0; transform: translateY(-10px) scale(0.5); } to { opacity: 1; transform: translateY(0) scale(1); } }`}</style>
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M2-3 — IL VIAGGIO DI WHATSAPP
+// ----------------------------------------------------------------------------
+
+function M2_JourneyPage({ markDone, goNext, goPrev }) {
+  const [step, setStep] = useState(-1); // -1 = idle
+  const [playing, setPlaying] = useState(false);
+
+  const steps = [
+    { actor: 'finger', message: 'Tocchi l\'icona di WhatsApp 👆' },
+    { actor: 'cpu', message: 'CPU: "Ho ricevuto il comando!"' },
+    { actor: 'cpu-to-disk', message: 'CPU chiede al disco: "trova WhatsApp"' },
+    { actor: 'disk', message: 'Disco: "L\'ho trovato! Te lo passo."' },
+    { actor: 'disk-to-ram', message: 'I dati di WhatsApp vanno nella RAM' },
+    { actor: 'ram', message: 'RAM: "Pronto! Ho WhatsApp sul banco."' },
+    { actor: 'cpu-to-gpu', message: 'CPU dice alla GPU: "disegnalo!"' },
+    { actor: 'gpu', message: 'GPU disegna sullo schermo... ✨' },
+    { actor: 'done', message: 'WhatsApp è aperto! ⚡ Tutto questo in MENO di un secondo!' },
+  ];
+
+  const play = () => {
+    setStep(0);
+    setPlaying(true);
+    steps.forEach((_, idx) => {
+      setTimeout(() => {
+        setStep(idx);
+        if (idx === steps.length - 1) {
+          setPlaying(false);
+          markDone();
+        }
+      }, idx * 1100);
+    });
+  };
+
+  const reset = () => {
+    setStep(-1);
+    setPlaying(false);
+  };
+
+  const isActive = (actor) => {
+    if (step < 0) return false;
+    const s = steps[step].actor;
+    return s === actor || s.startsWith(actor + '-') || s.endsWith('-' + actor);
+  };
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 4 di 7" title="Il viaggio di WhatsApp" accent={PALETTE.moss} />
+      <p style={{ fontSize: 17, lineHeight: 1.6, marginBottom: 8 }}>
+        Quando apri un'app, dentro al computer parte una <strong>staffetta veloce</strong>.
+      </p>
+      <p style={{ fontSize: 15, color: PALETTE.inkSoft, marginBottom: 22 }}>
+        Premi play e guarda cosa succede.
+      </p>
+
+      {/* Scena */}
+      <div style={{
+        background: PALETTE.ink, borderRadius: 6,
+        padding: '24px 18px', marginBottom: 14, position: 'relative',
+        overflow: 'hidden', minHeight: 280,
+      }}>
+        <svg viewBox="0 0 400 240" width="100%" style={{ display: 'block' }}>
+          {/* Connection lines */}
+          <line x1="100" y1="80" x2="200" y2="80" stroke={isActive('cpu-to-disk') ? PALETTE.amber : PALETTE.inkSoft} strokeWidth={isActive('cpu-to-disk') ? 3 : 1} strokeDasharray="4,3" />
+          <line x1="200" y1="80" x2="300" y2="80" stroke={isActive('disk-to-ram') ? PALETTE.amber : PALETTE.inkSoft} strokeWidth={isActive('disk-to-ram') ? 3 : 1} strokeDasharray="4,3" />
+          <line x1="100" y1="80" x2="200" y2="170" stroke={isActive('cpu-to-gpu') ? PALETTE.amber : PALETTE.inkSoft} strokeWidth={isActive('cpu-to-gpu') ? 3 : 1} strokeDasharray="4,3" />
+
+          {/* CPU */}
+          <g>
+            <rect x="50" y="50" width="100" height="60" rx="6" fill={isActive('cpu') ? PALETTE.rust : '#2a3550'} stroke={isActive('cpu') ? PALETTE.amber : PALETTE.inkSoft} strokeWidth="2" />
+            <text x="100" y="78" textAnchor="middle" fontFamily={FONT_MONO} fontSize="11" fontWeight="700" fill={PALETTE.cream}>CPU</text>
+            <text x="100" y="94" textAnchor="middle" fontFamily={FONT_BODY} fontSize="9" fill={PALETTE.cream} opacity="0.8">cervello</text>
+            {isActive('cpu') && <circle cx="100" cy="80" r="38" fill="none" stroke={PALETTE.amber} strokeWidth="1.5" opacity="0.5"><animate attributeName="r" values="32;42;32" dur="1.2s" repeatCount="indefinite" /></circle>}
+          </g>
+
+          {/* DISCO */}
+          <g>
+            <rect x="150" y="50" width="100" height="60" rx="6" fill={isActive('disk') ? PALETTE.amber : '#2a3550'} stroke={isActive('disk') ? PALETTE.amber : PALETTE.inkSoft} strokeWidth="2" />
+            <text x="200" y="78" textAnchor="middle" fontFamily={FONT_MONO} fontSize="11" fontWeight="700" fill={PALETTE.cream}>DISCO</text>
+            <text x="200" y="94" textAnchor="middle" fontFamily={FONT_BODY} fontSize="9" fill={PALETTE.cream} opacity="0.8">libreria</text>
+          </g>
+
+          {/* RAM */}
+          <g>
+            <rect x="250" y="50" width="100" height="60" rx="6" fill={isActive('ram') ? PALETTE.moss : '#2a3550'} stroke={isActive('ram') ? PALETTE.amber : PALETTE.inkSoft} strokeWidth="2" />
+            <text x="300" y="78" textAnchor="middle" fontFamily={FONT_MONO} fontSize="11" fontWeight="700" fill={PALETTE.cream}>RAM</text>
+            <text x="300" y="94" textAnchor="middle" fontFamily={FONT_BODY} fontSize="9" fill={PALETTE.cream} opacity="0.8">scrivania</text>
+          </g>
+
+          {/* GPU */}
+          <g>
+            <rect x="150" y="140" width="100" height="60" rx="6" fill={isActive('gpu') ? PALETTE.ink : '#2a3550'} stroke={isActive('gpu') ? PALETTE.amber : PALETTE.inkSoft} strokeWidth="2" />
+            <text x="200" y="168" textAnchor="middle" fontFamily={FONT_MONO} fontSize="11" fontWeight="700" fill={PALETTE.cream}>GPU</text>
+            <text x="200" y="184" textAnchor="middle" fontFamily={FONT_BODY} fontSize="9" fill={PALETTE.cream} opacity="0.8">pittore</text>
+          </g>
+
+          {/* Schermo */}
+          <g>
+            <rect x="280" y="135" width="100" height="70" rx="6" fill={isActive('done') ? PALETTE.moss : '#2a3550'} stroke={isActive('done') ? PALETTE.amber : PALETTE.inkSoft} strokeWidth="2" />
+            {isActive('done') ? (
+              <>
+                <text x="330" y="170" textAnchor="middle" fontSize="22">💬</text>
+                <text x="330" y="195" textAnchor="middle" fontFamily={FONT_MONO} fontSize="8" fill={PALETTE.cream}>WHATSAPP</text>
+              </>
+            ) : (
+              <text x="330" y="175" textAnchor="middle" fontFamily={FONT_BODY} fontSize="10" fill={PALETTE.cream} opacity="0.6">schermo</text>
+            )}
+          </g>
+
+          {/* Dito (touch indicator) */}
+          {isActive('finger') && (
+            <g>
+              <text x="370" y="35" textAnchor="middle" fontSize="22">👆</text>
+              <circle cx="370" cy="40" r="14" fill="none" stroke={PALETTE.amber} strokeWidth="2"><animate attributeName="r" values="6;18;6" dur="0.8s" repeatCount="1" /><animate attributeName="opacity" values="1;0;1" dur="0.8s" repeatCount="1" /></circle>
+            </g>
+          )}
+
+          {/* Particella che viaggia */}
+          {isActive('cpu-to-disk') && (
+            <circle r="5" fill={PALETTE.amber}>
+              <animate attributeName="cx" values="100;200" dur="1s" repeatCount="indefinite" />
+              <animate attributeName="cy" values="80;80" dur="1s" repeatCount="indefinite" />
+            </circle>
+          )}
+          {isActive('disk-to-ram') && (
+            <circle r="5" fill={PALETTE.amber}>
+              <animate attributeName="cx" values="200;300" dur="1s" repeatCount="indefinite" />
+              <animate attributeName="cy" values="80;80" dur="1s" repeatCount="indefinite" />
+            </circle>
+          )}
+          {isActive('cpu-to-gpu') && (
+            <circle r="5" fill={PALETTE.amber}>
+              <animate attributeName="cx" values="100;200" dur="1s" repeatCount="indefinite" />
+              <animate attributeName="cy" values="80;170" dur="1s" repeatCount="indefinite" />
+            </circle>
+          )}
+        </svg>
+      </div>
+
+      {/* Step message */}
+      <div style={{
+        background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`,
+        borderRadius: 4, padding: '14px 18px', marginBottom: 16,
+        minHeight: 52, display: 'flex', alignItems: 'center',
+      }}>
+        <div style={{ fontSize: 16, fontWeight: 500 }}>
+          {step < 0 ? <span style={{ color: PALETTE.inkSoft, fontStyle: 'italic' }}>Premi "tocca WhatsApp" per cominciare</span> : steps[step].message}
+        </div>
+      </div>
+
+      {/* Controlli */}
+      <div style={{ textAlign: 'center', display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20 }}>
+        {!playing && step < 0 && (
+          <button onClick={play} style={{ ...btnPrimary(), background: PALETTE.moss, boxShadow: `3px 3px 0 ${PALETTE.amber}` }}>
+            <Icon name="play" size={14} style={{ display: 'inline-block', marginRight: 6, verticalAlign: 'middle' }} fill="currentColor" />
+            tocca WhatsApp
+          </button>
+        )}
+        {playing && (
+          <div style={{ fontFamily: FONT_MONO, fontSize: 13, color: PALETTE.inkSoft }}>
+            ⏳ in corso... ({step + 1}/{steps.length})
+          </div>
+        )}
+        {!playing && step >= 0 && (
+          <>
+            <button onClick={reset} style={btnGhost()}>↻ rivedi</button>
+          </>
+        )}
+      </div>
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="la gara delle velocità →" />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M2-4 — GARA DELLE VELOCITÀ
+// ----------------------------------------------------------------------------
+
+function M2_SpeedRacePage({ markDone, goNext, goPrev }) {
+  const [racing, setRacing] = useState(false);
+  const [quizStep, setQuizStep] = useState(0);
+  const [quizAnswers, setQuizAnswers] = useState([]);
+
+  const startRace = () => {
+    setRacing(true);
+    setTimeout(() => setRacing(false), 8500);
+  };
+
+  const quiz = [
+    {
+      q: 'Stai scrivendo una lettera al computer. Le parole che hai appena scritto, dove sono ADESSO?',
+      options: [
+        { text: 'Nel cervello (CPU)', correct: false, why: 'No, la CPU pensa veloce ma non immagazzina.' },
+        { text: 'Sulla scrivania (RAM)', correct: true, why: 'Sì! Mentre lavori, le cose stanno sul banco veloce.' },
+        { text: 'Nella libreria (Disco)', correct: false, why: 'No, lì vanno solo dopo che le salvi.' },
+      ],
+    },
+    {
+      q: 'Hai salvato la lettera e spento il computer. Dove sta adesso?',
+      options: [
+        { text: 'Sulla scrivania (RAM)', correct: false, why: 'No! Ricordi? La RAM si svuota allo spegnimento.' },
+        { text: 'Nella libreria (Disco)', correct: true, why: 'Esatto! Solo il disco tiene le cose anche da spento.' },
+        { text: 'Si è persa', correct: false, why: 'Niente paura, l\'hai salvata! Sta nel disco.' },
+      ],
+    },
+    {
+      q: 'Apri un gioco. Per giocare veloce, dove viene caricato?',
+      options: [
+        { text: 'Nella libreria (Disco)', correct: false, why: 'Il disco è lento per giocare. Va caricato altrove.' },
+        { text: 'Sulla scrivania (RAM)', correct: true, why: 'Sì! La RAM è veloce, perfetta per i giochi.' },
+        { text: 'In un altro computer', correct: false, why: 'Nope, tutto sta nel tuo computer.' },
+      ],
+    },
+  ];
+
+  const handleAnswer = (idx) => {
+    const newAnswers = [...quizAnswers, idx];
+    setQuizAnswers(newAnswers);
+    if (newAnswers.length === quiz.length) markDone();
+  };
+
+  const resetQuiz = () => {
+    setQuizStep(0);
+    setQuizAnswers([]);
+  };
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 5 di 7" title="La gara delle velocità" accent={PALETTE.moss} />
+      <p style={{ fontSize: 17, lineHeight: 1.6, marginBottom: 8 }}>
+        Lo chef (<strong>CPU</strong>) è velocissimo. Il banco (<strong>RAM</strong>) è veloce. La dispensa (<strong>Disco</strong>) è lenta.
+      </p>
+      <p style={{ fontSize: 15, color: PALETTE.inkSoft, marginBottom: 22 }}>
+        Quanto lenta? Fai partire la gara per scoprirlo.
+      </p>
+
+      {/* PISTA DI GARA */}
+      <div style={{
+        background: PALETTE.cream,
+        border: `2px solid ${PALETTE.ink}`,
+        borderRadius: 6, padding: '20px 16px', marginBottom: 18,
+        overflow: 'hidden',
+      }}>
+        <SpeedRaceTrack racing={racing} />
+        <div style={{ textAlign: 'center', marginTop: 14 }}>
+          {!racing ? (
+            <button onClick={startRace} style={{ ...btnPrimary(), background: PALETTE.moss, boxShadow: `3px 3px 0 ${PALETTE.amber}` }}>
+              🏁 via alla gara!
+            </button>
+          ) : (
+            <div style={{ fontFamily: FONT_MONO, color: PALETTE.moss, fontSize: 14, fontWeight: 600 }}>
+              ⏱ corsa in corso...
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div style={{
+        background: `${PALETTE.amber}15`,
+        border: `1.5px dashed ${PALETTE.amber}`,
+        padding: '14px 18px', borderRadius: 4, marginBottom: 22, fontSize: 15, lineHeight: 1.5,
+      }}>
+        🤯 <strong>La differenza vera:</strong> se la CPU aspetta la RAM, è come aspettare <strong>30 minuti</strong>. Se aspetta il disco, è come aspettare <strong>6 mesi!</strong> Per questo il computer fa di tutto per non disturbare il disco.
+      </div>
+
+      {/* QUIZ */}
+      <div style={{ marginBottom: 18 }}>
+        <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 2, fontWeight: 700, marginBottom: 12 }}>
+          ░ DOMANDA DA SCIENZIATO ({Math.min(quizAnswers.length + 1, quiz.length)} di {quiz.length}) ░
+        </div>
+
+        {quizAnswers.length < quiz.length ? (
+          <div style={{
+            background: '#fff', border: `2px solid ${PALETTE.ink}`,
+            borderRadius: 4, padding: '18px 20px',
+          }}>
+            <p style={{ margin: '0 0 14px', fontSize: 16, fontWeight: 500, lineHeight: 1.4 }}>
+              {quiz[quizAnswers.length].q}
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {quiz[quizAnswers.length].options.map((opt, i) => (
+                <button key={i} onClick={() => handleAnswer(i)} style={{
+                  ...btnGhost(),
+                  textAlign: 'left',
+                  padding: '12px 16px',
+                  fontSize: 15,
+                }}>
+                  {opt.text}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div>
+            {quiz.map((q, qi) => {
+              const ai = quizAnswers[qi];
+              const opt = q.options[ai];
+              return (
+                <div key={qi} style={{
+                  background: opt.correct ? `${PALETTE.moss}15` : `${PALETTE.rust}15`,
+                  border: `1.5px solid ${opt.correct ? PALETTE.moss : PALETTE.rust}`,
+                  padding: '12px 16px', borderRadius: 4, marginBottom: 10, fontSize: 14, lineHeight: 1.4,
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                    <Icon name="check-circle" size={16} color={opt.correct ? PALETTE.moss : PALETTE.rust} style={{ flexShrink: 0, marginTop: 2 }} />
+                    <div>
+                      <div style={{ fontWeight: 600, marginBottom: 4 }}>{q.q}</div>
+                      <div>Hai detto: <em>{opt.text}</em> — {opt.why}</div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            <button onClick={resetQuiz} style={{ ...btnGhost(), marginTop: 8 }}>↻ rifai il quiz</button>
+          </div>
+        )}
+      </div>
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="anche nel telefono! →" />
+    </div>
+  );
+}
+
+function SpeedRaceTrack({ racing }) {
+  return (
+    <div>
+      {[
+        { name: 'CPU', emoji: '🏃‍♂️💨', label: 'velocissima', color: PALETTE.rust, duration: '1.5s' },
+        { name: 'RAM', emoji: '🚶', label: 'veloce', color: PALETTE.moss, duration: '4s' },
+        { name: 'Disco', emoji: '🐢', label: 'lentino', color: PALETTE.amber, duration: '8s' },
+      ].map((lane, i) => (
+        <div key={i} style={{ marginBottom: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+            <div style={{
+              width: 60, fontFamily: FONT_MONO, fontSize: 11,
+              color: lane.color, fontWeight: 700, letterSpacing: 1,
+            }}>
+              {lane.name}
+            </div>
+            <div style={{ flex: 1, position: 'relative', height: 32, background: '#fff', borderRadius: 16, border: `1.5px solid ${PALETTE.paperLine}`, overflow: 'hidden' }}>
+              {/* Pista con linee */}
+              <div style={{
+                position: 'absolute', inset: 0,
+                backgroundImage: `linear-gradient(90deg, transparent 0, transparent calc(100% - 20px), ${PALETTE.paperLine} calc(100% - 20px), ${PALETTE.paperLine} 100%)`,
+              }} />
+              {/* Bandierina di arrivo */}
+              <div style={{
+                position: 'absolute', right: 4, top: '50%', transform: 'translateY(-50%)',
+                fontSize: 18,
+              }}>🏁</div>
+              {/* Corridore */}
+              <div style={{
+                position: 'absolute',
+                left: racing ? 'calc(100% - 50px)' : 8,
+                top: '50%', transform: 'translateY(-50%)',
+                fontSize: 18,
+                transition: racing ? `left ${lane.duration} linear` : 'none',
+              }}>
+                {lane.emoji}
+              </div>
+            </div>
+            <div style={{ width: 80, fontSize: 11, color: PALETTE.inkSoft, fontStyle: 'italic' }}>
+              {lane.label}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M2-5 — ANCHE NEL TELEFONO
+// ----------------------------------------------------------------------------
+
+function M2_SmartphonePage({ markDone, goNext, goPrev }) {
+  const [xray, setXray] = useState(false);
+
+  useEffect(() => {
+    if (xray) markDone();
+  }, [xray]);
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 6 di 7" title="Anche nel telefono!" accent={PALETTE.moss} />
+      <p style={{ fontSize: 17, lineHeight: 1.6, marginBottom: 8 }}>
+        Il tuo smartphone è un computer in miniatura. Ha <strong>gli stessi pezzi</strong>, solo piccolissimi.
+      </p>
+      <p style={{ fontSize: 15, color: PALETTE.inkSoft, marginBottom: 22 }}>
+        Tocca per vedere dentro al telefono.
+      </p>
+
+      {/* TELEFONO */}
+      <div style={{
+        background: PALETTE.cream,
+        border: `1.5px solid ${PALETTE.paperLine}`,
+        borderRadius: 6, padding: '24px 16px',
+        marginBottom: 18, textAlign: 'center',
+      }}>
+        <SmartphoneXray xray={xray} />
+        <button
+          onClick={() => setXray(!xray)}
+          style={{
+            ...btnPrimary(),
+            marginTop: 18,
+            background: xray ? PALETTE.amber : PALETTE.ink,
+            color: xray ? PALETTE.ink : PALETTE.cream,
+            boxShadow: `3px 3px 0 ${PALETTE.moss}`,
+          }}
+        >
+          {xray ? '👁 nascondi i pezzi' : '🔬 guarda dentro!'}
+        </button>
+      </div>
+
+      {/* Curiosità */}
+      <div style={{
+        background: PALETTE.creamDeep, border: `2px solid ${PALETTE.ink}`,
+        borderRadius: 4, padding: '16px 18px', marginBottom: 14,
+      }}>
+        <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>
+          ░ CURIOSITÀ INCREDIBILE ░
+        </div>
+        <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5 }}>
+          🚀 Il chip del tuo telefono è <strong>più potente</strong> del computer della NASA che ha portato gli astronauti sulla <strong>Luna nel 1969</strong>. Tutto in un oggetto che sta in tasca.
+        </p>
+      </div>
+
+      <div style={{
+        background: PALETTE.creamDeep, border: `2px solid ${PALETTE.ink}`,
+        borderRadius: 4, padding: '16px 18px', marginBottom: 22,
+      }}>
+        <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, fontWeight: 700, letterSpacing: 2, marginBottom: 10 }}>
+          ░ IN PIÙ, IL TELEFONO HA... ░
+        </div>
+        <ul style={{ margin: 0, paddingLeft: 18, fontSize: 15, lineHeight: 1.7 }}>
+          <li><strong>GPS:</strong> sa dove sei sulla Terra, parlando con i satelliti</li>
+          <li><strong>Accelerometro:</strong> sente quando lo sposti o lo giri</li>
+          <li><strong>Fotocamera:</strong> trasforma la luce in numeri (e poi in 0 e 1!)</li>
+          <li><strong>Microfono:</strong> trasforma il suono in numeri</li>
+        </ul>
+      </div>
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="hai finito! →" disableNext={!xray} />
+    </div>
+  );
+}
+
+function SmartphoneXray({ xray }) {
+  return (
+    <svg viewBox="0 0 160 280" width="140" height="245" style={{ display: 'inline-block' }}>
+      {/* Cornice */}
+      <rect x="10" y="10" width="140" height="260" rx="18" fill={xray ? PALETTE.cream : PALETTE.ink} stroke={PALETTE.ink} strokeWidth="3" style={{ transition: 'fill 0.5s ease' }} />
+      <rect x="20" y="30" width="120" height="220" rx="4" fill={xray ? '#fff' : PALETTE.inkSoft} stroke={PALETTE.ink} strokeWidth="1" style={{ transition: 'fill 0.5s ease' }} />
+
+      {/* Speaker e fotocamera */}
+      <rect x="65" y="18" width="30" height="4" rx="2" fill={PALETTE.cream} />
+      <circle cx="50" cy="20" r="2" fill={PALETTE.cream} />
+
+      {/* Schermo: o icone o pezzi */}
+      {!xray ? (
+        <g>
+          {[
+            { x: 35, y: 50, label: '📱', name: 'home' },
+            { x: 80, y: 50, label: '💬', name: 'msg' },
+            { x: 125, y: 50, label: '📷', name: 'cam' },
+            { x: 35, y: 100, label: '🎵', name: 'music' },
+            { x: 80, y: 100, label: '🎮', name: 'game' },
+            { x: 125, y: 100, label: '🗺️', name: 'map' },
+          ].map((app, i) => (
+            <text key={i} x={app.x} y={app.y + 10} textAnchor="middle" fontSize="22">{app.label}</text>
+          ))}
+        </g>
+      ) : (
+        <g style={{ animation: 'fadeIn 0.5s ease' }}>
+          {/* CPU */}
+          <rect x="55" y="50" width="50" height="40" rx="3" fill={PALETTE.rust} stroke={PALETTE.ink} strokeWidth="1.5" />
+          <text x="80" y="72" textAnchor="middle" fontFamily={FONT_MONO} fontSize="8" fill="#fff" fontWeight="700">CPU</text>
+          <text x="80" y="83" textAnchor="middle" fontFamily={FONT_BODY} fontSize="6" fill="#fff">cervello</text>
+
+          {/* RAM */}
+          <rect x="30" y="100" width="40" height="20" rx="2" fill={PALETTE.moss} stroke={PALETTE.ink} strokeWidth="1.5" />
+          <text x="50" y="113" textAnchor="middle" fontFamily={FONT_MONO} fontSize="7" fill="#fff" fontWeight="700">RAM</text>
+
+          {/* Disco */}
+          <rect x="90" y="100" width="40" height="20" rx="2" fill={PALETTE.amber} stroke={PALETTE.ink} strokeWidth="1.5" />
+          <text x="110" y="113" textAnchor="middle" fontFamily={FONT_MONO} fontSize="7" fill={PALETTE.ink} fontWeight="700">DISCO</text>
+
+          {/* GPU */}
+          <rect x="30" y="130" width="100" height="14" rx="2" fill={PALETTE.ink} stroke={PALETTE.ink} strokeWidth="1.5" />
+          <text x="80" y="140" textAnchor="middle" fontFamily={FONT_MONO} fontSize="7" fill={PALETTE.cream} fontWeight="700">GPU (pittore)</text>
+
+          {/* Batteria */}
+          <rect x="30" y="155" width="100" height="20" rx="2" fill={PALETTE.cream} stroke={PALETTE.ink} strokeWidth="1.5" />
+          <rect x="32" y="157" width="70" height="16" fill={PALETTE.moss} />
+          <text x="80" y="169" textAnchor="middle" fontFamily={FONT_MONO} fontSize="7" fill={PALETTE.ink} fontWeight="700">🔋 BATTERIA</text>
+
+          {/* Sensori */}
+          <circle cx="45" cy="195" r="8" fill={PALETTE.warmGray} stroke={PALETTE.ink} strokeWidth="1.2" />
+          <text x="45" y="198" textAnchor="middle" fontSize="9">📍</text>
+          <text x="45" y="215" textAnchor="middle" fontFamily={FONT_MONO} fontSize="6" fill={PALETTE.ink}>GPS</text>
+
+          <circle cx="80" cy="195" r="8" fill={PALETTE.warmGray} stroke={PALETTE.ink} strokeWidth="1.2" />
+          <text x="80" y="198" textAnchor="middle" fontSize="9">🎤</text>
+          <text x="80" y="215" textAnchor="middle" fontFamily={FONT_MONO} fontSize="6" fill={PALETTE.ink}>MIC</text>
+
+          <circle cx="115" cy="195" r="8" fill={PALETTE.warmGray} stroke={PALETTE.ink} strokeWidth="1.2" />
+          <text x="115" y="198" textAnchor="middle" fontSize="9">📷</text>
+          <text x="115" y="215" textAnchor="middle" fontFamily={FONT_MONO} fontSize="6" fill={PALETTE.ink}>CAM</text>
+
+          <text x="80" y="240" textAnchor="middle" fontFamily={FONT_BODY} fontSize="7" fontStyle="italic" fill={PALETTE.inkSoft}>tutto in 1cm²!</text>
+        </g>
+      )}
+
+      {/* Pulsante home */}
+      <circle cx="80" cy="262" r="5" fill={PALETTE.cream} stroke={PALETTE.ink} strokeWidth="1" />
+    </svg>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M2-6 — COMPLETATO
+// ----------------------------------------------------------------------------
+
+function M2_CompletePage({ markDone, progress, goPrev }) {
+  useEffect(() => { markDone(); }, []);
+
+  const name = progress.module1.userName || 'Esploratore';
+
+  return (
+    <div style={{ textAlign: 'center', padding: '10px 0' }}>
+      <PageHeader eyebrow="Pagina 7 di 7" title="Hai imparato!" centered accent={PALETTE.moss} />
+
+      <div style={{ marginBottom: 12 }}>
+        <Icon name="trophy" size={68} strokeWidth={1.5} color={PALETTE.moss} />
+      </div>
+
+      <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 32, fontWeight: 800, margin: '0 0 8px', letterSpacing: '-0.01em' }}>
+        Sei un esperto, {name}!
+      </h3>
+      <p style={{ fontSize: 17, color: PALETTE.inkSoft, marginBottom: 28, maxWidth: 500, margin: '0 auto 28px' }}>
+        Adesso sai come funziona <strong>davvero</strong> un computer.<br />
+        E uno smartphone. E tutti gli oggetti elettronici che ti stanno intorno.
+      </p>
+
+      <div style={{
+        background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`,
+        borderRadius: 6, padding: '22px 24px',
+        marginBottom: 28, textAlign: 'left',
+        maxWidth: 540, marginLeft: 'auto', marginRight: 'auto',
+      }}>
+        <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 2, marginBottom: 12, fontWeight: 700 }}>
+          ░ COSA HAI IMPARATO ░
+        </div>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 16, lineHeight: 1.9 }}>
+          <li><Icon name="star" size={14} fill={PALETTE.moss} color={PALETTE.moss} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Dentro un computer ci sono <strong>CPU, RAM, Disco, GPU</strong></li>
+          <li><Icon name="star" size={14} fill={PALETTE.moss} color={PALETTE.moss} style={{ verticalAlign: 'middle', marginRight: 8 }} /> CPU = chef, RAM = banco, Disco = dispensa</li>
+          <li><Icon name="star" size={14} fill={PALETTE.moss} color={PALETTE.moss} style={{ verticalAlign: 'middle', marginRight: 8 }} /> La RAM si svuota quando spegni (per questo si salva!)</li>
+          <li><Icon name="star" size={14} fill={PALETTE.moss} color={PALETTE.moss} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Aprire un'app è una staffetta tra i componenti</li>
+          <li><Icon name="star" size={14} fill={PALETTE.moss} color={PALETTE.moss} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Lo smartphone ha gli stessi pezzi, in miniatura</li>
+        </ul>
+      </div>
+
+      <div style={{ fontStyle: 'italic', fontSize: 15, color: PALETTE.inkSoft, marginBottom: 20 }}>
+        Il prossimo modulo sarà <strong>I Pixel Magici</strong>. Scopriremo<br />
+        come si fanno le immagini sullo schermo.
+      </div>
+
+      <NavButtons goPrev={goPrev} hideNext />
+    </div>
+  );
+}
+
+// ============================================================================
+// MODULO 3 — I PIXEL MAGICI
+// ============================================================================
+
+const PIXEL_PALETTE = [
+  '#1a2540', '#ffffff', '#c0432a', '#e8a317', '#f5d000',
+  '#4a8a5c', '#2d7dd2', '#9b59b6', '#e91e8c', '#8b5a2b', '#9a9285',
+];
+
+// Genera un piccolo "paesaggio" 16x16 con sfumature (sembra una mini-foto)
+function makeLandscape() {
+  const W = 16, H = 16, px = [];
+  const flowers = [[3, 12], [11, 13], [7, 14]];
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      let color;
+      if (y < 7) {
+        // sole in alto a destra
+        const dx = x - 12.5, dy = y - 2;
+        if (dx * dx + dy * dy < 6) {
+          color = (dx * dx + dy * dy < 2) ? '#ffe066' : '#ffd11a';
+        } else {
+          // cielo sfumato: piu intenso in alto
+          const t = y / 7;
+          const r = Math.round(91 + t * 100);
+          const g = Math.round(155 + t * 70);
+          const b = Math.round(213 + t * 30);
+          color = `rgb(${r},${Math.min(g,235)},${Math.min(b,245)})`;
+        }
+      } else {
+        // erba sfumata + variazione
+        const isFlower = flowers.some(([fx, fy]) => fx === x && fy === y);
+        const isCenter = flowers.some(([fx, fy]) => fx === x && fy === y - 1);
+        if (isFlower) color = '#e91e8c';
+        else if (isCenter) color = '#f5d000';
+        else {
+          const t = (y - 7) / 8;
+          const noise = ((x * 7 + y * 13) % 5) - 2;
+          const g = Math.round(150 - t * 50 + noise * 4);
+          color = `rgb(${Math.round(74 + noise*3)},${g},${Math.round(70 - t*20)})`;
+        }
+      }
+      px.push(color);
+    }
+  }
+  return px;
+}
+
+function ModuleThreeView({ page, setPage, progress, markPageDone, updatePixelArt, onExit, onResetModule }) {
+  const pages = [
+    { component: M3_IntroPage },
+    { component: M3_StudioPage },
+    { component: M3_ColorMixerPage },
+    { component: M3_ZoomPage },
+    { component: M3_ResolutionPage },
+    { component: M3_NumbersPage },
+    { component: M3_CompletePage },
+  ];
+
+  const Current = pages[page].component;
+  const done = new Set(progress.module3.pagesDone);
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <button onClick={onExit} style={{
+          background: 'transparent', border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', gap: 6,
+          color: PALETTE.inkSoft, fontSize: 14, padding: 4,
+        }}>
+          <Icon name="arrow-left" size={16} /> all'officina
+        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 1.5 }}>
+            MODULO 03 · I PIXEL MAGICI
+          </div>
+          <ModuleResetButton onReset={onResetModule} />
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: 6, marginBottom: 28, justifyContent: 'center' }}>
+        {pages.map((p, i) => (
+          <button key={i} onClick={() => setPage(i)} style={{
+            width: i === page ? 36 : 14, height: 14, borderRadius: 7,
+            background: i === page ? PALETTE.rust : done.has(i) ? PALETTE.rust : PALETTE.creamDeep,
+            opacity: i === page ? 1 : done.has(i) ? 0.6 : 1,
+            border: `1.5px solid ${i === page ? PALETTE.ink : 'transparent'}`,
+            cursor: 'pointer', transition: 'all 0.2s ease', padding: 0,
+          }} />
+        ))}
+      </div>
+
+      <div style={{
+        background: '#fff', border: `2px solid ${PALETTE.ink}`,
+        borderRadius: 4, boxShadow: `6px 6px 0 ${PALETTE.ink}`,
+        padding: '36px 32px', minHeight: 460,
+      }}>
+        <Current
+          progress={progress}
+          markDone={() => markPageDone(page)}
+          updatePixelArt={updatePixelArt}
+          goNext={() => setPage(Math.min(page + 1, pages.length - 1))}
+          goPrev={() => setPage(Math.max(page - 1, 0))}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M3-0 — INTRO
+// ----------------------------------------------------------------------------
+
+function M3_IntroPage({ markDone, goNext }) {
+  useEffect(() => { markDone(); }, []);
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 1 di 7" title="Avvicinati allo schermo" accent={PALETTE.rust} />
+      <div style={{ fontSize: 18, lineHeight: 1.65, color: PALETTE.ink, marginBottom: 20 }}>
+        <p>
+          Guarda lo schermo da molto, molto vicino. Cosa vedi?<br />
+          <strong>Puntini.</strong> Tantissimi puntini colorati, uno accanto all'altro.
+        </p>
+        <p style={{ marginTop: 18 }}>
+          Ogni puntino si chiama <strong>pixel</strong>. Da lontano i pixel si fondono e tu vedi una faccia, un gatto, un gioco.
+          Da vicino, sono solo quadratini colorati.
+        </p>
+
+        <div style={{
+          marginTop: 24, marginBottom: 12, textAlign: 'center',
+          background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`,
+          borderRadius: 6, padding: 20,
+        }}>
+          <PixelZoomDemo />
+          <div style={{ fontSize: 13, color: PALETTE.inkSoft, fontStyle: 'italic', marginTop: 10 }}>
+            La stessa faccina: da lontano, e super da vicino.
+          </div>
+        </div>
+
+        <div style={{
+          background: `${PALETTE.rust}12`, border: `1.5px dashed ${PALETTE.rust}`,
+          padding: '16px 20px', borderRadius: 4, marginTop: 12,
+        }}>
+          <p style={{ margin: 0, fontSize: 17 }}>
+            In questo modulo diventi tu il <strong>pittore di pixel</strong>. E alla fine scoprirai un segreto:
+            ogni puntino è fatto di... <BinChip>0</BinChip> e <BinChip>1</BinChip>. Come nel primo modulo!
+          </p>
+        </div>
+      </div>
+      <NavButtons goNext={goNext} nextLabel="apri lo studio →" />
+    </div>
+  );
+}
+
+function PixelZoomDemo() {
+  // Una faccina 8x8: 0 vuoto, 1 contorno, 2 occhi, 3 bocca
+  const face = [
+    0,0,1,1,1,1,0,0,
+    0,1,1,1,1,1,1,0,
+    1,1,2,1,1,2,1,1,
+    1,1,2,1,1,2,1,1,
+    1,1,1,1,1,1,1,1,
+    1,1,3,1,1,3,1,1,
+    0,1,1,3,3,1,1,0,
+    0,0,1,1,1,1,0,0,
+  ];
+  const colorOf = (v) => v === 0 ? 'transparent' : v === 1 ? '#f5d000' : v === 2 ? '#1a2540' : '#c0432a';
+
+  const renderFace = (cell, gap) => (
+    <div style={{ display: 'grid', gridTemplateColumns: `repeat(8, ${cell}px)`, gap, background: gap > 0 ? PALETTE.warmGray : 'transparent', padding: gap > 0 ? 1 : 0 }}>
+      {face.map((v, i) => (
+        <div key={i} style={{ width: cell, height: cell, background: colorOf(v) }} />
+      ))}
+    </div>
+  );
+
+  return (
+    <div style={{ display: 'flex', gap: 28, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
+      <div style={{ textAlign: 'center' }}>
+        {renderFace(7, 0)}
+        <div style={{ fontFamily: FONT_MONO, fontSize: 10, color: PALETTE.inkSoft, marginTop: 6 }}>DA LONTANO</div>
+      </div>
+      <div style={{ fontSize: 24, color: PALETTE.rust }}>→</div>
+      <div style={{ textAlign: 'center' }}>
+        {renderFace(20, 1)}
+        <div style={{ fontFamily: FONT_MONO, fontSize: 10, color: PALETTE.inkSoft, marginTop: 6 }}>DA VICINO</div>
+      </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M3-1 — STUDIO PIXEL ART
+// ----------------------------------------------------------------------------
+
+function M3_StudioPage({ markDone, goNext, goPrev, progress, updatePixelArt }) {
+  const GRID = 16;
+  const [grid, setGrid] = useState(() => {
+    if (progress.module3.pixelArt && progress.module3.pixelArt.length === GRID * GRID) {
+      return progress.module3.pixelArt;
+    }
+    return new Array(GRID * GRID).fill(null);
+  });
+  const [color, setColor] = useState(PIXEL_PALETTE[2]);
+  const [erasing, setErasing] = useState(false);
+  const [drawing, setDrawing] = useState(false);
+  const [painted, setPainted] = useState(false);
+
+  // Salva quando cambia (debounce leggero via timeout)
+  useEffect(() => {
+    const t = setTimeout(() => updatePixelArt(grid), 400);
+    return () => clearTimeout(t);
+  }, [grid]);
+
+  useEffect(() => {
+    const stop = () => setDrawing(false);
+    window.addEventListener('pointerup', stop);
+    return () => window.removeEventListener('pointerup', stop);
+  }, []);
+
+  const paintAt = (idx) => {
+    if (idx == null || idx < 0) return;
+    setGrid(prev => {
+      const next = [...prev];
+      next[idx] = erasing ? null : color;
+      return next;
+    });
+    if (!painted) { setPainted(true); markDone(); }
+  };
+
+  const handlePointerDown = (idx) => { setDrawing(true); paintAt(idx); };
+  const handlePointerEnter = (idx) => { if (drawing) paintAt(idx); };
+
+  // touch drag support
+  const handleTouchMove = (e) => {
+    const t = e.touches[0];
+    if (!t) return;
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    if (el && el.dataset && el.dataset.idx != null) paintAt(parseInt(el.dataset.idx, 10));
+  };
+
+  const clearAll = () => setGrid(new Array(GRID * GRID).fill(null));
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 2 di 7" title="Lo studio dei pixel" accent={PALETTE.rust} />
+      <p style={{ fontSize: 16, lineHeight: 1.55, marginBottom: 6 }}>
+        Scegli un colore e disegna sulla griglia. Tieni premuto e trascina per colorare in fretta.
+      </p>
+      <p style={{ fontSize: 14, color: PALETTE.inkSoft, marginBottom: 18, fontStyle: 'italic' }}>
+        Il tuo disegno si salva da solo. ✏️
+      </p>
+
+      {/* Palette */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14, alignItems: 'center' }}>
+        {PIXEL_PALETTE.map((c) => (
+          <button key={c} onClick={() => { setColor(c); setErasing(false); }} style={{
+            width: 30, height: 30, borderRadius: 4, background: c,
+            border: `3px solid ${color === c && !erasing ? PALETTE.ink : '#fff'}`,
+            boxShadow: `0 0 0 1px ${PALETTE.paperLine}`,
+            cursor: 'pointer', padding: 0,
+          }} />
+        ))}
+        <button onClick={() => setErasing(true)} style={{
+          height: 30, padding: '0 12px', borderRadius: 4,
+          background: erasing ? PALETTE.ink : '#fff',
+          color: erasing ? '#fff' : PALETTE.ink,
+          border: `2px solid ${PALETTE.ink}`, cursor: 'pointer',
+          fontSize: 13, fontWeight: 600,
+        }}>
+          🧽 gomma
+        </button>
+      </div>
+
+      {/* Griglia */}
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
+        <div
+          onTouchMove={handleTouchMove}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${GRID}, 1fr)`,
+            width: 'min(100%, 384px)',
+            aspectRatio: '1 / 1',
+            border: `2px solid ${PALETTE.ink}`,
+            background: PALETTE.paperLine,
+            gap: 1,
+            touchAction: 'none',
+            userSelect: 'none',
+          }}
+        >
+          {grid.map((c, i) => (
+            <div
+              key={i}
+              data-idx={i}
+              onPointerDown={() => handlePointerDown(i)}
+              onPointerEnter={() => handlePointerEnter(i)}
+              style={{
+                background: c || PALETTE.cream,
+                cursor: 'pointer',
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: 18, flexWrap: 'wrap' }}>
+        <button onClick={clearAll} style={btnGhost()}>
+          <Icon name="rotate-ccw" size={13} style={{ display: 'inline-block', marginRight: 5, verticalAlign: 'middle' }} />
+          pulisci tutto
+        </button>
+      </div>
+
+      <div style={{ fontSize: 13, color: PALETTE.inkSoft, fontStyle: 'italic', textAlign: 'center', marginBottom: 16 }}>
+        Questa griglia è 16×16 = <strong>256 pixel</strong>. Lo schermo del telefono ne ha milioni!
+      </div>
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="la macchina dei colori →" disableNext={!painted && !(progress.module3.pixelArt)} />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M3-2 — MACCHINA DEI COLORI (RGB)
+// ----------------------------------------------------------------------------
+
+function M3_ColorMixerPage({ markDone, goNext, goPrev }) {
+  const [r, setR] = useState(120);
+  const [g, setG] = useState(80);
+  const [b, setB] = useState(200);
+  const [challengesWon, setChallengesWon] = useState([]);
+
+  const toHex = (n) => n.toString(16).padStart(2, '0');
+  const hex = `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+
+  const challenges = [
+    { name: 'GIALLO', check: () => r > 200 && g > 200 && b < 80, hint: 'Rosso + Verde, poco Blu' },
+    { name: 'BIANCO', check: () => r > 230 && g > 230 && b > 230, hint: 'Tutte e tre al massimo!' },
+    { name: 'NERO', check: () => r < 30 && g < 30 && b < 30, hint: 'Tutte e tre a zero. Niente luce.' },
+    { name: 'VIOLA', check: () => r > 100 && r < 200 && g < 80 && b > 130, hint: 'Rosso + Blu, niente Verde' },
+  ];
+
+  useEffect(() => {
+    challenges.forEach((c) => {
+      if (c.check() && !challengesWon.includes(c.name)) {
+        setChallengesWon(prev => [...prev, c.name]);
+      }
+    });
+  }, [r, g, b]);
+
+  useEffect(() => {
+    if (challengesWon.length >= 2) markDone();
+  }, [challengesWon]);
+
+  const Slider = ({ label, value, set, accent }) => (
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+        <span style={{ fontFamily: FONT_MONO, fontSize: 13, fontWeight: 700, color: accent }}>{label}</span>
+        <span style={{ fontFamily: FONT_MONO, fontSize: 13, color: PALETTE.ink }}>{value}</span>
+      </div>
+      <input
+        type="range" min="0" max="255" value={value}
+        onChange={(e) => set(parseInt(e.target.value, 10))}
+        style={{ width: '100%', accentColor: accent, height: 24 }}
+      />
+    </div>
+  );
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 3 di 7" title="La macchina dei colori" accent={PALETTE.rust} />
+      <p style={{ fontSize: 16, lineHeight: 1.55, marginBottom: 6 }}>
+        Ogni colore dello schermo nasce mescolando <strong>3 luci</strong>: <span style={{ color: '#c0432a', fontWeight: 700 }}>Rossa</span>, <span style={{ color: '#4a8a5c', fontWeight: 700 }}>Verde</span> e <span style={{ color: '#2d7dd2', fontWeight: 700 }}>Blu</span>.
+      </p>
+      <p style={{ fontSize: 14, color: PALETTE.inkSoft, marginBottom: 20, fontStyle: 'italic' }}>
+        Muovi i cursori da 0 a 255 e guarda cosa succede.
+      </p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 18, alignItems: 'center' }}>
+        {/* Sliders */}
+        <div>
+          <Slider label="ROSSO" value={r} set={setR} accent="#c0432a" />
+          <Slider label="VERDE" value={g} set={setG} accent="#4a8a5c" />
+          <Slider label="BLU" value={b} set={setB} accent="#2d7dd2" />
+        </div>
+        {/* Anteprima */}
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '100%', aspectRatio: '1/1', maxWidth: 160, margin: '0 auto',
+            background: hex, borderRadius: 8,
+            border: `2px solid ${PALETTE.ink}`,
+            boxShadow: `4px 4px 0 ${PALETTE.ink}`,
+          }} />
+          <div style={{ fontFamily: FONT_MONO, fontSize: 15, fontWeight: 700, marginTop: 10, color: PALETTE.ink }}>
+            {hex}
+          </div>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, marginTop: 2 }}>
+            R:{r} G:{g} B:{b}
+          </div>
+        </div>
+      </div>
+
+      {/* Sfide */}
+      <div style={{
+        background: PALETTE.creamDeep, border: `2px solid ${PALETTE.ink}`,
+        borderRadius: 4, padding: '14px 18px', marginBottom: 16,
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+          <span style={{ fontFamily: FONT_MONO, fontSize: 11, letterSpacing: 1.5, fontWeight: 700, color: PALETTE.inkSoft }}>░ SFIDE COLORE ░</span>
+          <span style={{ fontSize: 12, color: PALETTE.inkSoft }}>{challengesWon.length}/{challenges.length}</span>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 8 }}>
+          {challenges.map((c) => {
+            const won = challengesWon.includes(c.name);
+            return (
+              <div key={c.name} style={{
+                background: won ? `${PALETTE.moss}20` : '#fff',
+                border: `1.5px solid ${won ? PALETTE.moss : PALETTE.paperLine}`,
+                borderRadius: 4, padding: '8px 10px', fontSize: 13,
+              }}>
+                <div style={{ fontWeight: 700, color: won ? PALETTE.moss : PALETTE.ink, display: 'flex', alignItems: 'center', gap: 5 }}>
+                  {won && <Icon name="check-circle" size={13} color={PALETTE.moss} />}
+                  fai il {c.name}
+                </div>
+                {!won && <div style={{ fontSize: 11, color: PALETTE.inkSoft, marginTop: 2 }}>{c.hint}</div>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div style={{
+        background: `${PALETTE.amber}15`, border: `1.5px dashed ${PALETTE.amber}`,
+        padding: '12px 16px', borderRadius: 4, marginBottom: 20, fontSize: 14, lineHeight: 1.5,
+      }}>
+        💡 <strong>Strano ma vero:</strong> con la <strong>luce</strong>, Rosso + Verde fa GIALLO (non marrone come con i pennarelli!). E tutte e tre insieme fanno la luce BIANCA.
+      </div>
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="zoom nella foto →" disableNext={challengesWon.length < 2} />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M3-3 — ZOOM SULLA FOTO
+// ----------------------------------------------------------------------------
+
+function M3_ZoomPage({ markDone, goNext, goPrev }) {
+  const [zoom, setZoom] = useState(1);
+  const landscape = React.useMemo(() => makeLandscape(), []);
+
+  useEffect(() => {
+    if (zoom >= 4) markDone();
+  }, [zoom]);
+
+  const W = 16;
+  const view = Math.max(4, Math.round(W / zoom)); // celle visibili per lato
+  const start = Math.floor((W - view) / 2);
+  const showBorders = zoom >= 2.5;
+
+  // Estrai la finestra centrale
+  const cells = [];
+  for (let y = start; y < start + view; y++) {
+    for (let x = start; x < start + view; x++) {
+      cells.push(landscape[y * W + x]);
+    }
+  }
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 4 di 7" title="Zoom nella foto" accent={PALETTE.rust} />
+      <p style={{ fontSize: 16, lineHeight: 1.55, marginBottom: 6 }}>
+        Ecco una piccola <strong>foto</strong>: un prato con il sole e dei fiori. Sembra liscia, vero?
+      </p>
+      <p style={{ fontSize: 14, color: PALETTE.inkSoft, marginBottom: 18, fontStyle: 'italic' }}>
+        Muovi la lente e zooma fino in fondo. Cosa scopri?
+      </p>
+
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
+        <div style={{
+          width: 'min(100%, 320px)', aspectRatio: '1/1',
+          border: `3px solid ${PALETTE.ink}`, borderRadius: 4,
+          overflow: 'hidden', boxShadow: `4px 4px 0 ${PALETTE.ink}`,
+          display: 'grid', gridTemplateColumns: `repeat(${view}, 1fr)`,
+          gap: showBorders ? 1 : 0, background: PALETTE.ink,
+        }}>
+          {cells.map((c, i) => (
+            <div key={i} style={{ background: c, width: '100%', height: '100%' }} />
+          ))}
+        </div>
+      </div>
+
+      {/* Slider zoom */}
+      <div style={{ maxWidth: 360, margin: '0 auto 18px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: PALETTE.inkSoft, fontFamily: FONT_MONO, marginBottom: 4 }}>
+          <span>👁 tutta la foto</span>
+          <span>super zoom 🔬</span>
+        </div>
+        <input
+          type="range" min="1" max="4" step="0.1" value={zoom}
+          onChange={(e) => setZoom(parseFloat(e.target.value))}
+          style={{ width: '100%', accentColor: PALETTE.rust, height: 28 }}
+        />
+      </div>
+
+      <div style={{
+        background: zoom >= 2.5 ? `${PALETTE.rust}12` : PALETTE.creamDeep,
+        border: `1.5px dashed ${zoom >= 2.5 ? PALETTE.rust : PALETTE.ink}`,
+        padding: '14px 18px', borderRadius: 4, marginBottom: 20, fontSize: 15, lineHeight: 1.5,
+      }}>
+        {zoom < 2.5 ? (
+          <span>Da lontano sembra una foto normale. Continua a zoomare...</span>
+        ) : (
+          <span>🤯 <strong>Ecco il segreto!</strong> Anche le sfumature del cielo e dell'erba sono fatte di <strong>quadratini</strong>. Ogni quadratino è un pixel di un colore preciso. <strong>Ogni foto del mondo è fatta così.</strong></span>
+        )}
+      </div>
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="quanti puntini? →" disableNext={zoom < 4} />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M3-4 — RISOLUZIONE
+// ----------------------------------------------------------------------------
+
+function M3_ResolutionPage({ markDone, goNext, goPrev }) {
+  const [res, setRes] = useState(4);
+  useEffect(() => {
+    if (res >= 16) markDone();
+  }, [res]);
+
+  // Disegna un cerchio (faccina sole) a risoluzione variabile
+  const renderCircle = (n) => {
+    const cells = [];
+    const c = (n - 1) / 2;
+    const radius = n / 2;
+    for (let y = 0; y < n; y++) {
+      for (let x = 0; x < n; x++) {
+        const dx = x - c, dy = y - c;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        cells.push(dist <= radius - 0.3 ? '#e8a317' : PALETTE.cream);
+      }
+    }
+    return (
+      <div style={{
+        display: 'grid', gridTemplateColumns: `repeat(${n}, 1fr)`,
+        width: 200, height: 200, gap: 1, background: PALETTE.paperLine,
+        border: `2px solid ${PALETTE.ink}`,
+      }}>
+        {cells.map((col, i) => <div key={i} style={{ background: col }} />)}
+      </div>
+    );
+  };
+
+  const resLabel = res <= 4 ? 'pochi pixel' : res <= 8 ? 'qualche pixel' : res <= 16 ? 'tanti pixel' : 'tantissimi';
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 5 di 7" title="Quanti puntini?" accent={PALETTE.rust} />
+      <p style={{ fontSize: 16, lineHeight: 1.55, marginBottom: 6 }}>
+        Più pixel ci sono, più l'immagine è <strong>nitida</strong>. Prova a disegnare un cerchio con pochi o tanti pixel.
+      </p>
+      <p style={{ fontSize: 14, color: PALETTE.inkSoft, marginBottom: 18, fontStyle: 'italic' }}>
+        Sposta il cursore e guarda il cerchio diventare più liscio.
+      </p>
+
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+        {renderCircle(res)}
+      </div>
+      <div style={{ textAlign: 'center', marginBottom: 16 }}>
+        <span style={{ fontFamily: FONT_MONO, fontSize: 15, fontWeight: 700, color: PALETTE.rust }}>
+          {res} × {res} = {res * res} pixel
+        </span>
+        <span style={{ fontSize: 13, color: PALETTE.inkSoft, marginLeft: 8 }}>({resLabel})</span>
+      </div>
+
+      <div style={{ maxWidth: 360, margin: '0 auto 18px' }}>
+        <input
+          type="range" min="4" max="32" step="2" value={res}
+          onChange={(e) => setRes(parseInt(e.target.value, 10))}
+          style={{ width: '100%', accentColor: PALETTE.rust, height: 28 }}
+        />
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: PALETTE.inkSoft, fontFamily: FONT_MONO }}>
+          <span>4×4 sgranato</span>
+          <span>32×32 liscio</span>
+        </div>
+      </div>
+
+      <div style={{
+        background: `${PALETTE.amber}15`, border: `1.5px dashed ${PALETTE.amber}`,
+        padding: '14px 18px', borderRadius: 4, marginBottom: 20, fontSize: 15, lineHeight: 1.5,
+      }}>
+        📱 <strong>Ecco i megapixel!</strong> Quando senti "fotocamera da 12 megapixel" vuol dire che ogni foto ha <strong>12 milioni di pixel</strong>. Ecco perché le foto del telefono sono così nitide.
+      </div>
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="il grande segreto →" disableNext={res < 16} />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M3-5 — TUTTO TORNA AI NUMERI
+// ----------------------------------------------------------------------------
+
+function M3_NumbersPage({ markDone, goNext, goPrev }) {
+  const [r, setR] = useState(232);
+  const [g, setG] = useState(163);
+  const [b, setB] = useState(23);
+
+  useEffect(() => { markDone(); }, []);
+
+  const toBin = (n) => n.toString(2).padStart(8, '0');
+  const toHex = (n) => n.toString(16).padStart(2, '0');
+  const hex = `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 6 di 7" title="Il grande segreto" accent={PALETTE.rust} />
+      <p style={{ fontSize: 16, lineHeight: 1.55, marginBottom: 18 }}>
+        Adesso colleghiamo tutto. Prendi <strong>un solo pixel</strong>. Il suo colore sono 3 numeri (Rosso, Verde, Blu).
+        E ogni numero, ricordi il Modulo 1?, è fatto di <BinChip>0</BinChip> e <BinChip>1</BinChip>.
+      </p>
+
+      {/* Un pixel */}
+      <div style={{
+        background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`,
+        borderRadius: 6, padding: 20, marginBottom: 18,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div style={{
+            width: 70, height: 70, background: hex,
+            border: `2px solid ${PALETTE.ink}`, borderRadius: 4, flexShrink: 0,
+          }} />
+          <div style={{ fontSize: 22, color: PALETTE.rust }}>=</div>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 14 }}>
+            <div style={{ color: '#c0432a' }}>Rosso {r} → {toBin(r)}</div>
+            <div style={{ color: '#4a8a5c' }}>Verde {g} → {toBin(g)}</div>
+            <div style={{ color: '#2d7dd2' }}>Blu&nbsp;&nbsp; {b} → {toBin(b)}</div>
+          </div>
+        </div>
+        <div style={{ marginTop: 14 }}>
+          <input type="range" min="0" max="255" value={r} onChange={e => setR(+e.target.value)} style={{ width: '100%', accentColor: '#c0432a', height: 18 }} />
+          <input type="range" min="0" max="255" value={g} onChange={e => setG(+e.target.value)} style={{ width: '100%', accentColor: '#4a8a5c', height: 18 }} />
+          <input type="range" min="0" max="255" value={b} onChange={e => setB(+e.target.value)} style={{ width: '100%', accentColor: '#2d7dd2', height: 18 }} />
+        </div>
+        <div style={{ textAlign: 'center', marginTop: 10, fontFamily: FONT_MONO, fontSize: 13, color: PALETTE.inkSoft }}>
+          1 pixel = 24 zeri e uno
+        </div>
+      </div>
+
+      <div style={{
+        background: PALETTE.ink, color: PALETTE.cream,
+        borderRadius: 6, padding: '20px 22px', marginBottom: 20,
+      }}>
+        <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.amber, letterSpacing: 2, fontWeight: 700, marginBottom: 10 }}>
+          ░ FACCIAMO I CONTI ░
+        </div>
+        <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6 }}>
+          1 pixel = <strong>24</strong> bit.<br />
+          Una foto del telefono = <strong>12 milioni</strong> di pixel.<br />
+          Quindi una sola foto = <strong style={{ color: PALETTE.amber }}>288 milioni</strong> di 0 e 1!<br /><br />
+          Quando mandi una foto su WhatsApp, mandi <strong>centinaia di milioni di 0 e 1</strong> dall'altra parte del mondo. In un secondo.
+        </p>
+      </div>
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="hai finito! →" />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M3-6 — COMPLETATO
+// ----------------------------------------------------------------------------
+
+function M3_CompletePage({ markDone, progress, goPrev }) {
+  useEffect(() => { markDone(); }, []);
+  const name = progress.module1.userName || 'Esploratore';
+  const art = progress.module3.pixelArt;
+  const hasArt = art && art.some(c => c !== null);
+
+  return (
+    <div style={{ textAlign: 'center', padding: '10px 0' }}>
+      <PageHeader eyebrow="Pagina 7 di 7" title="Hai imparato!" centered accent={PALETTE.rust} />
+
+      <div style={{ marginBottom: 12 }}>
+        <Icon name="trophy" size={68} strokeWidth={1.5} color={PALETTE.rust} />
+      </div>
+
+      <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 32, fontWeight: 800, margin: '0 0 8px', letterSpacing: '-0.01em' }}>
+        Sei un pittore di pixel, {name}!
+      </h3>
+      <p style={{ fontSize: 17, color: PALETTE.inkSoft, marginBottom: 24, maxWidth: 500, margin: '0 auto 24px' }}>
+        Adesso quando guardi uno schermo sai cosa c'è davvero: <strong>milioni di puntini</strong>, ognuno fatto di numeri.
+      </p>
+
+      {hasArt && (
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 1.5, marginBottom: 8 }}>
+            ░ IL TUO CAPOLAVORO ░
+          </div>
+          <div style={{
+            display: 'inline-grid', gridTemplateColumns: 'repeat(16, 1fr)',
+            width: 160, height: 160, gap: 0,
+            border: `2px solid ${PALETTE.ink}`, boxShadow: `3px 3px 0 ${PALETTE.ink}`,
+          }}>
+            {art.map((c, i) => <div key={i} style={{ background: c || PALETTE.cream }} />)}
+          </div>
+        </div>
+      )}
+
+      <div style={{
+        background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`,
+        borderRadius: 6, padding: '22px 24px',
+        marginBottom: 28, textAlign: 'left',
+        maxWidth: 540, marginLeft: 'auto', marginRight: 'auto',
+      }}>
+        <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 2, marginBottom: 12, fontWeight: 700 }}>
+          ░ COSA HAI IMPARATO ░
+        </div>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 16, lineHeight: 1.9 }}>
+          <li><Icon name="star" size={14} fill={PALETTE.rust} color={PALETTE.rust} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Le immagini sono fatte di <strong>pixel</strong> (puntini)</li>
+          <li><Icon name="star" size={14} fill={PALETTE.rust} color={PALETTE.rust} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Ogni colore = Rosso + Verde + Blu (RGB)</li>
+          <li><Icon name="star" size={14} fill={PALETTE.rust} color={PALETTE.rust} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Più pixel = immagine più nitida (megapixel)</li>
+          <li><Icon name="star" size={14} fill={PALETTE.rust} color={PALETTE.rust} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Ogni pixel è fatto di 0 e 1 (torna il Modulo 1!)</li>
+          <li><Icon name="star" size={14} fill={PALETTE.rust} color={PALETTE.rust} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Una foto = milioni di numeri che viaggiano</li>
+        </ul>
+      </div>
+
+      <div style={{ fontStyle: 'italic', fontSize: 15, color: PALETTE.inkSoft, marginBottom: 20 }}>
+        Hai finito il <strong>Capitolo 1</strong>! Il prossimo modulo sarà<br />
+        <strong>Le Istruzioni Magiche</strong>: come si comanda un computer.
+      </div>
+
+      <NavButtons goPrev={goPrev} hideNext />
+    </div>
+  );
+}
+
+// ============================================================================
+// CHAPTER HEADER (hub)
+// ============================================================================
+
+function ModuleResetButton({ onReset }) {
+  return (
+    <button
+      onClick={() => {
+        if (window.confirm('Vuoi ricominciare SOLO questo modulo da capo?\n\nI progressi di questo modulo verranno azzerati. Gli altri moduli restano come sono.')) {
+          onReset();
+        }
+      }}
+      style={{
+        background: 'transparent',
+        border: `1px solid ${PALETTE.inkSoft}40`,
+        color: PALETTE.inkSoft,
+        padding: '3px 9px',
+        fontSize: 11,
+        cursor: 'pointer',
+        borderRadius: 2,
+        fontFamily: FONT_BODY,
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 4,
+      }}
+    >
+      <Icon name="rotate-ccw" size={10} />
+      ricomincia il modulo
+    </button>
+  );
+}
+
+function ChapterHeader({ num, title, done }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, padding: '0 2px' }}>
+      <div>
+        <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 2, fontWeight: 700 }}>
+          {num}{done ? ' · ✓' : ''}
+        </div>
+        <div style={{ fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 22, color: PALETTE.ink, lineHeight: 1.1 }}>
+          {title}
+        </div>
+      </div>
+      <div style={{ flex: 1, height: 2, background: done ? PALETTE.moss : PALETTE.paperLine, borderRadius: 1 }} />
+    </div>
+  );
+}
+
+// ============================================================================
+// MODULO 4 — LE ISTRUZIONI MAGICHE (ALGORITMI)
+// ============================================================================
+
+// Direzioni: N(su) E(dx) S(giu) W(sx)
+const DIRS = ['N', 'E', 'S', 'W'];
+const DELTA = { N: [0, -1], E: [1, 0], S: [0, 1], W: [-1, 0] };
+const turnRight = (d) => DIRS[(DIRS.indexOf(d) + 1) % 4];
+const turnLeft = (d) => DIRS[(DIRS.indexOf(d) + 3) % 4];
+
+function runProgram(level, program) {
+  let state = { ...level.start };
+  const trail = [{ ...state }];
+  let crashed = false;
+  for (const cmd of program) {
+    if (cmd === 'L') state = { ...state, dir: turnLeft(state.dir) };
+    else if (cmd === 'R') state = { ...state, dir: turnRight(state.dir) };
+    else if (cmd === 'F') {
+      const [dx, dy] = DELTA[state.dir];
+      const nx = state.x + dx, ny = state.y + dy;
+      const out = nx < 0 || ny < 0 || nx >= level.size || ny >= level.size;
+      const wall = level.walls.some(([wx, wy]) => wx === nx && wy === ny);
+      if (out || wall) { crashed = true; trail.push({ ...state, crash: true }); break; }
+      state = { ...state, x: nx, y: ny };
+    }
+    trail.push({ ...state });
+  }
+  const reached = !crashed && state.x === level.goal.x && state.y === level.goal.y;
+  return { trail, crashed, reached };
+}
+
+function ModuleFourView({ page, setPage, progress, markPageDone, onExit, onResetModule }) {
+  const pages = [
+    { component: M4_IntroPage },
+    { component: M4_GuidePage },
+    { component: M4_ObstaclePage },
+    { component: M4_DebugPage },
+    { component: M4_LoopPage },
+    { component: M4_ConditionPage },
+    { component: M4_CompletePage },
+  ];
+  const Current = pages[page].component;
+  const done = new Set(progress.module4.pagesDone);
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <button onClick={onExit} style={{
+          background: 'transparent', border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', gap: 6,
+          color: PALETTE.inkSoft, fontSize: 14, padding: 4,
+        }}>
+          <Icon name="arrow-left" size={16} /> all'officina
+        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 1.5 }}>
+            MODULO 04 · LE ISTRUZIONI MAGICHE
+          </div>
+          <ModuleResetButton onReset={onResetModule} />
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: 6, marginBottom: 28, justifyContent: 'center' }}>
+        {pages.map((p, i) => (
+          <button key={i} onClick={() => setPage(i)} style={{
+            width: i === page ? 36 : 14, height: 14, borderRadius: 7,
+            background: i === page ? PALETTE.moss : done.has(i) ? PALETTE.moss : PALETTE.creamDeep,
+            opacity: i === page ? 1 : done.has(i) ? 0.6 : 1,
+            border: `1.5px solid ${i === page ? PALETTE.ink : 'transparent'}`,
+            cursor: 'pointer', transition: 'all 0.2s ease', padding: 0,
+          }} />
+        ))}
+      </div>
+
+      <div style={{
+        background: '#fff', border: `2px solid ${PALETTE.ink}`,
+        borderRadius: 4, boxShadow: `6px 6px 0 ${PALETTE.ink}`,
+        padding: '36px 32px', minHeight: 460,
+      }}>
+        <Current
+          progress={progress}
+          markDone={() => markPageDone(page)}
+          goNext={() => setPage(Math.min(page + 1, pages.length - 1))}
+          goPrev={() => setPage(Math.max(page - 1, 0))}
+        />
+      </div>
+    </div>
+  );
+}
+
+// --- Componente griglia robot riutilizzabile ---
+function RobotGrid({ level, robotState, size = 280 }) {
+  const cell = size / level.size;
+  const rs = robotState || level.start;
+  const rot = { N: 0, E: 90, S: 180, W: 270 }[rs.dir];
+
+  return (
+    <svg viewBox={`0 0 ${size} ${size}`} width="100%" style={{ maxWidth: size, display: 'block', margin: '0 auto' }}>
+      {/* celle */}
+      {Array.from({ length: level.size }).map((_, y) =>
+        Array.from({ length: level.size }).map((_, x) => {
+          const isWall = level.walls.some(([wx, wy]) => wx === x && wy === y);
+          return (
+            <rect key={`${x}-${y}`} x={x * cell} y={y * cell} width={cell} height={cell}
+              fill={isWall ? PALETTE.inkSoft : PALETTE.cream}
+              stroke={PALETTE.paperLine} strokeWidth="1" />
+          );
+        })
+      )}
+      {/* goal */}
+      <text x={level.goal.x * cell + cell / 2} y={level.goal.y * cell + cell / 2 + cell * 0.18}
+        textAnchor="middle" fontSize={cell * 0.55}>🏁</text>
+      {/* robot */}
+      <g transform={`translate(${rs.x * cell + cell / 2}, ${rs.y * cell + cell / 2}) rotate(${rot})`}
+        style={{ transition: 'transform 0.3s ease' }}>
+        <circle r={cell * 0.32} fill={rs.crash ? PALETTE.rust : PALETTE.moss} stroke={PALETTE.ink} strokeWidth="2" />
+        <polygon points={`0,${-cell * 0.28} ${cell * 0.13},${-cell * 0.1} ${-cell * 0.13},${-cell * 0.1}`} fill={PALETTE.cream} />
+        <circle cx={-cell * 0.1} cy={cell * 0.05} r={cell * 0.05} fill={PALETTE.ink} />
+        <circle cx={cell * 0.1} cy={cell * 0.05} r={cell * 0.05} fill={PALETTE.ink} />
+      </g>
+    </svg>
+  );
+}
+
+// --- Builder di programma (sequenza comandi) ---
+function ProgramRunner({ level, initialProgram = [], locked = false, onResult, instruction }) {
+  const [program, setProgram] = useState(initialProgram);
+  const [robotState, setRobotState] = useState(level.start);
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState(null);
+
+  const cmdLabel = { F: '⬆ avanti', L: '↺ sinistra', R: '↻ destra' };
+
+  const addCmd = (c) => { if (!running) { setProgram(p => [...p, c]); setResult(null); } };
+  const removeLast = () => { if (!running) { setProgram(p => p.slice(0, -1)); setResult(null); } };
+  const clear = () => { if (!running) { setProgram([]); setResult(null); setRobotState(level.start); } };
+
+  const execute = () => {
+    if (running || program.length === 0) return;
+    setRunning(true);
+    setResult(null);
+    const { trail, reached } = runProgram(level, program);
+    trail.forEach((st, i) => {
+      setTimeout(() => {
+        setRobotState(st);
+        if (i === trail.length - 1) {
+          setRunning(false);
+          setResult(reached ? 'win' : 'fail');
+          if (reached && onResult) onResult();
+        }
+      }, i * 400);
+    });
+  };
+
+  const reset = () => { setRobotState(level.start); setResult(null); };
+
+  return (
+    <div>
+      <div style={{ background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`, borderRadius: 6, padding: 16, marginBottom: 14 }}>
+        <RobotGrid level={level} robotState={robotState} />
+      </div>
+
+      {instruction && (
+        <p style={{ fontSize: 15, color: PALETTE.inkSoft, marginBottom: 12, textAlign: 'center' }}>{instruction}</p>
+      )}
+
+      {/* Programma corrente */}
+      <div style={{
+        minHeight: 44, background: '#fff', border: `2px solid ${PALETTE.ink}`,
+        borderRadius: 4, padding: '8px 10px', marginBottom: 10,
+        display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center',
+      }}>
+        {program.length === 0 ? (
+          <span style={{ color: PALETTE.warmGray, fontStyle: 'italic', fontSize: 14 }}>
+            il tuo programma appare qui...
+          </span>
+        ) : program.map((c, i) => (
+          <span key={i} style={{
+            background: PALETTE.moss, color: '#fff', fontSize: 13, fontWeight: 600,
+            padding: '4px 8px', borderRadius: 3, fontFamily: FONT_MONO,
+          }}>{cmdLabel[c]}</span>
+        ))}
+      </div>
+
+      {/* Pulsanti comando */}
+      {!locked && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+          <button onClick={() => addCmd('F')} style={cmdBtn()}>⬆ avanti</button>
+          <button onClick={() => addCmd('L')} style={cmdBtn()}>↺ gira sx</button>
+          <button onClick={() => addCmd('R')} style={cmdBtn()}>↻ gira dx</button>
+          <button onClick={removeLast} style={{ ...cmdBtn(), background: '#fff' }}>⌫ togli</button>
+          <button onClick={clear} style={{ ...cmdBtn(), background: '#fff' }}>🗑 svuota</button>
+        </div>
+      )}
+
+      {/* Esegui */}
+      <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
+        <button onClick={execute} disabled={running || program.length === 0}
+          style={{ ...btnPrimary(), background: PALETTE.moss, boxShadow: `3px 3px 0 ${PALETTE.amber}`, opacity: (running || program.length === 0) ? 0.5 : 1 }}>
+          <Icon name="play" size={14} fill="currentColor" style={{ display: 'inline-block', marginRight: 6, verticalAlign: 'middle' }} />
+          {running ? 'in corso...' : 'esegui!'}
+        </button>
+        {result && !running && (
+          <button onClick={reset} style={btnGhost()}>↻ riprova</button>
+        )}
+      </div>
+
+      {/* Esito */}
+      {result === 'win' && (
+        <div style={{ background: `${PALETTE.moss}15`, border: `1.5px solid ${PALETTE.moss}`, borderRadius: 4, padding: '12px 16px', color: PALETTE.moss, fontWeight: 600, fontSize: 16, textAlign: 'center' }}>
+          <Icon name="check-circle" size={18} style={{ verticalAlign: 'middle', marginRight: 6 }} />
+          Il robot ha trovato il tesoro! 🎉
+        </div>
+      )}
+      {result === 'fail' && (
+        <div style={{ background: `${PALETTE.rust}12`, border: `1.5px solid ${PALETTE.rust}`, borderRadius: 4, padding: '12px 16px', color: PALETTE.rust, fontSize: 15, textAlign: 'center' }}>
+          Ahia! Il robot non è arrivato al tesoro. Niente paura: <strong>cambia i comandi e riprova.</strong>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function cmdBtn() {
+  return {
+    background: PALETTE.creamDeep, border: `2px solid ${PALETTE.ink}`,
+    borderRadius: 4, padding: '8px 12px', fontSize: 14, fontWeight: 600,
+    cursor: 'pointer', color: PALETTE.ink, fontFamily: FONT_BODY,
+  };
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M4-0 — INTRO: IL ROBOT STUPIDO
+// ----------------------------------------------------------------------------
+
+function M4_IntroPage({ markDone, goNext }) {
+  useEffect(() => { markDone(); }, []);
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 1 di 7" title="Il robot ubbidiente" accent={PALETTE.moss} />
+      <div style={{ fontSize: 18, lineHeight: 1.65, marginBottom: 20 }}>
+        <p>
+          Ecco una cosa importante sui computer: fanno <strong>esattamente</strong> quello che gli dici. Né più, né meno.
+        </p>
+        <p style={{ marginTop: 16 }}>
+          Sembra una bella cosa, ma c'è un problema: <strong>il computer non ha buon senso.</strong> Se gli dai un'istruzione sbagliata, lui la esegue lo stesso, anche se è una sciocchezza.
+        </p>
+        <div style={{ marginTop: 20, background: PALETTE.cream, border: `1.5px dashed ${PALETTE.moss}`, padding: '16px 20px', borderRadius: 4 }}>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.moss, fontWeight: 700, letterSpacing: 2, marginBottom: 8 }}>
+            ░ ESEMPIO ░
+          </div>
+          <p style={{ margin: 0, fontSize: 16 }}>
+            Tu dici al robot: <em>"1) metti le scarpe. 2) metti i calzini."</em><br /><br />
+            Un umano capirebbe l'ordine giusto. Il robot no: si infila le scarpe, e poi i <strong>calzini SOPRA le scarpe</strong>. Ha fatto esattamente quello che hai detto!
+          </p>
+        </div>
+        <p style={{ marginTop: 20, fontSize: 16 }}>
+          Una lista di istruzioni precise si chiama <strong>algoritmo</strong>. Imparare a darle bene è il primo passo per comandare qualsiasi computer.
+        </p>
+      </div>
+      <NavButtons goNext={goNext} nextLabel="guida il robot →" />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M4-1 — GUIDA IL ROBOT
+// ----------------------------------------------------------------------------
+
+function M4_GuidePage({ markDone, goNext, goPrev }) {
+  const level = { size: 5, start: { x: 0, y: 4, dir: 'N' }, goal: { x: 0, y: 0 }, walls: [] };
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 2 di 7" title="Guida il robot" accent={PALETTE.moss} />
+      <p style={{ fontSize: 16, lineHeight: 1.55, marginBottom: 16 }}>
+        Costruisci un <strong>programma</strong> per portare il robot 🤖 fino al tesoro 🏁. Aggiungi i comandi, poi premi <strong>esegui</strong>.
+      </p>
+      <ProgramRunner
+        level={level}
+        onResult={markDone}
+        instruction="Il robot guarda in alto. Deve salire fino in cima."
+      />
+      <div style={{ fontSize: 13, color: PALETTE.inkSoft, fontStyle: 'italic', textAlign: 'center', margin: '14px 0 0' }}>
+        Suggerimento: il robot guarda già verso l'alto. Quanti passi "avanti" servono?
+      </div>
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="attento agli ostacoli →" />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M4-2 — OSTACOLI
+// ----------------------------------------------------------------------------
+
+function M4_ObstaclePage({ markDone, goNext, goPrev }) {
+  const level = {
+    size: 5, start: { x: 0, y: 4, dir: 'N' }, goal: { x: 4, y: 0 },
+    walls: [[1, 1], [1, 2], [1, 3], [3, 0], [3, 1], [3, 2]],
+  };
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 3 di 7" title="Attento agli ostacoli" accent={PALETTE.moss} />
+      <p style={{ fontSize: 16, lineHeight: 1.55, marginBottom: 16 }}>
+        Adesso ci sono dei <strong>muri</strong> (i quadrati scuri). Se il robot ci sbatte, si ferma! Devi <strong>pianificare</strong> il percorso prima di partire.
+      </p>
+      <ProgramRunner
+        level={level}
+        onResult={markDone}
+        instruction="Trova la strada che gira intorno ai muri."
+      />
+      <div style={{ fontSize: 13, color: PALETTE.inkSoft, fontStyle: 'italic', textAlign: 'center', margin: '14px 0 0' }}>
+        Pianificare prima di agire è una mossa da veri esperti — vale per i robot e per la vita.
+      </div>
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="il bug nascosto →" />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M4-3 — DEBUG
+// ----------------------------------------------------------------------------
+
+function M4_DebugPage({ markDone, goNext, goPrev }) {
+  // programma quasi giusto: c'e un comando sbagliato che fa sbattere
+  const level = { size: 5, start: { x: 0, y: 4, dir: 'N' }, goal: { x: 2, y: 0 }, walls: [[1, 1], [1, 2], [1, 3]] };
+  // percorso corretto: F F (sale a y2), R, F F (va a x2), L, F F (sale a y0)
+  const [program, setProgram] = useState(['F', 'F', 'F', 'F', 'R', 'F', 'F', 'L', 'F', 'F']);
+  const [robotState, setRobotState] = useState(level.start);
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState(null);
+
+  const cmdLabel = { F: '⬆', L: '↺', R: '↻' };
+
+  const execute = () => {
+    if (running) return;
+    setRunning(true); setResult(null);
+    const { trail, reached } = runProgram(level, program);
+    trail.forEach((st, i) => setTimeout(() => {
+      setRobotState(st);
+      if (i === trail.length - 1) {
+        setRunning(false);
+        setResult(reached ? 'win' : 'fail');
+        if (reached) markDone();
+      }
+    }, i * 380));
+  };
+
+  const removeAt = (idx) => {
+    if (running) return;
+    setProgram(p => p.filter((_, i) => i !== idx));
+    setResult(null); setRobotState(level.start);
+  };
+  const reset = () => { setRobotState(level.start); setResult(null); };
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 4 di 7" title="Il bug nascosto" accent={PALETTE.moss} />
+      <p style={{ fontSize: 16, lineHeight: 1.55, marginBottom: 8 }}>
+        Questo programma è <strong>quasi</strong> giusto, ma ha un comando di troppo: un <strong>bug</strong>. Eseguilo e guarda dove il robot sbaglia.
+      </p>
+      <p style={{ fontSize: 15, color: PALETTE.inkSoft, marginBottom: 16 }}>
+        Poi <strong>tocca il comando sbagliato</strong> per toglierlo, e riprova. Trovare e correggere l'errore si chiama <strong>debug</strong>.
+      </p>
+
+      <div style={{ background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`, borderRadius: 6, padding: 16, marginBottom: 14 }}>
+        <RobotGrid level={level} robotState={robotState} />
+      </div>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12, justifyContent: 'center' }}>
+        {program.map((c, i) => (
+          <button key={i} onClick={() => removeAt(i)} title="tocca per togliere" style={{
+            background: PALETTE.moss, color: '#fff', border: `2px solid ${PALETTE.ink}`,
+            borderRadius: 4, width: 40, height: 40, fontSize: 18, cursor: 'pointer', fontFamily: FONT_MONO,
+          }}>{cmdLabel[c]}</button>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
+        <button onClick={execute} disabled={running} style={{ ...btnPrimary(), background: PALETTE.moss, boxShadow: `3px 3px 0 ${PALETTE.amber}`, opacity: running ? 0.5 : 1 }}>
+          <Icon name="play" size={14} fill="currentColor" style={{ display: 'inline-block', marginRight: 6, verticalAlign: 'middle' }} />
+          {running ? 'in corso...' : 'esegui!'}
+        </button>
+        {result && !running && <button onClick={reset} style={btnGhost()}>↻ riprova</button>}
+      </div>
+
+      {result === 'win' && (
+        <div style={{ background: `${PALETTE.moss}15`, border: `1.5px solid ${PALETTE.moss}`, borderRadius: 4, padding: '12px 16px', color: PALETTE.moss, fontWeight: 600, fontSize: 16, textAlign: 'center', marginBottom: 8 }}>
+          <Icon name="check-circle" size={18} style={{ verticalAlign: 'middle', marginRight: 6 }} />
+          Hai trovato il bug! Il robot è arrivato. 🎉
+        </div>
+      )}
+      {result === 'fail' && (
+        <div style={{ background: `${PALETTE.rust}12`, border: `1.5px solid ${PALETTE.rust}`, borderRadius: 4, padding: '12px 16px', color: PALETTE.rust, fontSize: 15, textAlign: 'center', marginBottom: 8 }}>
+          Il robot ha sbagliato strada. C'è un comando di troppo: quale? Toccalo per toglierlo.
+        </div>
+      )}
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="la ripetizione →" />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M4-4 — LOOP
+// ----------------------------------------------------------------------------
+
+function M4_LoopPage({ markDone, goNext, goPrev }) {
+  const [n, setN] = useState(3);
+  useEffect(() => { markDone(); }, []);
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 5 di 7" title="La ripetizione" accent={PALETTE.moss} />
+      <p style={{ fontSize: 16, lineHeight: 1.55, marginBottom: 16 }}>
+        E se il robot dovesse fare <strong>avanti</strong> dieci volte? Scrivere "avanti" dieci volte è noioso. I programmatori usano un trucco: la <strong>ripetizione</strong> (in inglese <em>loop</em>).
+      </p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 18 }}>
+        <div style={{ background: PALETTE.creamDeep, border: `1.5px solid ${PALETTE.paperLine}`, borderRadius: 6, padding: 14 }}>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.rust, fontWeight: 700, marginBottom: 8 }}>SENZA RIPETIZIONE 😩</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {Array.from({ length: n }).map((_, i) => (
+              <span key={i} style={{ fontFamily: FONT_MONO, fontSize: 13, background: '#fff', padding: '3px 8px', borderRadius: 3, border: `1px solid ${PALETTE.paperLine}` }}>⬆ avanti</span>
+            ))}
+          </div>
+        </div>
+        <div style={{ background: `${PALETTE.moss}15`, border: `1.5px solid ${PALETTE.moss}`, borderRadius: 6, padding: 14 }}>
+          <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.moss, fontWeight: 700, marginBottom: 8 }}>CON RIPETIZIONE 😎</div>
+          <span style={{ fontFamily: FONT_MONO, fontSize: 14, background: '#fff', padding: '6px 10px', borderRadius: 3, border: `1px solid ${PALETTE.moss}`, display: 'inline-block', fontWeight: 700 }}>
+            🔁 ripeti {n}× ( ⬆ avanti )
+          </span>
+          <p style={{ fontSize: 13, color: PALETTE.inkSoft, marginTop: 10, marginBottom: 0 }}>
+            Stessa cosa, ma scritta una volta sola!
+          </p>
+        </div>
+      </div>
+
+      <div style={{ textAlign: 'center', marginBottom: 18 }}>
+        <div style={{ fontSize: 14, color: PALETTE.inkSoft, marginBottom: 6 }}>Prova a cambiare quante volte ripetere:</div>
+        <input type="range" min="2" max="10" value={n} onChange={e => setN(+e.target.value)} style={{ width: 200, accentColor: PALETTE.moss }} />
+        <div style={{ fontFamily: FONT_MONO, fontWeight: 700, color: PALETTE.moss, fontSize: 18 }}>{n} volte</div>
+      </div>
+
+      <div style={{ background: `${PALETTE.amber}15`, border: `1.5px dashed ${PALETTE.amber}`, padding: '12px 16px', borderRadius: 4, marginBottom: 20, fontSize: 15, lineHeight: 1.5 }}>
+        💡 I computer fanno la stessa cosa <strong>milioni di volte</strong> senza stancarsi. La ripetizione è il loro superpotere.
+      </div>
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="se... allora →" />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M4-5 — CONDIZIONI
+// ----------------------------------------------------------------------------
+
+function M4_ConditionPage({ markDone, goNext, goPrev }) {
+  // Robot segue regola: SE muro davanti -> gira a destra; ALTRIMENTI -> avanti
+  const level = { size: 5, start: { x: 0, y: 4, dir: 'N' }, goal: { x: 4, y: 0 }, walls: [[0, 1], [1, 1], [2, 1], [2, 2], [2, 3]] };
+  const [robotState, setRobotState] = useState(level.start);
+  const [running, setRunning] = useState(false);
+  const [done, setDone] = useState(false);
+
+  const run = () => {
+    if (running) return;
+    setRunning(true); setDone(false);
+    // simula regola condizionale per max 30 passi
+    let state = { ...level.start };
+    const trail = [{ ...state }];
+    for (let step = 0; step < 30; step++) {
+      if (state.x === level.goal.x && state.y === level.goal.y) break;
+      const [dx, dy] = DELTA[state.dir];
+      const nx = state.x + dx, ny = state.y + dy;
+      const out = nx < 0 || ny < 0 || nx >= level.size || ny >= level.size;
+      const wall = level.walls.some(([wx, wy]) => wx === nx && wy === ny);
+      if (out || wall) {
+        state = { ...state, dir: turnRight(state.dir) }; // SE muro -> gira
+      } else {
+        state = { ...state, x: nx, y: ny }; // ALTRIMENTI -> avanti
+      }
+      trail.push({ ...state });
+    }
+    trail.forEach((st, i) => setTimeout(() => {
+      setRobotState(st);
+      if (i === trail.length - 1) { setRunning(false); setDone(true); markDone(); }
+    }, i * 350));
+  };
+
+  const reset = () => { setRobotState(level.start); setDone(false); };
+
+  return (
+    <div>
+      <PageHeader eyebrow="Pagina 6 di 7" title="Se... allora" accent={PALETTE.moss} />
+      <p style={{ fontSize: 16, lineHeight: 1.55, marginBottom: 14 }}>
+        I computer sanno anche <strong>decidere</strong>. Diamo al robot una regola e lui la segue da solo, scegliendo cosa fare in ogni momento:
+      </p>
+
+      <div style={{ background: PALETTE.ink, color: PALETTE.cream, borderRadius: 6, padding: '14px 18px', marginBottom: 16, fontFamily: FONT_MONO, fontSize: 14, lineHeight: 1.7 }}>
+        <div><span style={{ color: PALETTE.amber }}>SE</span> c'è un muro davanti → <span style={{ color: PALETTE.amberGlow }}>gira a destra</span></div>
+        <div><span style={{ color: PALETTE.amber }}>ALTRIMENTI</span> → <span style={{ color: PALETTE.amberGlow }}>vai avanti</span></div>
+      </div>
+
+      <div style={{ background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`, borderRadius: 6, padding: 16, marginBottom: 14 }}>
+        <RobotGrid level={level} robotState={robotState} />
+      </div>
+
+      <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
+        <button onClick={run} disabled={running} style={{ ...btnPrimary(), background: PALETTE.moss, boxShadow: `3px 3px 0 ${PALETTE.amber}`, opacity: running ? 0.5 : 1 }}>
+          <Icon name="play" size={14} fill="currentColor" style={{ display: 'inline-block', marginRight: 6, verticalAlign: 'middle' }} />
+          {running ? 'il robot decide...' : 'lascia decidere il robot'}
+        </button>
+        {done && <button onClick={reset} style={btnGhost()}>↻ ancora</button>}
+      </div>
+
+      {done && (
+        <div style={{ background: `${PALETTE.moss}15`, border: `1.5px solid ${PALETTE.moss}`, borderRadius: 4, padding: '12px 16px', color: PALETTE.moss, fontSize: 15, textAlign: 'center', marginBottom: 8 }}>
+          Visto? Con una sola regola, il robot ha deciso da solo a ogni passo. Questo si chiama <strong>condizione</strong>.
+        </div>
+      )}
+
+      <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="hai finito! →" />
+    </div>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// PAGINA M4-6 — COMPLETATO
+// ----------------------------------------------------------------------------
+
+function M4_CompletePage({ markDone, progress, goPrev }) {
+  useEffect(() => { markDone(); }, []);
+  const name = progress.module1.userName || 'Esploratore';
+
+  return (
+    <div style={{ textAlign: 'center', padding: '10px 0' }}>
+      <PageHeader eyebrow="Pagina 7 di 7" title="Hai imparato!" centered accent={PALETTE.moss} />
+      <div style={{ marginBottom: 12 }}>
+        <Icon name="trophy" size={68} strokeWidth={1.5} color={PALETTE.moss} />
+      </div>
+      <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 32, fontWeight: 800, margin: '0 0 8px' }}>
+        Sei un programmatore, {name}!
+      </h3>
+      <p style={{ fontSize: 17, color: PALETTE.inkSoft, marginBottom: 26, maxWidth: 500, margin: '0 auto 26px' }}>
+        Hai imparato a dare ordini precisi a un computer. È così che funziona <strong>tutto</strong> il software del mondo.
+      </p>
+
+      <div style={{ background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`, borderRadius: 6, padding: '22px 24px', marginBottom: 22, textAlign: 'left', maxWidth: 540, marginLeft: 'auto', marginRight: 'auto' }}>
+        <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 2, marginBottom: 12, fontWeight: 700 }}>░ COSA HAI IMPARATO ░</div>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 16, lineHeight: 1.9 }}>
+          <li><Icon name="star" size={14} fill={PALETTE.moss} color={PALETTE.moss} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Un <strong>algoritmo</strong> è una lista di passi precisi</li>
+          <li><Icon name="star" size={14} fill={PALETTE.moss} color={PALETTE.moss} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Il computer fa <strong>esattamente</strong> ciò che dici (non ha buon senso)</li>
+          <li><Icon name="star" size={14} fill={PALETTE.moss} color={PALETTE.moss} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Un <strong>bug</strong> è un errore; il <strong>debug</strong> è trovarlo</li>
+          <li><Icon name="star" size={14} fill={PALETTE.moss} color={PALETTE.moss} style={{ verticalAlign: 'middle', marginRight: 8 }} /> La <strong>ripetizione</strong> fa le cose tante volte senza riscriverle</li>
+          <li><Icon name="star" size={14} fill={PALETTE.moss} color={PALETTE.moss} style={{ verticalAlign: 'middle', marginRight: 8 }} /> Una <strong>condizione</strong> (se… allora) fa decidere il computer</li>
+        </ul>
+      </div>
+
+      <div style={{ background: `${PALETTE.amber}12`, border: `1.5px dashed ${PALETTE.amber}`, borderRadius: 6, padding: '16px 20px', marginBottom: 22, textAlign: 'left', maxWidth: 540, marginLeft: 'auto', marginRight: 'auto' }}>
+        <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.amber, letterSpacing: 1.5, fontWeight: 700, marginBottom: 8 }}>🔍 LA DOMANDA DEL DETECTIVE</div>
+        <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55 }}>
+          Quando il robot sbagliava, ripetere lo stesso comando "perché l'avevo già messo così" non serviva a niente. Bisognava <strong>fermarsi e controllare</strong>. Funziona uguale nella vita: <em>"l'ho sempre fatto così" non vuol dire che è giusto.</em>
+        </p>
+      </div>
+
+      <div style={{ fontStyle: 'italic', fontSize: 15, color: PALETTE.inkSoft, marginBottom: 20 }}>
+        Il prossimo modulo sarà <strong>La Grande Ragnatela</strong>: come i dati<br />fanno il giro del mondo in un secondo.
+      </div>
+
+      <NavButtons goPrev={goPrev} hideNext />
+    </div>
+  );
+}
+
+// ============================================================================
+// COMPONENTI DI SUPPORTO
+// ============================================================================
+
+function PageHeader({ eyebrow, title, centered, accent }) {
+  const color = accent || PALETTE.amber;
+  return (
+    <div style={{ marginBottom: 22, textAlign: centered ? 'center' : 'left' }}>
+      <div style={{ fontFamily: FONT_MONO, fontSize: 11, color: color, letterSpacing: 2, fontWeight: 700, marginBottom: 6 }}>
+        {eyebrow.toUpperCase()}
+      </div>
+      <h2 style={{
+        fontFamily: FONT_DISPLAY, fontSize: 'clamp(28px, 4.5vw, 38px)',
+        fontWeight: 800, margin: 0, letterSpacing: '-0.01em',
+        color: PALETTE.ink, lineHeight: 1.1,
+      }}>
+        {title}
+      </h2>
+    </div>
+  );
+}
+
+function BinChip({ children }) {
+  return (
+    <span style={{
+      display: 'inline-block', background: PALETTE.ink,
+      color: PALETTE.amber, fontFamily: FONT_MONO, fontWeight: 700,
+      padding: '2px 8px', borderRadius: 3, fontSize: 16, margin: '0 2px',
+    }}>
+      {children}
+    </span>
+  );
+}
+
+function NavButtons({ goPrev, goNext, nextLabel = 'avanti →', disableNext, hideNext }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 28, gap: 12, flexWrap: 'wrap' }}>
+      {goPrev ? (
+        <button onClick={goPrev} style={btnGhost()}>← indietro</button>
+      ) : <span />}
+      {!hideNext && goNext && (
+        <button onClick={goNext} disabled={disableNext}
+          style={{ ...btnPrimary(), opacity: disableNext ? 0.4 : 1, cursor: disableNext ? 'not-allowed' : 'pointer' }}>
+          {nextLabel}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function btnPrimary() {
+  return {
+    background: PALETTE.ink, color: PALETTE.cream,
+    border: 'none', borderRadius: 4,
+    padding: '12px 22px', fontSize: 15, fontWeight: 600,
+    cursor: 'pointer', boxShadow: `3px 3px 0 ${PALETTE.amber}`,
+    transition: 'transform 0.1s ease',
+  };
+}
+
+function btnGhost() {
+  return {
+    background: 'transparent', color: PALETTE.ink,
+    border: `1.5px solid ${PALETTE.ink}`, borderRadius: 4,
+    padding: '10px 18px', fontSize: 14, fontWeight: 500,
+    cursor: 'pointer',
+  };
+}
+
+// ============================================================================
+// MOUNT
+// ============================================================================
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>
