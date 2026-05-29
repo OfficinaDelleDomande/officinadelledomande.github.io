@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>L'Officina delle Domande</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,700&family=Spectral:wght@400;500;600&family=Caveat:wght@600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#f2e8d3; --paper-2:#ecd9b2; --card:#fdf9f0; --ink:#211b12; --ink-soft:#7a6a48;
+    --orange:#f5810d; --red:#e63525; --yellow:#ffc41f; --teal:#13b0a1; --green:#43a456; --blue:#2f6fd6;
+    --sky:#cfeaf0; --line:#cdb489;
+    --display:'Fraunces',Georgia,serif; --body:'Spectral',Georgia,serif;
+    --hand:'Caveat','Comic Sans MS',cursive; --mono:'Courier Prime','Courier New',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--body); color:var(--ink); line-height:1.5; min-height:100vh; overflow-x:hidden;
+    background:
+      radial-gradient(circle at 14% 8%, rgba(245,129,13,.16), transparent 40%),
+      radial-gradient(circle at 90% 30%, rgba(19,176,161,.14), transparent 42%),
+      radial-gradient(circle at 80% 88%, rgba(230,53,37,.12), transparent 46%),
+      linear-gradient(rgba(180,150,95,.06) 1px, transparent 1px),
+      radial-gradient(#d7c49a .6px, transparent .6px),
+      var(--paper);
+    background-size:100% 100%,100% 100%,100% 100%,100% 30px,16px 16px,100% 100%;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px;position:relative}
+
+  @keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-12px) rotate(2deg)}}
+  @keyframes blink{0%,93%,100%{transform:scaleY(1)}96.5%{transform:scaleY(.08)}}
+  @keyframes look{0%,100%{transform:translate(0,0)}30%{transform:translate(3px,-2px)}65%{transform:translate(-3px,2px)}}
+  @keyframes wiggle{0%,100%{transform:rotate(var(--rot,0deg))}50%{transform:rotate(calc(var(--rot,0deg) + 7deg))}}
+  @keyframes twinkle{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.15)}}
+  @keyframes dash{to{stroke-dashoffset:0}}
+  @keyframes pop{0%{opacity:0;transform:scale(.4) rotate(-12deg)}70%{transform:scale(1.18)}100%{opacity:1;transform:scale(1) rotate(-8deg)}}
+  .rise{opacity:0;animation:rise .7s cubic-bezier(.2,.7,.3,1) forwards}
+  .d1{animation-delay:.05s}.d2{animation-delay:.18s}.d3{animation-delay:.34s}.d4{animation-delay:.5s}.d5{animation-delay:.66s}.d6{animation-delay:.82s}
+  @media (prefers-reduced-motion: reduce){
+    .rise{opacity:1 !important;animation:none !important}
+    .lens,.spin-soft,.tw,.eyelid,.pupil,.verif{animation:none !important}
+    .underline-svg path{stroke-dashoffset:0 !important;animation:none !important}
+  }
+
+  .doodle{position:absolute;pointer-events:none}
+  .spin-soft{transform-origin:center;animation:wiggle 5s ease-in-out infinite}
+  .tw{animation:twinkle 2.6s ease-in-out infinite}
+
+  header{padding:54px 0 14px;position:relative}
+  .insegna{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;letter-spacing:3px;
+    color:#fff;background:var(--ink);border-radius:4px;padding:7px 16px;text-transform:uppercase}
+  .insegna b{color:var(--yellow)}
+
+  .hero{display:flex;gap:14px;align-items:center;margin-top:26px;position:relative}
+  .question{font-family:var(--display);font-weight:900;font-size:clamp(50px,11vw,118px);line-height:.86;letter-spacing:-.03em;max-width:13ch}
+  .question .l2{color:var(--orange)}
+  .question .dav{font-style:italic;font-weight:700;color:var(--red);position:relative;white-space:nowrap}
+  .underline-svg{position:absolute;left:-3%;bottom:-16px;width:106%;height:26px;overflow:visible}
+  .underline-svg path{stroke:var(--yellow);stroke-width:9;fill:none;stroke-linecap:round;stroke-dasharray:340;stroke-dashoffset:340;animation:dash 1s ease .9s forwards}
+
+  .lens{flex-shrink:0;width:clamp(96px,15vw,158px);animation:float 5s ease-in-out infinite;margin-top:4px}
+  @media(max-width:680px){.hero{flex-direction:column-reverse;align-items:center;text-align:center}.lens{width:128px}.question{max-width:none}}
+  .eyelid{transform-box:fill-box;transform-origin:center;animation:blink 5s infinite}
+  .pupil{transform-box:fill-box;transform-origin:center;animation:look 6s ease-in-out infinite}
+
+  .note{font-family:var(--hand);color:var(--red);font-size:clamp(20px,2.7vw,27px);line-height:1.05;position:absolute;transform:rotate(-6deg)}
+  .note-1{top:-10px;right:0;max-width:175px;text-align:center}
+  @media(max-width:980px){.note-1{display:none}}
+
+  .subtitle{font-size:clamp(17px,2.3vw,21px);color:#41372a;max-width:55ch;margin-top:24px;line-height:1.6}
+  .subtitle strong{color:var(--ink);font-weight:600}
+  .subtitle .hl{background:linear-gradient(transparent 55%, var(--yellow) 55% 94%, transparent 94%);padding:0 3px}
+
+  .manifesto{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap}
+  .manifesto span{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.5px;color:#fff;padding:6px 13px;border-radius:20px}
+  .manifesto .a{background:var(--green)} .manifesto .b{background:var(--orange)} .manifesto .c{background:var(--blue)}
+
+  .shelf{padding:46px 0 10px;position:relative}
+  .shelf-head{display:flex;align-items:center;gap:14px;margin-bottom:30px}
+  .shelf-head .bar{flex:1;height:3px;background:repeating-linear-gradient(90deg,var(--ink) 0 9px,transparent 9px 16px);opacity:.4}
+  .shelf-head span{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--ink-soft);font-weight:700}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  @media(max-width:760px){.cards{grid-template-columns:1fr;gap:34px}}
+  .card{position:relative;display:flex;flex-direction:column;background:var(--card);border:3px solid var(--ink);
+    border-radius:8px;padding:30px 26px 24px;text-decoration:none;color:var(--ink);transition:transform .2s ease,box-shadow .2s ease}
+  .card.bit{box-shadow:9px 9px 0 var(--orange);transform:rotate(-1.1deg)}
+  .card.caso{box-shadow:9px 9px 0 var(--red);transform:rotate(1deg)}
+  .card.bit:hover{transform:rotate(0) translateY(-5px);box-shadow:13px 14px 0 var(--orange)}
+  .card.caso:hover{transform:rotate(0) translateY(-5px);box-shadow:13px 14px 0 var(--red)}
+  .tape{position:absolute;top:-14px;left:50%;width:110px;height:30px;transform:translateX(-50%) rotate(-3deg);
+    background:rgba(255,196,31,.6);border:1px dashed rgba(33,27,18,.4)}
+  .card.caso .tape{background:rgba(19,176,161,.5)}
+  .card .tagrow{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}
+  .pill{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1px;padding:4px 9px;border-radius:3px;color:#fff}
+  .pill.orange{background:var(--orange)}.pill.red{background:var(--red)}.pill.green{background:var(--green)}.pill.teal{background:var(--teal)}
+  .pill.ghost{background:#fff;color:var(--ink-soft);border:1.5px solid var(--line)}
+  .card h2{font-family:var(--display);font-weight:900;font-size:clamp(28px,3.6vw,38px);line-height:.98;letter-spacing:-.01em;margin-bottom:9px}
+  .card .kind{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--ink-soft);margin-bottom:13px}
+  .card p{font-size:16px;line-height:1.55;color:#3c3325;flex-grow:1}
+  .card .enter{margin-top:18px;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:16px}
+  .card.bit .enter{color:#c96905}.card.caso .enter{color:var(--red)}
+  .card .arr{transition:transform .18s ease}.card:hover .arr{transform:translateX(7px)}
+  .verif{position:absolute;bottom:14px;right:14px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:1px;
+    color:var(--green);border:2px solid var(--green);border-radius:3px;padding:3px 7px;transform:rotate(-9deg);animation:pop .5s ease 1.1s backwards}
+
+  .coming{margin:52px 0 6px;text-align:center;position:relative}
+  .coming .lbl{font-family:var(--hand);font-size:27px;color:var(--ink-soft);margin-bottom:14px;display:inline-block;transform:rotate(-1.5deg)}
+  .chips{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
+  .chip{background:#fff;border:2px solid var(--line);border-radius:18px;padding:7px 15px;font-size:14px;color:var(--ink-soft);font-weight:500}
+
+  .garanzie{padding:44px 0 4px;text-align:center}
+  .bollini{display:flex;gap:11px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+  .bollino{display:inline-flex;align-items:center;gap:7px;background:var(--card);
+    border:2px solid var(--ink);border-radius:6px;padding:8px 13px;
+    font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--ink)}
+  .bollino svg{width:15px;height:15px;flex-shrink:0}
+  .bollino:nth-child(odd){transform:rotate(-1.4deg)}
+  .bollino:nth-child(even){transform:rotate(1.4deg)}
+  .bollino.g{box-shadow:3px 3px 0 var(--green)} .bollino.g svg{color:var(--green)}
+  .bollino.r{box-shadow:3px 3px 0 var(--red)} .bollino.r svg{color:var(--red)}
+  .bollino.b{box-shadow:3px 3px 0 var(--blue)} .bollino.b svg{color:var(--blue)}
+  .bollino.t{box-shadow:3px 3px 0 var(--teal)} .bollino.t svg{color:var(--teal)}
+  .bollino.o{box-shadow:3px 3px 0 var(--orange)} .bollino.o svg{color:var(--orange)}
+  .pergenitori{max-width:62ch;margin:0 auto;background:rgba(255,255,255,.6);
+    border:1.5px dashed var(--line);border-radius:8px;padding:15px 22px;
+    font-size:15px;line-height:1.6;color:#41372a}
+  .pergenitori b{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:var(--ink-soft);
+    display:block;margin-bottom:6px;text-transform:uppercase}
+
+  footer{text-align:center;padding:52px 0 60px;position:relative}
+  footer .line{font-family:var(--display);font-style:italic;font-weight:700;font-size:clamp(20px,3.1vw,28px);color:var(--ink);max-width:30ch;margin:0 auto 16px;line-height:1.28}
+  footer .meta{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--ink-soft)}
+  footer .meta b{color:var(--green)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <svg class="doodle spin-soft" style="--rot:6deg;top:118px;left:-4px;width:36px;color:var(--orange)" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="20" cy="20" r="9"/><path d="M20 4v5M20 31v5M4 20h5M31 20h5M8 8l4 4M32 8l-4 4M8 32l4-4M32 32l-4-4"/></svg>
+    <svg class="doodle" style="top:415px;right:4px;width:42px;color:var(--teal);transform:rotate(8deg)" viewBox="0 0 40 50" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6 C 30 4, 34 18, 22 24 C 18 26, 18 30, 19 33"/><circle cx="19.5" cy="42" r="1.8" fill="currentColor"/></svg>
+    <svg class="doodle tw" style="bottom:130px;left:8px;width:30px;color:var(--yellow)" viewBox="0 0 40 40" fill="currentColor"><path d="M20 0l4 14 14 4-14 4-4 14-4-14-14-4 14-4z"/></svg>
+    <svg class="doodle tw" style="top:60px;right:32%;width:18px;color:var(--red);animation-delay:1.1s" viewBox="0 0 40 40" fill="currentColor"><path d="M20 0l4 14 14 4-14 4-4 14-4-14-14-4 14-4z"/></svg>
+
+    <header>
+      <div class="insegna rise d1">L'OFFICINA DELLE <b>DOMANDE</b></div>
+
+      <div class="hero">
+        <div style="position:relative;flex:1">
+          <h1 class="question rise d2">
+            Come faccio<br/><span class="l2">a saperlo</span><br/><span class="dav">davvero?<svg class="underline-svg" viewBox="0 0 340 26" preserveAspectRatio="none"><path d="M5 16 C 80 5, 150 5, 220 13 S 320 18, 335 9"/></svg></span>
+          </h1>
+          <div class="note note-1 rise d4">la domanda più<br/>potente del mondo
+            <svg style="display:block;width:50px;height:36px;margin:2px auto 0" viewBox="0 0 54 40" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M48 5 C 30 14, 20 24, 9 36"/><path d="M9 36l13-3M9 36l2-13"/></svg>
+          </div>
+        </div>
+
+        <svg class="lens" viewBox="0 0 130 150" fill="none">
+          <line x1="44" y1="92" x2="20" y2="138" stroke="#211b12" stroke-width="12" stroke-linecap="round"/>
+          <line x1="44" y1="92" x2="20" y2="138" stroke="#f5810d" stroke-width="4.5" stroke-linecap="round"/>
+          <circle cx="68" cy="56" r="46" fill="#cfeaf0" stroke="#211b12" stroke-width="6"/>
+          <g class="eyelid">
+            <circle cx="68" cy="56" r="20" fill="#ffffff" stroke="#211b12" stroke-width="3.5"/>
+            <circle class="pupil" cx="68" cy="56" r="10" fill="#211b12"/>
+            <circle cx="63.5" cy="51.5" r="3.2" fill="#ffffff"/>
+          </g>
+        </svg>
+      </div>
+
+      <p class="subtitle rise d3">
+        Piccoli laboratori interattivi per menti curiose. Non si imparano cose a memoria:
+        si impara a <strong class="hl">pensare, dubitare e capire</strong> come funziona davvero il mondo.
+        Il sapere come superpotere — non come trofeo.
+      </p>
+
+      <div class="manifesto rise d5">
+        <span class="a">ESPLORI COME VUOI</span>
+        <span class="b">TUTTO VERIFICATO</span>
+        <span class="c">TUTTO GRATIS</span>
+      </div>
+    </header>
+
+    <section class="garanzie">
+      <div class="shelf-head rise d4" style="margin-bottom:22px"><div class="bar"></div><span>PERCHÉ TI PUOI FIDARE</span><div class="bar"></div></div>
+      <div class="bollini rise d5">
+        <span class="bollino g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>GRATIS · SEMPRE</span>
+        <span class="bollino r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>ZERO PUBBLICITÀ</span>
+        <span class="bollino b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/></svg>NIENTE REGISTRAZIONE</span>
+        <span class="bollino t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>I DATI RESTANO NEL DISPOSITIVO</span>
+        <span class="bollino o"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>FONTI VERIFICATE</span>
+      </div>
+      <p class="pergenitori rise d6"><b>Per chi accompagna</b>Nessun account, nessuna email, nessun dato raccolto: tutto vive nel browser del dispositivo e resta lì. Niente pubblicità, niente acquisti, niente link che portano fuori. È pensato perché i bambini esplorino in autonomia — anche dal telefono — e ogni fatto storico o scientifico è controllato su fonti vere. <a href="fonti.html" style="color:#1d6b2e;font-weight:600">Vuoi le prove? Guarda tutte le fonti, una per una &rarr;</a></p>
+    </section>
+
+    <section class="shelf">
+      <div class="shelf-head rise d4"><span>DUE OFFICINE APERTE</span><div class="bar"></div></div>
+      <div class="cards">
+        <a class="card bit rise d5" href="officina-dei-bit.html">
+          <span class="tape"></span>
+          <div class="tagrow"><span class="pill orange">INFORMATICA</span><span class="pill ghost">4 / 8 MODULI</span></div>
+          <h2>L'Officina<br/>dei Bit</h2>
+          <div class="kind">come funziona davvero un computer</div>
+          <p>Dal codice segreto fatto di 0 e 1, alla scatola aperta, ai colori che nascono dai numeri,
+          fino a come si danno ordini a una macchina. Si gioca, si costruisce, si scopre.</p>
+          <span class="enter">entra nell'officina <span class="arr">&rarr;</span></span>
+        </a>
+        <a class="card caso rise d6" href="officina-del-tempo.html">
+          <span class="tape"></span>
+          <div class="tagrow"><span class="pill teal">STORIA &amp; PENSIERO</span><span class="pill ghost">1 CASO · ALTRI IN ARRIVO</span></div>
+          <h2>L'Officina<br/>del Tempo</h2>
+          <div class="kind">indagini da detective sulle grandi storie dell'umanità</div>
+          <p>Si veste i panni di un detective per distinguere quello che <em>sappiamo</em>,
+          quello che si <em>racconta</em> e quello che si <em>crede</em>. Primo caso aperto: <strong>Il Falegname</strong>.</p>
+          <span class="enter">entra nell'officina <span class="arr">&rarr;</span></span>
+        </a>
+      </div>
+    </section>
+
+    <section class="coming">
+      <div class="lbl rise d5">…altri in costruzione nel laboratorio</div>
+      <div class="chips rise d6">
+        <span class="chip">La Grande Ragnatela · internet</span>
+        <span class="chip">Lo Scudo Segreto · password</span>
+        <span class="chip">La Mente Finta · l'AI</span>
+        <span class="chip">I Messaggi Cifrati · codici</span>
+        <span class="chip">…e nuovi casi</span>
+      </div>
+    </section>
+
+    <footer>
+      <div class="line rise d6">«Sapere non è un'arma per stare sopra agli altri: è un paio di occhiali per vedere meglio.»</div>
+      <div class="meta rise d6">FATTO CON CURA &middot; <b>TUTTO GRATIS</b> &middot; SI DIFFONDE COL PASSAPAROLA</div>
+    </footer>
+
+  </div>
+</body>
+</html>
