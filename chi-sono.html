@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chi c'è dietro · L'Officina delle Domande</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,700&family=Spectral:wght@400;500;600&family=Caveat:wght@600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#f2e8d3; --paper-2:#ecd9b2; --card:#fdf9f0; --ink:#211b12; --ink-soft:#7a6a48;
+    --orange:#f5810d; --red:#e63525; --yellow:#ffc41f; --teal:#13b0a1; --green:#43a456; --blue:#2f6fd6;
+    --sky:#cfeaf0; --line:#cdb489; --grey:#9a8e76;
+    --display:'Fraunces',Georgia,serif; --body:'Spectral',Georgia,serif;
+    --hand:'Caveat','Comic Sans MS',cursive; --mono:'Courier Prime','Courier New',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--body); color:var(--ink); line-height:1.55; min-height:100vh; overflow-x:hidden;
+    background:
+      radial-gradient(circle at 12% 6%, rgba(245,129,13,.14), transparent 40%),
+      radial-gradient(circle at 92% 24%, rgba(19,176,161,.12), transparent 42%),
+      radial-gradient(circle at 82% 92%, rgba(47,111,214,.10), transparent 46%),
+      linear-gradient(rgba(180,150,95,.06) 1px, transparent 1px),
+      radial-gradient(#d7c49a .6px, transparent .6px),
+      var(--paper);
+    background-size:100% 100%,100% 100%,100% 100%,100% 30px,16px 16px,100% 100%;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:0 22px;position:relative}
+
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  @keyframes blink{0%,93%,100%{transform:scaleY(1)}96.5%{transform:scaleY(.08)}}
+  @keyframes look{0%,100%{transform:translate(0,0)}30%{transform:translate(3px,-2px)}65%{transform:translate(-3px,2px)}}
+  .rise{opacity:0;animation:rise .7s cubic-bezier(.2,.7,.3,1) forwards}
+  .d1{animation-delay:.05s}.d2{animation-delay:.18s}.d3{animation-delay:.32s}.d4{animation-delay:.46s}.d5{animation-delay:.6s}
+  @media (prefers-reduced-motion: reduce){.rise{opacity:1!important;animation:none!important}.eyelid,.pupil{animation:none!important}}
+
+  /* top bar */
+  .topbar{display:flex;align-items:center;gap:12px;padding:26px 0 6px;flex-wrap:wrap}
+  .back{font-family:var(--mono);font-size:12px;letter-spacing:1px;color:var(--ink);text-decoration:none;
+    border:2px solid var(--ink);border-radius:5px;padding:7px 13px;background:var(--card);transition:transform .15s}
+  .back:hover{transform:translateX(-3px)}
+  .insegna{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:2.5px;
+    color:#fff;background:var(--ink);border-radius:4px;padding:7px 14px;text-transform:uppercase}
+  .insegna b{color:var(--yellow)}
+
+  /* header */
+  header{padding:22px 0 8px;position:relative}
+  .htitle{display:flex;gap:16px;align-items:flex-start}
+  h1{font-family:var(--display);font-weight:900;font-size:clamp(38px,7vw,68px);line-height:.92;letter-spacing:-.02em;flex:1}
+  h1 .o{color:var(--orange)}
+  .lens{flex-shrink:0;width:clamp(62px,11vw,86px);margin-top:6px}
+  .eyelid{transform-box:fill-box;transform-origin:center;animation:blink 5s infinite}
+  .pupil{transform-box:fill-box;transform-origin:center;animation:look 6s ease-in-out infinite}
+  @media(max-width:560px){.lens{width:58px}}
+
+  /* corpo */
+  .metodo{background:var(--card);border:3px solid var(--ink);border-radius:10px;
+    padding:24px 26px;margin-top:26px;box-shadow:7px 7px 0 rgba(33,27,18,.12);position:relative}
+  .metodo .tag{position:absolute;top:-13px;left:22px;font-family:var(--mono);font-size:11px;font-weight:700;
+    letter-spacing:1.5px;color:#fff;background:var(--red);padding:4px 12px;border-radius:4px;text-transform:uppercase}
+  .metodo p{font-size:16.5px;margin-bottom:13px;color:#352c1d}
+  .metodo p:last-child{margin-bottom:0}
+  .metodo strong{color:var(--ink);font-weight:600}
+  .metodo .hl{background:linear-gradient(transparent 55%, var(--yellow) 55% 94%, transparent 94%);padding:0 3px}
+  .metodo a{color:#1d6b2e;font-weight:600}
+  .firma{font-family:var(--hand);font-size:30px;color:var(--ink);margin-top:6px;transform:rotate(-3deg);display:inline-block}
+
+  /* contatto */
+  .contatto{background:rgba(255,255,255,.5);border:1.5px dashed var(--line);border-radius:10px;
+    padding:22px 24px;margin-top:24px;text-align:center}
+  .contatto h2{font-family:var(--display);font-weight:900;font-size:clamp(22px,4vw,28px);margin-bottom:8px}
+  .contatto p{font-size:15.5px;color:#3c3325;max-width:46ch;margin:0 auto 16px;line-height:1.5}
+  .mailbtn{display:inline-block;font-family:var(--mono);font-size:14px;letter-spacing:.5px;font-weight:700;
+    color:var(--ink);background:var(--yellow);text-decoration:none;border:2px solid var(--ink);border-radius:6px;
+    padding:11px 18px;transition:transform .15s}
+  .mailbtn:hover{transform:translateY(-2px)}
+  .contatto .small{font-family:var(--mono);font-size:11px;color:var(--ink-soft);margin-top:13px;letter-spacing:.3px}
+
+  /* footer */
+  .pied{margin:46px 0 16px;background:var(--ink);border-radius:12px;padding:26px 28px;color:var(--paper);text-align:center}
+  .pied .q{font-family:var(--display);font-style:italic;font-weight:700;font-size:clamp(18px,3vw,23px);line-height:1.3;
+    max-width:34ch;margin:0 auto 10px}
+  .pied .sub{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:#d8c9a4;line-height:1.6}
+  .pied .sub b{color:var(--yellow)}
+  .gotime{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:12px;letter-spacing:1px;
+    color:var(--ink);background:var(--yellow);text-decoration:none;border-radius:5px;padding:9px 16px;font-weight:700;transition:transform .15s}
+  .gotime:hover{transform:translateY(-2px)}
+  footer{text-align:center;padding:10px 0 56px}
+  footer .meta{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--ink-soft)}
+  footer .meta b{color:var(--green)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="topbar rise d1">
+      <a class="back" href="index.html">&larr; il portale</a>
+      <span class="insegna">L'OFFICINA DELLE <b>DOMANDE</b> &middot; CHI C'È DIETRO</span>
+    </div>
+
+    <header>
+      <div class="htitle">
+        <h1 class="rise d2">Chi c'è<br/><span class="o">dietro</span></h1>
+        <svg class="lens rise d2" viewBox="0 0 130 150" fill="none">
+          <line x1="44" y1="92" x2="20" y2="138" stroke="#211b12" stroke-width="12" stroke-linecap="round"/>
+          <line x1="44" y1="92" x2="20" y2="138" stroke="#f5810d" stroke-width="4.5" stroke-linecap="round"/>
+          <circle cx="68" cy="56" r="46" fill="#cfeaf0" stroke="#211b12" stroke-width="6"/>
+          <g class="eyelid">
+            <circle cx="68" cy="56" r="20" fill="#ffffff" stroke="#211b12" stroke-width="3.5"/>
+            <circle class="pupil" cx="68" cy="56" r="10" fill="#211b12"/>
+            <circle cx="63.5" cy="51.5" r="3.2" fill="#ffffff"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="metodo rise d3">
+        <span class="tag">Due parole oneste</span>
+        <p>Mi chiamo <strong>Damiano</strong>. Non sono uno storico, né un insegnante, né uno studioso: sono il <strong>padre di tre figli</strong>. L'Officina è nata così — da domande vere, fatte a tavola, a cui non mi bastava rispondere «perché sì» o «perché lo dico io».</p>
+        <p>Volevo dargli qualcosa di meglio di una risposta: <span class="hl">un modo per arrivarci da soli</span>. Da lì sono partite le officine.</p>
+        <p>E qui c'è la cosa più importante. Proprio perché <strong>non sono un esperto</strong>, non vi chiedo di fidarvi di me. Tutto quello che il sito afferma è verificato su fonti vere, e quelle fonti sono in chiaro, una per una: potete controllarle. <a href="fonti.html">Le trovate qui &rarr;</a> Se scopro un errore, lo correggo — anche questo fa parte del gioco che provo a insegnare ai miei figli.</p>
+        <p class="firma">— Damiano</p>
+      </div>
+
+      <div class="contatto rise d4">
+        <h2>Hai trovato un errore?</h2>
+        <p>O vuoi suggerire una fonte, segnalare un refuso o proporre un caso nuovo? Scrivimi: ogni correzione rende l'officina più solida.</p>
+        <a class="mailbtn" href="mailto:officinadelledomande&#64;gmail&#46;com?subject=Officina%20delle%20Domande">officinadelledomande&#64;gmail&#46;com</a>
+        <div class="small">È l'unica email del progetto. Nessuna newsletter, nessuna lista: scrivo io, rispondo io.</div>
+      </div>
+    </header>
+
+    <div class="pied rise d5">
+      <div class="q">«Non fidarti perché te lo dico io. Fidati perché l'hai controllato.»</div>
+      <div class="sub">QUESTO VALE PER ME COME PER CHIUNQUE ALTRO &middot; <b>ANCHE PER CHI HA FATTO IL SITO</b></div>
+      <a class="gotime" href="index.html">&rarr; torna al portale</a>
+    </div>
+
+    <footer>
+      <div class="meta">FATTO CON CURA &middot; <b>TUTTO GRATIS</b> &middot; SI DIFFONDE COL PASSAPAROLA</div>
+    </footer>
+
+  </div>
+</body>
+</html>
