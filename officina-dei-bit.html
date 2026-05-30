@@ -23,6 +23,15 @@
   @media (max-width: 600px) {
     .card-grid { grid-template-columns: 1fr !important; }
   }
+  @keyframes oaBlink { 0%,90%,100%{transform:scaleY(0)} 95%{transform:scaleY(1)} }
+  @keyframes oaGaze { 0%,100%{transform:translate(0,0)} 30%{transform:translate(1.6px,-1.2px)} 62%{transform:translate(-1.6px,.8px)} }
+  @keyframes oaPulse { 0%,100%{opacity:1} 50%{opacity:.15} }
+  @keyframes oaFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+  .oa-lid { transform-box:fill-box; transform-origin:top; animation:oaBlink 4.2s infinite; }
+  .oa-look { transform-box:fill-box; animation:oaGaze 6s ease-in-out infinite; }
+  .oa-px { animation:oaPulse 1.9s ease-in-out infinite; }
+  .oa-float { transform-box:fill-box; animation:oaFloat 4.5s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .oa-lid,.oa-look,.oa-px,.oa-float { animation:none; } }
 </style>
 
 <!-- React + Babel via CDN -->
@@ -766,6 +775,58 @@ function ModuleCard({ number, iconName, title, subtitle, status, progress, onCli
 }
 
 // ============================================================================
+// L'OCCHIO — mentore (avatar Bit + voce)
+// ============================================================================
+
+function EyeBitAvatar({ size = 52 }) {
+  const px = [
+    { x: 39, y: 14, c: '#e8a317' }, { x: 59, y: 14, c: '#c0432a' }, { x: 79, y: 14, c: '#4a8a5c' },
+    { x: 104, y: 41, c: '#e8a317' }, { x: 104, y: 59, c: '#c0432a' }, { x: 104, y: 77, c: '#4a8a5c' },
+    { x: 79, y: 104, c: '#e8a317' }, { x: 59, y: 104, c: '#c0432a' }, { x: 39, y: 104, c: '#4a8a5c' },
+    { x: 14, y: 77, c: '#e8a317' }, { x: 14, y: 59, c: '#c0432a' }, { x: 14, y: 41, c: '#4a8a5c' },
+  ];
+  return (
+    <svg width={size} height={size} viewBox="0 0 126 126" aria-hidden="true" style={{ display: 'block', flexShrink: 0 }}>
+      <g className="oa-float">
+        {px.map((p, i) => (
+          <rect key={i} className="oa-px" style={{ animationDelay: `${i * 0.12}s` }} x={p.x} y={p.y} width="8" height="8" fill={p.c} />
+        ))}
+        <rect x="27" y="27" width="72" height="72" rx="3" fill="#fdf9f0" stroke="#211b12" strokeWidth="5" />
+        <rect x="33" y="33" width="60" height="60" rx="2" fill="none" stroke="#e8a317" strokeWidth="2" />
+        <circle cx="63" cy="63" r="22" fill="#ffffff" stroke="#211b12" strokeWidth="3" />
+        <g className="oa-look"><circle cx="63" cy="63" r="11" fill="#211b12" /><circle cx="59" cy="59" r="3.2" fill="#ffffff" /></g>
+        <circle className="oa-lid" cx="63" cy="63" r="22" fill="#fdf9f0" />
+        <circle cx="63" cy="63" r="22" fill="none" stroke="#211b12" strokeWidth="3" />
+      </g>
+    </svg>
+  );
+}
+
+function OcchioSays({ children }) {
+  return (
+    <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start', background: PALETTE.cream, border: `2px solid ${PALETTE.ink}`, borderRadius: 6, boxShadow: `4px 4px 0 ${PALETTE.ink}`, padding: '16px 18px', margin: '22px 0' }}>
+      <EyeBitAvatar size={54} />
+      <div>
+        <div style={{ fontFamily: FONT_MONO, fontSize: 11, letterSpacing: 2, color: PALETTE.inkSoft, fontWeight: 700, marginBottom: 6 }}>L'OCCHIO</div>
+        <div style={{ fontSize: 16, lineHeight: 1.55, color: PALETTE.ink }}>{children}</div>
+      </div>
+    </div>
+  );
+}
+
+function ProvaloTu({ children }) {
+  return (
+    <div style={{ background: `${PALETTE.moss}14`, border: `2px solid ${PALETTE.moss}`, borderRadius: 6, padding: '14px 16px 16px', margin: '20px 0' }}>
+      <div style={{ fontFamily: FONT_MONO, fontSize: 11, letterSpacing: 2, color: PALETTE.moss, fontWeight: 700, marginBottom: 10 }}>░ PROVALO TU ░</div>
+      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+        <EyeBitAvatar size={46} />
+        <div style={{ fontSize: 16, lineHeight: 1.55, color: PALETTE.ink }}>{children}</div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
 // MODULO 1
 // ============================================================================
 
@@ -868,10 +929,10 @@ function IntroPage({ markDone, goNext }) {
             Tutto quello che il computer sa, è scritto con queste lampadine.
           </p>
         </div>
-        <p style={{ marginTop: 24, fontSize: 17, fontStyle: 'italic', color: PALETTE.inkSoft }}>
-          Adesso ti insegniamo come funziona. Giriamo pagina →
-        </p>
       </div>
+      <OcchioSays>
+        Io non ti dirò <em>come</em> fa il computer a fare tutto questo. Te lo farò vedere — anzi, lo farai <strong>tu</strong>, con le tue mani. Poi sarai tu a dirmi se è vero. Giriamo pagina.
+      </OcchioSays>
       <NavButtons goNext={goNext} nextLabel="vai alle lampadine" />
     </div>
   );
@@ -989,6 +1050,12 @@ function LightbulbsPage({ markDone, goNext, goPrev }) {
       <div style={{ fontSize: 14, color: PALETTE.inkSoft, fontStyle: 'italic', marginBottom: 20 }}>
         💡 <strong>Suggerimento:</strong> per fare 13, cerca le lampadine che sommate fanno 13. Tipo 8+4+1 = 13!
       </div>
+
+      {challengesWon.length > 0 && (
+        <ProvaloTu>
+          Fermati un attimo. Il numero <strong>{challengesWon[0]}</strong>... te l'ho detto io? No. L'hai fatto <strong>tu</strong>, accendendo le lampadine giuste. Questo si chiama <em>provarlo</em>: non credere a una cosa perché qualcuno la dice, ma perché l'hai vista succedere con le tue mani.
+        </ProvaloTu>
+      )}
 
       <NavButtons goPrev={goPrev} goNext={goNext} nextLabel="conta con le dita →" />
     </div>
