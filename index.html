@@ -140,10 +140,17 @@
   .bollino.o{box-shadow:3px 3px 0 var(--orange)} .bollino.o svg{color:var(--orange)}
   .pergenitori{max-width:62ch;margin:0 auto;background:rgba(255,255,255,.6);
     border:1.5px dashed var(--line);border-radius:8px;padding:15px 22px;
-    font-size:15px;line-height:1.6;color:#41372a}
+    font-size:16.5px;line-height:1.62;color:#41372a}
   .pergenitori b{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:var(--ink-soft);
     display:block;margin-bottom:6px;text-transform:uppercase}
   .pergenitori p{margin:0 0 14px}
+  .scrolldown{display:inline-flex;align-items:center;gap:9px;margin-top:24px;
+    font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.5px;
+    color:var(--ink-soft);text-decoration:none}
+  .scrolldown span{display:inline-flex;width:24px;height:24px;align-items:center;justify-content:center;
+    border:2px solid var(--ink-soft);border-radius:50%;font-size:14px;transition:transform .2s}
+  .scrolldown:hover span{transform:translateY(3px)}
+  @media(prefers-reduced-motion:reduce){.scrolldown span{transition:none}}
   .btrow{display:flex;gap:11px;flex-wrap:wrap;justify-content:center;margin-top:2px}
   .btnota{display:inline-flex;align-items:center;gap:7px;background:var(--card);
     border:2px solid var(--ink);border-radius:6px;padding:9px 15px;font-family:var(--mono);
@@ -205,6 +212,7 @@
         <span class="b">SBAGLIARE È PERMESSO</span>
         <span class="c">NESSUN VOTO, NESSUNA FRETTA</span>
       </div>
+      <a href="#officine" class="scrolldown rise d6">le officine ti aspettano <span>&darr;</span></a>
     </header>
 
     <section class="garanzie">
@@ -226,7 +234,7 @@
       </div>
     </section>
 
-    <section class="shelf">
+    <section class="shelf" id="officine">
       <div class="shelf-head rise d4"><span>DUE OFFICINE APERTE</span><div class="bar"></div></div>
       <div class="cards">
         <a class="card bit rise d5" href="officina-dei-bit.html">
