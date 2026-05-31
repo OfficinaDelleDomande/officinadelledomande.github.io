@@ -14,9 +14,7 @@
 <meta property="og:locale" content="it_IT" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://officinadelledomande.github.io/og-image.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,700&family=Spectral:wght@400;500;600&family=Caveat:wght@600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="fonts.css" />
 <style>
   :root{
     --paper:#f2e8d3; --paper-2:#ecd9b2; --card:#fdf9f0; --ink:#211b12; --ink-soft:#7a6a48;
@@ -116,6 +114,47 @@
     text-transform:uppercase;display:block;margin-bottom:3px}
   .claim .note{font-size:13px;color:var(--ink-soft);font-style:italic;margin-top:7px;line-height:1.45}
 
+  /* officina (L1) + caso/modulo (L2) */
+  .officina-head{margin-top:66px;padding-bottom:9px;border-bottom:4px solid var(--ink)}
+  .officina-head.first{margin-top:34px}
+  .officina-head .eyebrow{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:2.5px;
+    text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:5px}
+  .officina-head h2{font-family:var(--display);font-weight:900;font-size:clamp(29px,6vw,46px);line-height:.95;letter-spacing:-.02em}
+  .officina-head h2 .accent{color:var(--orange)}
+  .officina-head.tempo h2 .accent{color:var(--blue)}
+  .caso-head{margin-top:30px;margin-bottom:4px}
+  .caso-head .lbl{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:2px;
+    text-transform:uppercase;color:var(--ink-soft)}
+  .caso-head h3{font-family:var(--display);font-weight:900;font-size:clamp(20px,3.5vw,26px);line-height:1.05;
+    letter-spacing:-.01em;margin-top:2px}
+
+  /* pannelli a fisarmonica (caso/modulo collassabile) */
+  details.caso{border:2px solid var(--ink);border-radius:11px;background:rgba(255,255,255,.42);
+    margin-top:18px;box-shadow:4px 4px 0 rgba(33,27,18,.10)}
+  details.caso[open]{background:rgba(255,255,255,.6)}
+  details.caso > summary{list-style:none;cursor:pointer;padding:17px 20px;display:flex;align-items:center;gap:13px;
+    user-select:none;-webkit-tap-highlight-color:transparent}
+  details.caso > summary::-webkit-details-marker{display:none}
+  details.caso > summary:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius:9px}
+  .sum-arrow{flex-shrink:0;width:11px;height:11px;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);
+    transform:rotate(-45deg);transition:transform .25s;margin-left:2px}
+  details.caso[open] > summary .sum-arrow{transform:rotate(45deg)}
+  .sum-txt{flex:1;display:flex;flex-direction:column;gap:1px}
+  .sum-lbl{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft)}
+  .sum-title{font-family:var(--display);font-weight:900;font-size:clamp(19px,3.3vw,25px);line-height:1.05;letter-spacing:-.01em}
+  .caso-body{padding:2px 20px 22px}
+  .caso-body .fasc:first-of-type{margin-top:22px}
+  .caso-body .legende{margin-top:6px}
+  @media (prefers-reduced-motion: reduce){.sum-arrow{transition:none}}
+  /* etichette dei Bit */
+  .chipx.matematica{color:#0b7d72;border-color:#13b0a1;background:rgba(19,176,161,.12)}
+  .chipx.convenzione{color:#5a3f8f;border-color:#6b4fa0;background:rgba(107,79,160,.12)}
+  .chipx.storico{color:#7a4e22;border-color:#9a6a35;background:rgba(138,90,43,.12)}
+  .claim.mate{border-left-color:#13b0a1}
+  .claim.conv{border-left-color:#6b4fa0}
+  .claim.stor{border-left-color:#9a6a35}
+  .dot.mate{background:var(--teal)} .dot.conv{background:#6b4fa0} .dot.stor{background:#9a6a35}
+
   /* footer */
   .pied{margin:46px 0 16px;background:var(--ink);border-radius:12px;padding:26px 28px;color:var(--paper);text-align:center}
   .pied .q{font-family:var(--display);font-style:italic;font-weight:700;font-size:clamp(18px,3vw,23px);line-height:1.3;
@@ -155,28 +194,41 @@
 
       <div class="metodo rise d3">
         <span class="tag">Nota di metodo</span>
-        <p>Questa pagina raccoglie, una per una, le cose che il caso afferma e <strong>dove le abbiamo verificate</strong>. Non serve a dire «fidatevi»: serve a <span class="hl">mostrare il lavoro</span>. È pensata per chi accompagna — genitori e insegnanti — e per chiunque voglia rifare i controlli da solo.</p>
-        <p>Una regola d'onestà attraversa tutta la pagina: distinguiamo ciò che possiamo appoggiare a <strong>una fonte precisa</strong> da ciò che è soltanto <strong>il quadro condiviso dagli studiosi</strong>. Sono due cose diverse — e dirle diverse è esattamente il punto.</p>
-        <p>Le fonti sono citate per esteso (autore, opera, passaggio) così puoi cercarle da te. Niente collegamenti che ti portano fuori: come promesso nel portale, da qui non si esce.</p>
+        <p>Questa pagina raccoglie, officina per officina, le cose che ogni indagine afferma e <strong>dove le abbiamo verificate</strong>. Non serve a dire «fidatevi»: serve a <span class="hl">mostrare il lavoro</span>. È pensata per chi accompagna — genitori e insegnanti — e per chiunque voglia rifare i controlli da solo.</p>
+        <p>Una regola d'onestà attraversa tutta la pagina: ogni officina distingue i suoi <strong>modi di sapere</strong> — la storia si appoggia alle fonti, le macchine separano ciò che è <strong>matematica</strong> (vero e dimostrabile) da ciò che è <strong>convenzione</strong> (deciso da qualcuno, e poteva essere diverso). All'inizio di ogni officina trovi la sua piccola legenda.</p>
+        <p>Le fonti sono citate per esteso (autore, opera, data) così puoi cercarle da te. Niente collegamenti che ti portano fuori: come promesso nel portale, da qui non si esce.</p>
       </div>
 
-      <div class="legende rise d4">
-        <div class="legbox">
-          <h3>I tre colori</h3>
-          <div class="legrow"><span class="dot storia"></span><span><b>Storia</b> — quello che i documenti permettono di sapere</span></div>
-          <div class="legrow"><span class="dot vangelo"></span><span><b>Vangelo</b> — quello che raccontano i testi cristiani</span></div>
-          <div class="legrow"><span class="dot fede"></span><span><b>Fede</b> — quello che si crede, fuori dalla storia</span></div>
-        </div>
-        <div class="legbox">
-          <h3>Quanto è solido</h3>
-          <div class="legrow"><span class="chipx puntuale">FONTE PUNTUALE</span><span>un documento o uno studio preciso lo attesta</span></div>
-          <div class="legrow"><span class="chipx consenso">CONSENSO</span><span>gli studiosi concordano, ma è un quadro, non una singola prova</span></div>
-          <div class="legrow"><span class="chipx testo">LO DICE IL TESTO</span><span>sta nei vangeli: la fonte è il testo stesso</span></div>
-          <div class="legrow"><span class="chipx dopo">AGGIUNTO DOPO</span><span>non è nelle fonti antiche: è tradizione successiva</span></div>
-          <div class="legrow"><span class="chipx fede">FEDE</span><span>non è una domanda che la storia possa giudicare</span></div>
-        </div>
-      </div>
     </header>
+
+    <div class="officina-head tempo first rise d4">
+      <span class="eyebrow">Officina</span>
+      <h2>L'Officina del <span class="accent">Tempo</span></h2>
+    </div>
+
+    <details class="caso">
+      <summary>
+        <span class="sum-arrow"></span>
+        <span class="sum-txt"><span class="sum-lbl">Caso</span><span class="sum-title">Il Falegname</span></span>
+      </summary>
+      <div class="caso-body">
+
+    <div class="legende">
+      <div class="legbox">
+        <h3>I tre colori</h3>
+        <div class="legrow"><span class="dot storia"></span><span><b>Storia</b> — quello che i documenti permettono di sapere</span></div>
+        <div class="legrow"><span class="dot vangelo"></span><span><b>Vangelo</b> — quello che raccontano i testi cristiani</span></div>
+        <div class="legrow"><span class="dot fede"></span><span><b>Fede</b> — quello che si crede, fuori dalla storia</span></div>
+      </div>
+      <div class="legbox">
+        <h3>Quanto è solido</h3>
+        <div class="legrow"><span class="chipx puntuale">FONTE PUNTUALE</span><span>un documento o uno studio preciso lo attesta</span></div>
+        <div class="legrow"><span class="chipx consenso">CONSENSO</span><span>gli studiosi concordano, ma è un quadro, non una singola prova</span></div>
+        <div class="legrow"><span class="chipx testo">LO DICE IL TESTO</span><span>sta nei vangeli: la fonte è il testo stesso</span></div>
+        <div class="legrow"><span class="chipx dopo">AGGIUNTO DOPO</span><span>non è nelle fonti antiche: è tradizione successiva</span></div>
+        <div class="legrow"><span class="chipx fede">FEDE</span><span>non è una domanda che la storia possa giudicare</span></div>
+      </div>
+    </div>
 
     <!-- 01 -->
     <section class="fasc">
@@ -309,12 +361,67 @@
         <div class="src"><span class="lab">Nota</span>L'ultimo fascicolo non aggiunge fatti: chiede di firmare i tre verdetti, ciascuno nel suo colore. La domanda «Dio esiste?» resta volutamente <strong>fuori dalla giurisdizione della storia</strong>: né questa pagina né il caso pretendono di rispondervi. Quello tocca a ciascuno.</div>
       </div>
     </section>
+      </div>
+    </details>
+
+    <div class="officina-head rise">
+      <span class="eyebrow">Officina</span>
+      <h2>L'Officina dei <span class="accent">Bit</span></h2>
+    </div>
+
+    <details class="caso">
+      <summary>
+        <span class="sum-arrow"></span>
+        <span class="sum-txt"><span class="sum-lbl">Modulo 01</span><span class="sum-title">Il Linguaggio Segreto</span></span>
+      </summary>
+      <div class="caso-body">
+
+    <div class="legende">
+      <div class="legbox">
+        <h3>Tre modi di sapere, per le macchine</h3>
+        <div class="legrow"><span class="chipx matematica">MATEMATICA</span><span>è vero e si dimostra: non l'ha deciso nessuno</span></div>
+        <div class="legrow"><span class="chipx convenzione">CONVENZIONE</span><span>qualcuno l'ha deciso così — e poteva decidere diverso</span></div>
+        <div class="legrow"><span class="chipx storico">STORIA DEL TERMINE</span><span>da dove viene la parola e chi l'ha inventata</span></div>
+      </div>
+    </div>
+
+    <div class="claim mate">
+      <div class="top"><span class="says">Con due soli simboli, 0 e 1, si può scrivere qualsiasi numero.</span><span class="chipx matematica">MATEMATICA</span></div>
+      <div class="src"><span class="lab">Perché è vero</span>È il sistema di numerazione in <strong>base 2</strong>: come in base 10 usiamo dieci cifre (0–9), in base 2 ne bastano due. Non è una scelta, è matematica — si dimostra. La prima descrizione moderna del sistema binario è di <strong>Gottfried W. Leibniz</strong>, «Explication de l'Arithmétique Binaire», 1703.</div>
+    </div>
+
+    <div class="claim mate">
+      <div class="top"><span class="says">Otto interruttori accesi o spenti danno 256 combinazioni diverse.</span><span class="chipx matematica">MATEMATICA</span></div>
+      <div class="src"><span class="lab">Perché è vero</span>È <strong>2 elevato alla 8 = 256</strong>: ogni interruttore in più raddoppia le possibilità (2, 4, 8, 16, 32…). Lo verifichi a mano — ed è proprio quello che fa il «Provalo tu» dell'officina: qui la fonte sei tu che conti.</div>
+    </div>
+
+    <div class="claim conv">
+      <div class="top"><span class="says">Un gruppo di 8 bit si chiama «byte».</span><span class="chipx convenzione">CONVENZIONE</span></div>
+      <div class="src"><span class="lab">Chi l'ha deciso</span>Che siano <strong>proprio 8</strong> è una convenzione, non una legge di natura: nei primissimi computer un byte poteva avere da 1 a 6 bit. Gli 8 si sono imposti come standard con l'<strong>IBM System/360</strong>, negli anni '60.</div>
+    </div>
+
+    <div class="claim conv">
+      <div class="top"><span class="says">La lettera «A» corrisponde al numero 65.</span><span class="chipx convenzione">CONVENZIONE</span></div>
+      <div class="src"><span class="lab">Chi l'ha deciso</span>Lo stabilisce lo standard <strong>ASCII</strong> (American Standard Code for Information Interchange), <strong>1963</strong>: una tabella che assegna a ogni lettera e simbolo un numero. Si poteva scegliere diversamente — ma serviva un accordo, perché macchine diverse si capissero tra loro.</div>
+    </div>
+
+    <div class="claim stor">
+      <div class="top"><span class="says">La parola «bit».</span><span class="chipx storico">STORIA DEL TERMINE</span></div>
+      <div class="src"><span class="lab">Da dove viene</span>È la contrazione di <strong>«binary digit»</strong> (cifra binaria), suggerita dallo statistico <strong>John W. Tukey</strong> in un promemoria dei Bell Labs del <strong>9 gennaio 1947</strong>. Il primo uso a stampa è di <strong>Claude Shannon</strong>, «A Mathematical Theory of Communication», Bell System Technical Journal, luglio 1948.</div>
+    </div>
+
+    <div class="claim stor">
+      <div class="top"><span class="says">La parola «byte».</span><span class="chipx storico">STORIA DEL TERMINE</span></div>
+      <div class="src"><span class="lab">Da dove viene</span>Coniata da <strong>Werner Buchholz</strong> all'<strong>IBM</strong> nel <strong>1956</strong>, durante il progetto del computer «Stretch». È una storpiatura voluta di <em>bite</em> (boccone): il boccone di bit che la macchina «mastica», scritta con la y per non confonderla con «bit».</div>
+    </div>
+      </div>
+    </details>
 
     <div class="pied">
       <div class="q">«Una prova che si può controllare vale più di mille parole sicure.»</div>
       <div class="sub">OGNI RIGA HA LA SUA FONTE &middot; <b>QUELLO CHE NON SAPPIAMO, LO DICIAMO</b></div>
       <br/>
-      <a class="gotime" href="officina-del-tempo.html">&rarr; torna all'indagine</a>
+      <a class="gotime" href="index.html">&rarr; torna al portale</a>
     </div>
 
     <footer>
