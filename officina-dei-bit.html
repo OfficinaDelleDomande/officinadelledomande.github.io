@@ -2308,7 +2308,7 @@ function IntroPage({
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 1 di 7",
     title: "Una storia"
-  }), /*#__PURE__*/React.createElement(OcchioSays, null, "Allora, ci siamo. Vuoi sapere come fa il computer a sapere tutte quelle cose? Te lo dico subito, e tieniti forte: ", /*#__PURE__*/React.createElement("strong", null, "non lo sa"), ". \xC8 pi\xF9 tonto di te \u2014 sa dire solo due cose, ", /*#__PURE__*/React.createElement(BinChip, null, "0"), " e ", /*#__PURE__*/React.createElement(BinChip, null, "1"), ": spento e acceso. Tutto il trucco \xE8 l\xEC. Vieni, te lo faccio toccare con mano."), /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1" }, "Allora, ci siamo. Vuoi sapere come fa il computer a sapere tutte quelle cose? Te lo dico subito, e tieniti forte: ", /*#__PURE__*/React.createElement("strong", null, "non lo sa"), ". \xC8 pi\xF9 tonto di te \u2014 sa dire solo due cose, ", /*#__PURE__*/React.createElement(BinChip, null, "0"), " e ", /*#__PURE__*/React.createElement(BinChip, null, "1"), ": spento e acceso. Tutto il trucco \xE8 l\xEC. Vieni, te lo faccio toccare con mano."), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 18,
       lineHeight: 1.65,
@@ -2405,7 +2405,7 @@ function LightbulbsPage({
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 2 di 7",
     title: "Le 8 lampadine"
-  }), /*#__PURE__*/React.createElement(OcchioSays, null, "Eccoci. Otto lampadine, ognuna accesa o spenta. Sembra poca roba, eh? Prima di toccarle, per\xF2, voglio una tua scommessa."), /*#__PURE__*/React.createElement(Indovina, {
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1" }, "Eccoci. Otto lampadine, ognuna accesa o spenta. Sembra poca roba, eh? Prima di toccarle, per\xF2, voglio una tua scommessa."), /*#__PURE__*/React.createElement(Indovina, {
     domanda: "Con 8 lampadine, ognuna accesa o spenta, quanti numeri diversi pensi di poter fare?",
     opzioni: [{
       label: 'Una decina'
@@ -2419,7 +2419,7 @@ function LightbulbsPage({
     onScelto: () => setRivelato(true)
   }), rivelato && /*#__PURE__*/React.createElement("div", {
     className: "reveal-pop"
-  }, /*#__PURE__*/React.createElement(OcchioSays, {
+  }, /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1",
     nome: "L'OCCHIO \u2014 e adesso guarda!"
   }, "Eccole. Guarda bene: sotto ogni lampadina c'\xE8 un ", /*#__PURE__*/React.createElement("strong", null, "numero"), ". Se la accendi, quel numero ", /*#__PURE__*/React.createElement("strong", null, "conta"), "; se \xE8 spenta, conta ", /*#__PURE__*/React.createElement("strong", null, "0"), ". Il numero che fai \xE8 semplicemente la ", /*#__PURE__*/React.createElement("strong", null, "somma"), " di tutte quelle accese. Prova: accendine qualcuna e guarda il totale salire."), /*#__PURE__*/React.createElement("p", {
     style: {
@@ -2497,7 +2497,7 @@ function LightbulbsPage({
       padding: '16px 18px',
       marginBottom: 18
     }
-  }, /*#__PURE__*/React.createElement(OcchioSays, {
+  }, /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1",
     nome: "L'OCCHIO \u2014 ci stai?"
   }, "Ci hai preso la mano, vedo. Allora mettiamoci alla prova: ti do un numero, e tu lo costruisci con le lampadine. Ci stai?"), /*#__PURE__*/React.createElement("button", {
     onClick: () => {
@@ -2585,7 +2585,7 @@ function LightbulbsPage({
   }), "spegni tutte"))), challengesWon.length > 0 && /*#__PURE__*/React.createElement("div", {
     className: "reveal-pop",
     key: challengesWon.length
-  }, /*#__PURE__*/React.createElement(OcchioSays, {
+  }, /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1",
     nome: "L'OCCHIO"
   }, reazioni[challengesWon.length])), !challengesWon.includes(challengeTarget) && /*#__PURE__*/React.createElement("div", {
     style: {
@@ -2709,7 +2709,7 @@ function FingersPage({
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 3 di 7",
     title: "Conta con le dita"
-  }), /*#__PURE__*/React.createElement(OcchioSays, null, "Una mano, cinque dita. A scuola conti fino a ", /*#__PURE__*/React.createElement("strong", null, "5"), ", giusto? Io con quella stessa mano vado molto pi\xF9 in l\xE0 \u2014 stesso trucco delle lampadine: ogni dito vale un numero. Ma prima dimmi una cosa."), /*#__PURE__*/React.createElement(Indovina, {
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1" }, "Una mano, cinque dita. A scuola conti fino a ", /*#__PURE__*/React.createElement("strong", null, "5"), ", giusto? Io con quella stessa mano vado molto pi\xF9 in l\xE0 \u2014 stesso trucco delle lampadine: ogni dito vale un numero. Ma prima dimmi una cosa."), /*#__PURE__*/React.createElement(Indovina, {
     domanda: "Con una mano sola, secondo te, fino a che numero si pu\xF2 contare in binario?",
     opzioni: [{
       label: 'Fino a 5, una per dito'
@@ -2832,7 +2832,7 @@ function FingersPage({
     }
   }, revealed ? 'Curiosità svelata' : 'Vuoi sapere fino a quanto si conta con DUE mani?'), revealed && /*#__PURE__*/React.createElement("div", {
     className: "reveal-pop"
-  }, /*#__PURE__*/React.createElement(OcchioSays, {
+  }, /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1",
     nome: "L'OCCHIO \u2014 tieniti forte"
   }, "Con ", /*#__PURE__*/React.createElement("strong", null, "due mani"), " arrivi a ", /*#__PURE__*/React.createElement("strong", null, "1.023"), ". E con ", /*#__PURE__*/React.createElement("strong", null, "due mani e due piedi"), "... oltre ", /*#__PURE__*/React.createElement("strong", null, "un milione"), ". Con le dita di una persona sola. Pazzesco, eh? Eppure \xE8 solo il trucco di prima, ripetuto.")), /*#__PURE__*/React.createElement(NavButtons, {
     goPrev: goPrev,
@@ -2940,7 +2940,7 @@ function NamePage({
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 4 di 7",
     title: "Il tuo nome segreto"
-  }), /*#__PURE__*/React.createElement(OcchioSays, null, "Numeri, d'accordo. Ma le ", /*#__PURE__*/React.createElement("strong", null, "lettere"), "? Come fa un computer a scriverle, se conosce solo 0 e 1? Stessa furbizia: le traveste da numeri. Scrivi il tuo nome qui sotto e guarda coi tuoi occhi come lo vede lui."), /*#__PURE__*/React.createElement("p", {
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1" }, "Numeri, d'accordo. Ma le ", /*#__PURE__*/React.createElement("strong", null, "lettere"), "? Come fa un computer a scriverle, se conosce solo 0 e 1? Stessa furbizia: le traveste da numeri. Scrivi il tuo nome qui sotto e guarda coi tuoi occhi come lo vede lui."), /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 14,
       color: PALETTE.inkSoft,
@@ -3083,7 +3083,7 @@ function DecodePage({
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 5 di 7",
     title: "Decifra il messaggio"
-  }), !finished && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(OcchioSays, null, "Ti ricordi? Ogni lettera ha il suo ", /*#__PURE__*/React.createElement("strong", null, "numero"), ", e quel numero \xE8 scritto in 0 e 1. Ora il gioco si gira: ti mostro il codice e ", /*#__PURE__*/React.createElement("strong", null, "tu"), " ritrovi la lettera. Sbagliare \xE8 permesso \u2014 \xE8 cos\xEC che ci si fa l'occhio. Prenditi un secondo, poi scegli."), /*#__PURE__*/React.createElement("p", {
+  }), !finished && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1" }, "Ti ricordi? Ogni lettera ha il suo ", /*#__PURE__*/React.createElement("strong", null, "numero"), ", e quel numero \xE8 scritto in 0 e 1. Ora il gioco si gira: ti mostro il codice e ", /*#__PURE__*/React.createElement("strong", null, "tu"), " ritrovi la lettera. Sbagliare \xE8 permesso \u2014 \xE8 cos\xEC che ci si fa l'occhio. Prenditi un secondo, poi scegli."), /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 17,
       lineHeight: 1.6,
@@ -3356,7 +3356,7 @@ function CompletePage({
       maxWidth: 560,
       margin: '0 auto 18px'
     }
-  }, /*#__PURE__*/React.createElement(OcchioSays, null, "Ce l'hai fatta. Ma una cosa cos\xEC non te la firmo io: leggere il codice dei computer, adesso, lo sai fare ", /*#__PURE__*/React.createElement("strong", null, "tu"), ". Quindi il sigillo lo metti ", /*#__PURE__*/React.createElement("strong", null, "tu"), ". Apri l'attestato e mettici la firma.")), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1" }, "Ce l'hai fatta. Ma una cosa cos\xEC non te la firmo io: leggere il codice dei computer, adesso, lo sai fare ", /*#__PURE__*/React.createElement("strong", null, "tu"), ". Quindi il sigillo lo metti ", /*#__PURE__*/React.createElement("strong", null, "tu"), ". Apri l'attestato e mettici la firma.")), /*#__PURE__*/React.createElement("div", {
     style: {
       maxWidth: 560,
       margin: '0 auto',
@@ -3473,7 +3473,7 @@ function CompletePage({
       fontSize: 16,
       color: PALETTE.ink
     }
-  }, "N\xB001 \xB7 Il Linguaggio Segreto"))), /*#__PURE__*/React.createElement(OcchioSays, null, "Bravo, ", name, " \u2014 e adesso \xE8 scritto, l'hai scritto tu. Lo trovi nel tuo ", /*#__PURE__*/React.createElement("strong", null, "taccuino"), ", primo distintivo. Ma una domanda mi resta in testa: questi 0 e 1... ", /*#__PURE__*/React.createElement("em", null, "dove"), " stanno, davvero? Dentro che cosa? Torna all'officina \u2014 nel prossimo modulo apriamo la scatola e andiamo a guardare.")), /*#__PURE__*/React.createElement(NavButtons, {
+  }, "N\xB001 \xB7 Il Linguaggio Segreto"))), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1" }, "Bravo, ", name, " \u2014 e adesso \xE8 scritto, l'hai scritto tu. Lo trovi nel tuo ", /*#__PURE__*/React.createElement("strong", null, "taccuino"), ", primo distintivo. Ma una domanda mi resta in testa: questi 0 e 1... ", /*#__PURE__*/React.createElement("em", null, "dove"), " stanno, davvero? Dentro che cosa? Torna all'officina \u2014 nel prossimo modulo apriamo la scatola e andiamo a guardare.")), /*#__PURE__*/React.createElement(NavButtons, {
     goPrev: goPrev,
     hideNext: true
   }));
@@ -4438,130 +4438,32 @@ function M2_CompletePage({
   progress,
   goPrev
 }) {
-  useEffect(() => {
-    markDone();
-  }, []);
+  useEffect(() => { markDone(); }, []);
   const name = progress.module1.userName || 'Esploratore';
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      textAlign: 'center',
-      padding: '10px 0'
-    }
-  }, /*#__PURE__*/React.createElement(PageHeader, {
+  const [firmato, setFirmato] = useState(false);
+  return /*#__PURE__*/React.createElement("div", { style: { padding: '4px 0' } }, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 7 di 7",
-    title: "Hai imparato!",
+    title: "Il sigillo",
     centered: true,
     accent: PALETTE.moss
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginBottom: 12
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "trophy",
-    size: 68,
-    strokeWidth: 1.5,
-    color: PALETTE.moss
-  })), /*#__PURE__*/React.createElement("h3", {
-    style: {
-      fontFamily: FONT_DISPLAY,
-      fontSize: 32,
-      fontWeight: 800,
-      margin: '0 0 8px',
-      letterSpacing: '-0.01em'
-    }
-  }, "Sei un esperto, ", name, "!"), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 17,
-      color: PALETTE.inkSoft,
-      marginBottom: 28,
-      maxWidth: 500,
-      margin: '0 auto 28px'
-    }
-  }, "Adesso sai come funziona ", /*#__PURE__*/React.createElement("strong", null, "davvero"), " un computer.", /*#__PURE__*/React.createElement("br", null), "E uno smartphone. E tutti gli oggetti elettronici che ti stanno intorno."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: PALETTE.cream,
-      border: `1.5px solid ${PALETTE.paperLine}`,
-      borderRadius: 6,
-      padding: '22px 24px',
-      marginBottom: 28,
-      textAlign: 'left',
-      maxWidth: 540,
-      marginLeft: 'auto',
-      marginRight: 'auto'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: FONT_MONO,
-      fontSize: 11,
-      color: PALETTE.inkSoft,
-      letterSpacing: 2,
-      marginBottom: 12,
-      fontWeight: 700
-    }
-  }, "\u2591 COSA HAI IMPARATO \u2591"), /*#__PURE__*/React.createElement("ul", {
-    style: {
-      listStyle: 'none',
-      padding: 0,
-      margin: 0,
-      fontSize: 16,
-      lineHeight: 1.9
-    }
-  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement(Icon, {
-    name: "star",
-    size: 14,
-    fill: PALETTE.moss,
-    color: PALETTE.moss,
-    style: {
-      verticalAlign: 'middle',
-      marginRight: 8
-    }
-  }), " Dentro un computer ci sono ", /*#__PURE__*/React.createElement("strong", null, "CPU, RAM, Disco, GPU")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement(Icon, {
-    name: "star",
-    size: 14,
-    fill: PALETTE.moss,
-    color: PALETTE.moss,
-    style: {
-      verticalAlign: 'middle',
-      marginRight: 8
-    }
-  }), " CPU = chef, RAM = banco, Disco = dispensa"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement(Icon, {
-    name: "star",
-    size: 14,
-    fill: PALETTE.moss,
-    color: PALETTE.moss,
-    style: {
-      verticalAlign: 'middle',
-      marginRight: 8
-    }
-  }), " La RAM si svuota quando spegni (per questo si salva!)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement(Icon, {
-    name: "star",
-    size: 14,
-    fill: PALETTE.moss,
-    color: PALETTE.moss,
-    style: {
-      verticalAlign: 'middle',
-      marginRight: 8
-    }
-  }), " Aprire un'app \xE8 una staffetta tra i componenti"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement(Icon, {
-    name: "star",
-    size: 14,
-    fill: PALETTE.moss,
-    color: PALETTE.moss,
-    style: {
-      verticalAlign: 'middle',
-      marginRight: 8
-    }
-  }), " Lo smartphone ha gli stessi pezzi, in miniatura"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontStyle: 'italic',
-      fontSize: 15,
-      color: PALETTE.inkSoft,
-      marginBottom: 20
-    }
-  }, "Il prossimo modulo sar\xE0 ", /*#__PURE__*/React.createElement("strong", null, "I Pixel Magici"), ". Scopriremo", /*#__PURE__*/React.createElement("br", null), "come si fanno le immagini sullo schermo."), /*#__PURE__*/React.createElement(NavButtons, {
-    goPrev: goPrev,
-    hideNext: true
-  }));
+  }), /*#__PURE__*/React.createElement("div", { style: { maxWidth: 560, margin: '0 auto 18px' } }, /*#__PURE__*/React.createElement(OcchioSays, null, "Ce l'hai fatta. Sai cosa c'\u00e8 dentro un computer \u2014 e dentro al telefono. E non perch\u00e9 te l'ho detto io: l'hai ", /*#__PURE__*/React.createElement("strong", null, "aperto e guardato tu"), ". Quindi il sigillo lo metti ", /*#__PURE__*/React.createElement("strong", null, "tu"), ". Apri l'attestato e firma.")), /*#__PURE__*/React.createElement("div", {
+    style: { maxWidth: 560, margin: '0 auto', background: firmato ? '#fff' : PALETTE.cream, border: `2.5px solid ${firmato ? PALETTE.amber : PALETTE.ink}`, borderRadius: 8, padding: '22px 24px', boxShadow: firmato ? `6px 6px 0 ${PALETTE.amber}` : 'none', transition: 'box-shadow .25s ease, border-color .25s ease' }
+  }, /*#__PURE__*/React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 6 } },
+    /*#__PURE__*/React.createElement("span", { style: { fontFamily: FONT_MONO, fontSize: 11, letterSpacing: 2, fontWeight: 700, color: PALETTE.amber } }, "ATTESTATO \xB7 MODULO 02"),
+    /*#__PURE__*/React.createElement("span", { style: { fontFamily: FONT_MONO, fontSize: 10, letterSpacing: 1, color: PALETTE.inkSoft } }, "L'OFFICINA DEI BIT")),
+    /*#__PURE__*/React.createElement("p", { style: { fontFamily: FONT_DISPLAY, fontWeight: 500, fontSize: 19, lineHeight: 1.45, color: PALETTE.ink, margin: '0 0 18px' } }, "So cosa c'\u00e8 dentro un computer: ", /*#__PURE__*/React.createElement("strong", null, "CPU, RAM, disco e GPU"), ". So che la RAM si svuota quando spengo, e che aprire un'app \u00e8 una ", /*#__PURE__*/React.createElement("strong", null, "staffetta"), " tra i pezzi. L'ho visto con i miei occhi."),
+    /*#__PURE__*/React.createElement("div", { style: { borderTop: `1.5px dashed ${PALETTE.paperLine}`, paddingTop: 12 } },
+      /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_MONO, fontSize: 10, letterSpacing: 1.5, color: PALETTE.inkSoft, marginBottom: 4 } }, "FIRMA"),
+      firmato ? /*#__PURE__*/React.createElement("div", { className: "reveal-pop", style: { fontFamily: FONT_HAND, fontSize: 42, fontWeight: 700, color: PALETTE.ink, lineHeight: 1 } }, name) : /*#__PURE__*/React.createElement("div", { style: { height: 46, borderBottom: `2px solid ${PALETTE.paperLine}` } })),
+    !firmato && /*#__PURE__*/React.createElement("button", { onClick: () => setFirmato(true), style: { ...btnPrimary(), marginTop: 16 } }, "Firma qui")),
+  firmato && /*#__PURE__*/React.createElement("div", { className: "reveal-pop", style: { maxWidth: 560, margin: '20px auto 0' } },
+    /*#__PURE__*/React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'center', background: `${PALETTE.moss}16`, border: `2px dashed ${PALETTE.moss}`, borderRadius: 8, padding: '12px 16px', marginBottom: 18 } },
+      /*#__PURE__*/React.createElement(Icon, { name: "cpu", size: 24, color: PALETTE.moss }),
+      /*#__PURE__*/React.createElement("div", { style: { textAlign: 'left' } },
+        /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_MONO, fontSize: 10, letterSpacing: 1.5, color: PALETTE.inkSoft } }, "DISTINTIVO SBLOCCATO"),
+        /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 16, color: PALETTE.ink } }, "N\xB002 \xB7 Dentro la Scatola"))),
+    /*#__PURE__*/React.createElement(OcchioSays, null, "Bravo, ", name, " \u2014 e adesso \u00e8 scritto, l'hai scritto tu. Lo trovi nel tuo ", /*#__PURE__*/React.createElement("strong", null, "taccuino"), ", secondo distintivo. Il prossimo modulo \u00e8 ", /*#__PURE__*/React.createElement("strong", null, "I Pixel Magici"), ": come nascono le immagini sullo schermo. Torna all'officina \u2014 ti aspetto.")),
+  /*#__PURE__*/React.createElement(NavButtons, { goPrev: goPrev, hideNext: true }));
 }
 
 // ============================================================================
@@ -4729,7 +4631,7 @@ function M3_IntroPage({
     eyebrow: "Pagina 1 di 7",
     title: "Avvicinati allo schermo",
     accent: PALETTE.rust
-  }), /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Avvicinati allo schermo il pi\u00f9 possibile. Quei puntini colorati hanno un nome \u2014 e nascondono lo ", /*#__PURE__*/React.createElement("strong", null, "stesso segreto"), " del primo modulo. Andiamo a scoprirlo."), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 18,
       lineHeight: 1.65,
@@ -4898,7 +4800,7 @@ function M3_StudioPage({
     eyebrow: "Pagina 2 di 7",
     title: "Lo studio dei pixel",
     accent: PALETTE.rust
-  }), /*#__PURE__*/React.createElement("p", {
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Hai visto i pixel da vicino. Adesso il pittore sei ", /*#__PURE__*/React.createElement("strong", null, "tu"), ": scegli un colore e disegna. Ogni quadratino che tocchi \u00e8 un pixel."), /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 16,
       lineHeight: 1.55,
@@ -4911,7 +4813,7 @@ function M3_StudioPage({
       marginBottom: 18,
       fontStyle: 'italic'
     }
-  }, "Il tuo disegno si salva da solo. \u270F\uFE0F"), /*#__PURE__*/React.createElement("div", {
+  }, "Il tuo disegno si salva da solo."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexWrap: 'wrap',
@@ -4948,7 +4850,7 @@ function M3_StudioPage({
       fontSize: 13,
       fontWeight: 600
     }
-  }, "\uD83E\uDDFD gomma")), /*#__PURE__*/React.createElement("div", {
+  }, "gomma")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       justifyContent: 'center',
@@ -5097,7 +4999,7 @@ function M3_ColorMixerPage({
     eyebrow: "Pagina 3 di 7",
     title: "La macchina dei colori",
     accent: PALETTE.rust
-  }), /*#__PURE__*/React.createElement("p", {
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Ogni colore che vedi nasce da ", /*#__PURE__*/React.createElement("strong", null, "tre luci"), ": rossa, verde, blu. Mescolale tu coi cursori e prova a centrare i colori delle sfide qui sotto."), /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 16,
       lineHeight: 1.55,
@@ -5251,7 +5153,7 @@ function M3_ColorMixerPage({
       fontSize: 14,
       lineHeight: 1.5
     }
-  }, "\uD83D\uDCA1 ", /*#__PURE__*/React.createElement("strong", null, "Strano ma vero:"), " con la ", /*#__PURE__*/React.createElement("strong", null, "luce"), ", Rosso + Verde fa GIALLO (non marrone come con i pennarelli!). E tutte e tre insieme fanno la luce BIANCA."), /*#__PURE__*/React.createElement(NavButtons, {
+  }, /*#__PURE__*/React.createElement(Icon, { name: "lightbulb", size: 16, color: PALETTE.amber, style: { verticalAlign: "-3px", marginRight: 6 } }), /*#__PURE__*/React.createElement("strong", null, "Strano ma vero:"), " con la ", /*#__PURE__*/React.createElement("strong", null, "luce"), ", Rosso + Verde fa GIALLO (non marrone come con i pennarelli!). E tutte e tre insieme fanno la luce BIANCA."), /*#__PURE__*/React.createElement(NavButtons, {
     goPrev: goPrev,
     goNext: goNext,
     nextLabel: "zoom nella foto \u2192",
