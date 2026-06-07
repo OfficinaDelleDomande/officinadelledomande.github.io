@@ -45,6 +45,7 @@
 <script src="lib/react.production.min.js"></script>
 <script src="lib/react-dom.production.min.js"></script>
 <script src="profilebar.js"></script>
+<script src="sipario.js"></script>
 </head>
 <body>
 <div id="root"></div>
@@ -1654,6 +1655,9 @@ function App() {
   const [cruscottoBack, setCruscottoBack] = useState('home'); // da dove sei arrivato al taccuino
   const [idx, setIdx] = useState(0);
   const [store, setStore] = useState(loadStore());
+  const [entrato, setEntrato] = useState(() => typeof sessionStorage !== 'undefined' && sessionStorage.getItem('tempo-entrato') === '1');
+  const marcaEntrato = fn => (...a) => { setEntrato(true); try { sessionStorage.setItem('tempo-entrato', '1'); } catch (e) {} return fn && fn(...a); };
+  const [siparioFatto, setSiparioFatto] = useState(() => typeof sessionStorage !== 'undefined' && sessionStorage.getItem('tempo-sipario') === '1');
   useEffect(() => {
     document.body.style.background = C.bg;
   }, []);
@@ -1664,8 +1668,9 @@ function App() {
       behavior: 'instant'
     });
   }, [idx, view]);
-  const activeId = store.activeId;
+  const activeId = entrato ? store.activeId : null;
   const activeProfile = store.profiles.find(p => p.id === activeId) || null;
+  const mostraSipario = activeId && entrato && !siparioFatto;
   const progress = activeId && store.progressByProfile[activeId] ? store.progressByProfile[activeId] : freshProgress();
   const markRead = useCallback(key => {
     setStore(prev => {
@@ -1746,6 +1751,7 @@ function App() {
     });
     setView('home');
   }, []);
+  const tornaAlSelettore = () => { setEntrato(false); try { sessionStorage.removeItem('tempo-entrato'); } catch (e) {} switchProfile(); };
   const deleteProfile = useCallback(id => {
     setStore(prev => {
       const pbp = {
@@ -1797,7 +1803,7 @@ function App() {
       setCruscottoBack(view);
       setView('cruscotto');
     },
-    onSwitch: switchProfile,
+    onSwitch: tornaAlSelettore,
     bgColor: C.bg,
     inkColor: C.ink,
     softColor: C.inkSoft
@@ -1828,8 +1834,8 @@ function App() {
     }, "\u2190 le officine")), /*#__PURE__*/React.createElement(ProfileSelectView, {
       profiles: store.profiles,
       progressByProfile: store.progressByProfile,
-      onSelect: selectProfile,
-      onCreate: createProfile,
+      onSelect: marcaEntrato(selectProfile),
+      onCreate: marcaEntrato(createProfile),
       onDelete: deleteProfile
     })));
   }
@@ -1855,7 +1861,17 @@ function App() {
         maxWidth: 760,
         margin: '0 auto'
       }
-    }, topBar, /*#__PURE__*/React.createElement(ProgettoHome, {
+    }, topBar, mostraSipario && window.SiparioOfficina && /*#__PURE__*/React.createElement(window.SiparioOfficina, {
+      nome: activeProfile && activeProfile.name,
+      titolo: "Officina del Tempo",
+      renderAvatar: size => /*#__PURE__*/React.createElement(AvatarLente, { size: size }),
+      bg: C.bg,
+      ink: C.ink,
+      inkSoft: C.inkSoft,
+      fontDisplay: F_DISPLAY,
+      fontMono: F_MONO,
+      onFine: () => { setSiparioFatto(true); try { sessionStorage.setItem('tempo-sipario', '1'); } catch (e) {} }
+    }), /*#__PURE__*/React.createElement(ProgettoHome, {
       onOpenCaso: () => {
         setView('cover');
       },

@@ -38,6 +38,7 @@
 <script src="lib/react.production.min.js"></script>
 <script src="lib/react-dom.production.min.js"></script>
 <script src="profilebar.js"></script>
+<script src="sipario.js"></script>
 </head>
 <body>
 <div id="root"></div>
@@ -75,6 +76,7 @@ const FONT_MONO = "'Space Mono', 'Courier New', monospace";
 // ============================================================================
 
 const ICONS = {
+  'x-circle': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("circle", { cx: "12", cy: "12", r: "10" }), /*#__PURE__*/React.createElement("path", { d: "m15 9-6 6" }), /*#__PURE__*/React.createElement("path", { d: "m9 9 6 6" })),
   'arrow-left': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
     d: "m12 19-7-7 7-7"
   }), /*#__PURE__*/React.createElement("path", {
@@ -365,7 +367,23 @@ const ICONS = {
     d: "m5 12 7-7 7 7"
   }), /*#__PURE__*/React.createElement("path", {
     d: "M12 19V5"
-  }))
+  })),
+  'egg': React.createElement("path", {d: "M12 2C8 2 4 8 4 14a8 8 0 0 0 16 0c0-6-4-12-8-12"}),
+  'apple': React.createElement(React.Fragment, null, React.createElement("path", {d: "M12 6.528V3a1 1 0 0 1 1-1h0"}), React.createElement("path", {d: "M18.237 21A15 15 0 0 0 22 11a6 6 0 0 0-10-4.472A6 6 0 0 0 2 11a15.1 15.1 0 0 0 3.763 10 3 3 0 0 0 3.648.648 5.5 5.5 0 0 1 5.178 0A3 3 0 0 0 18.237 21"})),
+  'milk': React.createElement(React.Fragment, null, React.createElement("path", {d: "M5.116 4.104A1 1 0 0 1 6.11 3h11.78a1 1 0 0 1 .994 1.105L17.19 20.21A2 2 0 0 1 15.2 22H8.8a2 2 0 0 1-2-1.79z"}), React.createElement("path", {d: "M6 12a5 5 0 0 1 6 0 5 5 0 0 0 6 0"})),
+  'choc': React.createElement(React.Fragment, null, React.createElement("path", {d: "M10 7v10.9"}), React.createElement("path", {d: "M14 6.1V17"}), React.createElement("path", {d: "M16 7V3a1 1 0 0 1 1.707-.707 2.5 2.5 0 0 0 2.152.717 1 1 0 0 1 1.131 1.131 2.5 2.5 0 0 0 .717 2.152A1 1 0 0 1 21 8h-4"}), React.createElement("path", {d: "M16.536 7.465a5 5 0 0 0-7.072 0l-2 2a5 5 0 0 0 0 7.07 5 5 0 0 0 7.072 0l2-2a5 5 0 0 0 0-7.07"}), React.createElement("path", {d: "M8 17v4a1 1 0 0 1-1.707.707 2.5 2.5 0 0 0-2.152-.717 1 1 0 0 1-1.131-1.131 2.5 2.5 0 0 0-.717-2.152A1 1 0 0 1 3 16h4"})),
+  'wheat': React.createElement(React.Fragment, null, React.createElement("path", {d: "M2 22 16 8"}), React.createElement("path", {d: "M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"}), React.createElement("path", {d: "M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"}), React.createElement("path", {d: "M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"}), React.createElement("path", {d: "M20 2h2v2a4 4 0 0 1-4 4h-2V6a4 4 0 0 1 4-4Z"}), React.createElement("path", {d: "M11.47 17.47 13 19l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L5 19l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"}), React.createElement("path", {d: "M15.47 13.47 17 15l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L9 15l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"}), React.createElement("path", {d: "M19.47 9.47 21 11l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L13 11l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"})),
+  'rabbit': React.createElement(React.Fragment, null, React.createElement("path", {d: "M13 16a3 3 0 0 1 2.24 5"}), React.createElement("path", {d: "M18 12h.01"}), React.createElement("path", {d: "M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3"}), React.createElement("path", {d: "M20 8.54V4a2 2 0 1 0-4 0v3"}), React.createElement("path", {d: "M7.612 12.524a3 3 0 1 0-1.6 4.3"})),
+  'turtle': React.createElement(React.Fragment, null, React.createElement("path", {d: "m12 10 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a8 8 0 1 0-16 0v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3l2-4h4Z"}), React.createElement("path", {d: "M4.82 7.9 8 10"}), React.createElement("path", {d: "M15.18 7.9 12 10"}), React.createElement("path", {d: "M16.93 10H20a2 2 0 0 1 0 4H2"})),
+  'snail': React.createElement(React.Fragment, null, React.createElement("path", {d: "M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0"}), React.createElement("circle", {cx: "10", cy: "13", r: "8"}), React.createElement("path", {d: "M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6"}), React.createElement("path", {d: "M18 3 19.1 5.2"}), React.createElement("path", {d: "M22 3 20.9 5.2"})),
+  'flag': React.createElement("path", {d: "M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528"}),
+  'camera': React.createElement(React.Fragment, null, React.createElement("path", {d: "M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"}), React.createElement("circle", {cx: "12", cy: "13", r: "3"})),
+  'music': React.createElement(React.Fragment, null, React.createElement("path", {d: "M9 18V5l12-2v13"}), React.createElement("circle", {cx: "6", cy: "18", r: "3"}), React.createElement("circle", {cx: "18", cy: "16", r: "3"})),
+  'gamepad': React.createElement(React.Fragment, null, React.createElement("line", {x1: "6", x2: "10", y1: "11", y2: "11"}), React.createElement("line", {x1: "8", x2: "8", y1: "9", y2: "13"}), React.createElement("line", {x1: "15", x2: "15.01", y1: "12", y2: "12"}), React.createElement("line", {x1: "18", x2: "18.01", y1: "10", y2: "10"}), React.createElement("path", {d: "M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"})),
+  'map': React.createElement(React.Fragment, null, React.createElement("path", {d: "M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"}), React.createElement("path", {d: "M15 5.764v15"}), React.createElement("path", {d: "M9 3.236v15"})),
+  'microscope': React.createElement(React.Fragment, null, React.createElement("path", {d: "M6 18h8"}), React.createElement("path", {d: "M3 22h18"}), React.createElement("path", {d: "M14 22a7 7 0 1 0 0-14h-1"}), React.createElement("path", {d: "M9 14h2"}), React.createElement("path", {d: "M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"}), React.createElement("path", {d: "M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"})),
+  'cake': React.createElement(React.Fragment, null, React.createElement("path", {d: "M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"}), React.createElement("path", {d: "M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"}), React.createElement("path", {d: "M2 21h20"}), React.createElement("path", {d: "M7 8v3"}), React.createElement("path", {d: "M12 8v3"}), React.createElement("path", {d: "M17 8v3"}), React.createElement("path", {d: "M7 4h.01"}), React.createElement("path", {d: "M12 4h.01"}), React.createElement("path", {d: "M17 4h.01"})),
+  'chef-hat': React.createElement(React.Fragment, null, React.createElement("path", {d: "M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"}), React.createElement("path", {d: "M6 17h12"})),
 };
 function Icon({
   name,
@@ -868,8 +886,12 @@ function App() {
   const [module3Page, setModule3Page] = useState(0);
   const [module4Page, setModule4Page] = useState(0);
   const [store, setStore] = useState(loadStore());
-  const activeId = store.activeId;
+  const [entrato, setEntrato] = useState(() => typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bit-entrato') === '1');
+  const marcaEntrato = fn => (...a) => { setEntrato(true); try { sessionStorage.setItem('bit-entrato', '1'); } catch (e) {} return fn && fn(...a); };
+  const [siparioFatto, setSiparioFatto] = useState(() => typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bit-sipario') === '1');
+  const activeId = entrato ? store.activeId : null;
   const activeProfile = store.profiles.find(p => p.id === activeId) || null;
+  const mostraSipario = activeId && entrato && !siparioFatto;
   const progress = activeId && store.progressByProfile[activeId] ? store.progressByProfile[activeId] : freshProgress();
 
   // Aggiorna il progress del profilo attivo
@@ -986,6 +1008,7 @@ function App() {
     });
     setView('hub');
   }, []);
+  const tornaAlSelettore = () => { setEntrato(false); try { sessionStorage.removeItem('bit-entrato'); } catch (e) {} switchProfile(); };
   const deleteProfile = useCallback(id => {
     setStore(prev => {
       const progressByProfile = {
@@ -1017,23 +1040,33 @@ function App() {
       maxWidth: 880,
       margin: '0 auto'
     }
-  }, activeId && window.ProfileBar && React.createElement(window.ProfileBar, {
+  }, mostraSipario && window.SiparioOfficina && /*#__PURE__*/React.createElement(window.SiparioOfficina, {
+    nome: activeProfile && activeProfile.name,
+    titolo: "Officina dei Bit",
+    renderAvatar: size => /*#__PURE__*/React.createElement(EyeBitAvatar, { size: size }),
+    bg: '#f5efe0',
+    ink: PALETTE.ink,
+    inkSoft: PALETTE.inkSoft,
+    fontDisplay: FONT_DISPLAY,
+    fontMono: FONT_MONO,
+    onFine: () => { setSiparioFatto(true); try { sessionStorage.setItem('bit-sipario', '1'); } catch (e) {} }
+  }), activeId && window.ProfileBar && React.createElement(window.ProfileBar, {
     profile: activeProfile,
     onOpenTaccuino: () => setView('taccuino'),
-    onSwitch: switchProfile,
+    onSwitch: tornaAlSelettore,
     bgColor: PALETTE.cream,
     inkColor: PALETTE.ink,
     softColor: PALETTE.inkSoft
   }), !activeId && /*#__PURE__*/React.createElement(ProfileSelectView, {
     profiles: store.profiles,
     progressByProfile: store.progressByProfile,
-    onSelect: selectProfile,
-    onCreate: createProfile,
+    onSelect: marcaEntrato(selectProfile),
+    onCreate: marcaEntrato(createProfile),
     onDelete: deleteProfile
   }), activeId && view === 'hub' && /*#__PURE__*/React.createElement(HubView, {
     progress: progress,
     activeProfile: activeProfile,
-    onSwitchProfile: switchProfile,
+    onSwitchProfile: tornaAlSelettore,
     onOpenTaccuino: () => setView('taccuino'),
     onEnterModule1: () => {
       setView('module1');
@@ -1914,11 +1947,27 @@ function EyeBitAvatar({
     strokeWidth: "3"
   })));
 }
+// Traccia gli ingressi gia' avvenuti (una volta per chiave/modulo, per caricamento)
+const _occhioEntrato = {};
 function OcchioSays({
   children,
-  nome = "L'OCCHIO"
+  nome = "L'OCCHIO",
+  entra
 }) {
+  // Durate entrata morbida (ms)
+  const DUR_OCCHIO = 600; // l'Occhio scende e si posa
+  const DUR_BOX = 480; // il fumetto compare
+  const DELAY_TESTO = 700; // pausa prima che parli
+  const DUR_TESTO = 520; // il testo appare
+  const reduce = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const [anima] = useState(() => !!entra && !reduce && !_occhioEntrato[entra]);
+  const [salta, setSalta] = useState(false);
+  useEffect(() => {
+    if (anima && entra) _occhioEntrato[entra] = true;
+  }, []);
+  const on = anima && !salta;
   return /*#__PURE__*/React.createElement("div", {
+    onClick: on ? () => setSalta(true) : undefined,
     style: {
       display: 'flex',
       gap: 14,
@@ -1928,11 +1977,23 @@ function OcchioSays({
       borderRadius: 10,
       boxShadow: `4px 4px 0 ${PALETTE.rust}`,
       padding: '15px 16px',
-      margin: '18px 0'
+      margin: '18px 0',
+      cursor: on ? 'pointer' : 'default',
+      animation: on ? `occhioBox ${DUR_BOX}ms ease-out both` : undefined
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      flexShrink: 0,
+      animation: on ? `occhioGiu ${DUR_OCCHIO}ms cubic-bezier(.2,.8,.3,1) both` : 'none'
     }
   }, /*#__PURE__*/React.createElement(EyeBitAvatar, {
     size: 60
-  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      animation: on ? `occhioTesto ${DUR_TESTO}ms ease-out ${DELAY_TESTO}ms both` : 'none'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: FONT_MONO,
       fontSize: 10,
@@ -1947,7 +2008,12 @@ function OcchioSays({
       lineHeight: 1.55,
       color: PALETTE.ink
     }
-  }, children)));
+  }, children)), on && /*#__PURE__*/React.createElement("style", null, `
+    @keyframes occhioGiu { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes occhioBox { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }
+    @keyframes occhioTesto { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { @keyframes occhioGiu { from{opacity:1} to{opacity:1} } @keyframes occhioBox { from{opacity:1} to{opacity:1} } @keyframes occhioTesto { from{opacity:1} to{opacity:1} } }
+  `));
 }
 function Indovina({
   domanda,
@@ -2147,6 +2213,7 @@ function ModuleOneView({
     component: CompletePage
   }];
   const Current = pages[page].component;
+  useEffect(() => { window.scrollTo(0, 0); }, [page]);
   const done = new Set(progress.module1.pagesDone);
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -2576,12 +2643,7 @@ function Lightbulb8({
     r: "22",
     fill: PALETTE.amberGlow,
     opacity: "0.5"
-  }, /*#__PURE__*/React.createElement("animate", {
-    attributeName: "opacity",
-    values: "0.3;0.6;0.3",
-    dur: "2s",
-    repeatCount: "indefinite"
-  })), /*#__PURE__*/React.createElement("ellipse", {
+  }), /*#__PURE__*/React.createElement("ellipse", {
     cx: "22",
     cy: "20",
     rx: "14",
@@ -3177,19 +3239,19 @@ function TriviaPage({
   const cards = [{
     front: 'Perché solo 0 e 1?',
     back: 'Perché il computer funziona con la corrente elettrica. La corrente o passa (1) o non passa (0). Non c\'è una via di mezzo. Per questo i computer parlano solo con due lettere.',
-    icon: '⚡'
+    icon: 'zap'
   }, {
     front: 'Una foto è fatta di numeri',
     back: 'Quando scatti una foto, ogni puntino (pixel) viene salvato come un numero. Una foto del cellulare ha milioni di puntini = milioni di numeri = miliardi di 0 e 1!',
-    icon: '📸'
+    icon: 'image'
   }, {
     front: 'Quanto è 1 byte?',
     back: '8 bit insieme si chiamano "byte". Con 1 byte puoi scrivere 256 cose diverse (lettere, numeri, simboli). Il tuo nome è circa 5 byte. Un libro intero pesa qualche milione di byte!',
-    icon: '📦'
+    icon: 'memory-stick'
   }, {
     front: 'Anche la musica è 0 e 1',
     back: 'Quando ascolti una canzone, il computer legge migliaia di numeri al secondo e li trasforma in suono. Tutta la musica del mondo, nello smartphone, è una lunghissima fila di 0 e 1.',
-    icon: '🎵'
+    icon: 'play'
   }];
   const toggle = i => setOpened(prev => {
     const next = [...prev];
@@ -3229,10 +3291,13 @@ function TriviaPage({
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 32,
       marginBottom: 10
     }
-  }, c.icon), !opened[i] ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: c.icon,
+    size: 30,
+    color: opened[i] ? PALETTE.cream : PALETTE.amber
+  })), !opened[i] ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: FONT_DISPLAY,
       fontWeight: 700,
@@ -3442,6 +3507,7 @@ function ModuleTwoView({
     component: M2_CompletePage
   }];
   const Current = pages[page].component;
+  useEffect(() => { window.scrollTo(0, 0); }, [page]);
   const done = new Set(progress.module2.pagesDone);
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -3512,12 +3578,26 @@ function ModuleTwoView({
       padding: '36px 32px',
       minHeight: 460
     }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "pagina-stagger",
+    key: page
   }, /*#__PURE__*/React.createElement(Current, {
     progress: progress,
     markDone: () => markPageDone(page),
     goNext: () => setPage(Math.min(page + 1, pages.length - 1)),
     goPrev: () => setPage(Math.max(page - 1, 0))
-  })));
+  })), /*#__PURE__*/React.createElement("style", null, `
+    .pagina-stagger > div > * { animation: paginaSu 500ms cubic-bezier(.2,.75,.3,1) both; }
+    .pagina-stagger > div > *:nth-child(1){animation-delay:40ms}
+    .pagina-stagger > div > *:nth-child(2){animation-delay:130ms}
+    .pagina-stagger > div > *:nth-child(3){animation-delay:220ms}
+    .pagina-stagger > div > *:nth-child(4){animation-delay:310ms}
+    .pagina-stagger > div > *:nth-child(5){animation-delay:400ms}
+    .pagina-stagger > div > *:nth-child(6){animation-delay:490ms}
+    .pagina-stagger > div > *:nth-child(n+7){animation-delay:580ms}
+    @keyframes paginaSu { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .pagina-stagger > div > * { animation: none !important; } }
+  `)));
 }
 
 // ----------------------------------------------------------------------------
@@ -3536,7 +3616,7 @@ function M2_IntroPage({
     eyebrow: "Pagina 1 di 7",
     title: "Apri la scatola",
     accent: PALETTE.moss
-  }), /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement(OcchioSays, {entra: "m2"}, "Eccoci al Modulo 2. Schiacci un tasto e \u2014 zac \u2014 il computer fa una cosa. Ma dentro la scatola, secondo te, cosa c'\u00e8 davvero? Mica un piccolo mago: c'\u00e8 una ", /*#__PURE__*/React.createElement("strong", null, "squadra"), ". Aprila e guarda chi ci abita."), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 18,
       lineHeight: 1.65,
@@ -3569,21 +3649,12 @@ function M2_IntroPage({
       boxShadow: opened ? 'none' : `3px 3px 0 ${PALETTE.moss}`,
       opacity: opened ? 0.7 : 1
     }
-  }, opened ? '✨ scatola aperta!' : '👆 tocca per aprire')), opened && /*#__PURE__*/React.createElement("div", {
+  }, opened ? 'scatola aperta!' : 'tocca per aprire')), opened && /*#__PURE__*/React.createElement("div", {
     style: {
-      background: `${PALETTE.moss}15`,
-      border: `1.5px dashed ${PALETTE.moss}`,
-      padding: '16px 20px',
-      borderRadius: 4,
       marginTop: 12,
       animation: 'fadeIn 0.5s ease'
     }
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      margin: 0,
-      fontSize: 17
-    }
-  }, "Ecco i pezzi del computer. Ognuno ha un compito diverso.", /*#__PURE__*/React.createElement("br", null), "Ora andiamo a conoscerli uno per uno \u2192"))), /*#__PURE__*/React.createElement(NavButtons, {
+  }, /*#__PURE__*/React.createElement(OcchioSays, null, "Visto? Nessuna magia. Dentro c'\u00e8 una squadra: la ", /*#__PURE__*/React.createElement("strong", null, "CPU"), " che pensa, la ", /*#__PURE__*/React.createElement("strong", null, "RAM"), " che tiene a mente, il ", /*#__PURE__*/React.createElement("strong", null, "disco"), " che ricorda, la ", /*#__PURE__*/React.createElement("strong", null, "GPU"), " che disegna. E quel \u201cciao\u201d sullo schermo? Lui non sa scrivere \u201cciao\u201d: lo dice in ", /*#__PURE__*/React.createElement(BinChip, null, "0"), " e ", /*#__PURE__*/React.createElement(BinChip, null, "1"), ", la lingua del Modulo 1. Andiamo a conoscerli, uno per uno."))), /*#__PURE__*/React.createElement(NavButtons, {
     goNext: goNext,
     nextLabel: "conosciamoli \u2192",
     disableNext: !opened
@@ -3596,7 +3667,7 @@ function ComputerBoxIllustration({
     viewBox: "0 0 280 200",
     width: "100%",
     style: {
-      maxWidth: 320,
+      maxWidth: 380,
       height: 'auto'
     }
   }, /*#__PURE__*/React.createElement("rect", {
@@ -3617,22 +3688,15 @@ function ComputerBoxIllustration({
     fill: opened ? PALETTE.amber : PALETTE.creamDeep,
     stroke: PALETTE.ink,
     strokeWidth: "1.5"
-  }), opened && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("text", {
+  }), opened && /*#__PURE__*/React.createElement("text", {
     x: "140",
-    y: "58",
+    y: "73",
     textAnchor: "middle",
     fontFamily: FONT_MONO,
-    fontSize: "9",
+    fontSize: "15",
     fill: PALETTE.ink,
     fontWeight: "700"
-  }, "CIAO!"), /*#__PURE__*/React.createElement("text", {
-    x: "140",
-    y: "75",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "7",
-    fill: PALETTE.ink
-  }, "01001000 01101001")), /*#__PURE__*/React.createElement("rect", {
+  }, "CIAO!"), /*#__PURE__*/React.createElement("rect", {
     x: "125",
     y: "120",
     width: "30",
@@ -3674,7 +3738,7 @@ function ComputerBoxIllustration({
     y: "180",
     textAnchor: "middle",
     fontFamily: FONT_MONO,
-    fontSize: "8",
+    fontSize: "9",
     fill: PALETTE.ink
   }, "SCATOLA CHIUSA")), opened && /*#__PURE__*/React.createElement("g", {
     style: {
@@ -3704,7 +3768,7 @@ function ComputerBoxIllustration({
     y: "168",
     textAnchor: "middle",
     fontFamily: FONT_MONO,
-    fontSize: "8",
+    fontSize: "10",
     fill: "#fff",
     fontWeight: "700"
   }, "CPU"), /*#__PURE__*/React.createElement("rect", {
@@ -3728,7 +3792,7 @@ function ComputerBoxIllustration({
     y: "178",
     textAnchor: "middle",
     fontFamily: FONT_MONO,
-    fontSize: "7",
+    fontSize: "9",
     fill: PALETTE.ink,
     fontWeight: "700"
   }, "RAM"), /*#__PURE__*/React.createElement("rect", {
@@ -3757,7 +3821,7 @@ function ComputerBoxIllustration({
     y: "178",
     textAnchor: "middle",
     fontFamily: FONT_MONO,
-    fontSize: "6",
+    fontSize: "9",
     fill: PALETTE.ink,
     fontWeight: "700"
   }, "DISCO"), /*#__PURE__*/React.createElement("rect", {
@@ -3780,7 +3844,7 @@ function ComputerBoxIllustration({
     y: "180",
     textAnchor: "middle",
     fontFamily: FONT_MONO,
-    fontSize: "7",
+    fontSize: "9",
     fill: PALETTE.ink,
     fontWeight: "700"
   }, "GPU")), /*#__PURE__*/React.createElement("style", null, `@keyframes explode { 0% { opacity: 0; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }`));
@@ -3850,7 +3914,7 @@ function M2_ComponentsPage({
     eyebrow: "Pagina 2 di 7",
     title: "I 5 abitanti",
     accent: PALETTE.moss
-  }), /*#__PURE__*/React.createElement("p", {
+  }), /*#__PURE__*/React.createElement(OcchioSays, {entra: "m2"}, "Cinque ", /*#__PURE__*/React.createElement("strong", null, "abitanti"), " in una sola scatola \u2014 e ognuno fa un mestiere diverso. Chi pensa? Chi ricorda? Toccali uno per uno e scoprilo: non si crede, si fa."), /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 17,
       lineHeight: 1.6,
@@ -3927,7 +3991,7 @@ function M2_ComponentsPage({
   }, selectedComp.name), /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: FONT_MONO,
-      fontSize: 11,
+      fontSize: 12,
       color: PALETTE.inkSoft,
       letterSpacing: 1,
       marginTop: 3
@@ -3943,17 +4007,17 @@ function M2_ComponentsPage({
       background: PALETTE.cream,
       padding: '10px 14px',
       borderRadius: 3,
-      fontSize: 14,
+      fontSize: 15,
       color: PALETTE.inkSoft,
       fontStyle: 'italic'
     }
-  }, "\uD83E\uDDE0 ", /*#__PURE__*/React.createElement("strong", null, "Lo sapevi?"), " ", selectedComp.fun)) : /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(Icon, {name: "lightbulb", size: 15, color: PALETTE.amber, style: {verticalAlign: "-2px", marginRight: 5}}), /*#__PURE__*/React.createElement("strong", null, "Lo sapevi?"), " ", selectedComp.fun)) : /*#__PURE__*/React.createElement("div", {
     style: {
       padding: '18px 22px',
       textAlign: 'center',
       color: PALETTE.warmGray,
       fontStyle: 'italic',
-      fontSize: 15
+      fontSize: 16
     }
   }, "\u2191 Tocca un abitante per conoscerlo"), /*#__PURE__*/React.createElement(NavButtons, {
     goPrev: goPrev,
@@ -3993,26 +4057,26 @@ function ComponentBlock({
     }
   }, /*#__PURE__*/React.createElement(Icon, {
     name: comp.icon,
-    size: 28,
+    size: 32,
     strokeWidth: 1.8
   }), /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: FONT_DISPLAY,
       fontWeight: 700,
-      fontSize: 14,
+      fontSize: 16,
       lineHeight: 1.1,
       textAlign: 'center'
     }
   }, comp.name), !isOpened && /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 10,
+      fontSize: 13,
       fontFamily: FONT_MONO,
       color: PALETTE.warmGray,
       letterSpacing: 1
     }
   }, "?"), isOpened && !isSelected && /*#__PURE__*/React.createElement(Icon, {
     name: "check-circle",
-    size: 12,
+    size: 16,
     color: comp.color
   }));
 }
@@ -4026,277 +4090,76 @@ function M2_KitchenPage({
   goNext,
   goPrev
 }) {
-  const [phase, setPhase] = useState('idle'); // idle | cooking | done | shutdown
-  const [pantry, setPantry] = useState(['🥚', '🍎', '🥛', '🍫', '🌾']);
+  const ingredients = ['egg', 'choc', 'wheat'];
+  const pantry = ['egg', 'apple', 'milk', 'choc', 'wheat'];
   const [counter, setCounter] = useState([]);
   const [cake, setCake] = useState(false);
-  const doCooking = () => {
-    setPhase('cooking');
-    // Sposta ingredienti uno per uno con delay
-    const ingredients = ['🥚', '🍫', '🌾'];
-    ingredients.forEach((ing, idx) => {
-      setTimeout(() => {
-        setCounter(prev => [...prev, ing]);
-      }, 400 * (idx + 1));
-    });
-    setTimeout(() => {
-      setCake(true);
-      setPhase('done');
-      markDone();
-    }, 400 * (ingredients.length + 1) + 500);
+  const [spento, setSpento] = useState(false);
+  const [viaggio, setViaggio] = useState(null); // ingrediente che lo chef sta portando
+  const pieno = counter.length >= ingredients.length;
+
+  const portaIngrediente = () => {
+    if (viaggio || counter.length >= ingredients.length) return;
+    const ing = ingredients[counter.length];
+    setViaggio(ing); // lo chef parte verso la dispensa
+    setTimeout(() => { setCounter(prev => [...prev, ing]); setViaggio(null); }, 750); // ...e lo posa sul banco
   };
-  const doShutdown = () => {
-    setPhase('shutdown');
-    setTimeout(() => {
-      setCounter([]);
-      setCake(false);
-    }, 600);
-  };
-  const reset = () => {
-    setPhase('idle');
-    setCounter([]);
-    setCake(false);
-  };
+  const cucina = () => { setCake(true); markDone(); };
+  const spegni = () => { setSpento(true); setTimeout(() => { setCounter([]); setCake(false); }, 500); };
+  const reset = () => { setSpento(false); setCounter([]); setCake(false); setViaggio(null); };
+
+  const labelStile = bordo => ({ fontFamily: FONT_MONO, fontSize: 12, color: bordo, fontWeight: 700, letterSpacing: 1, marginBottom: 6, textAlign: 'center' });
+  const statoStile = { fontSize: 12, textAlign: 'center', color: PALETTE.inkSoft, marginTop: 6, fontStyle: 'italic' };
+  const colonnaStile = bordo => ({ background: '#fff', border: `2px solid ${bordo}`, borderRadius: 4, padding: '12px 10px', display: 'flex', flexDirection: 'column', minHeight: 180 });
+
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 3 di 7",
     title: "La cucina del computer",
     accent: PALETTE.moss
-  }), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 17,
-      lineHeight: 1.6,
-      marginBottom: 8
-    }
-  }, "Il computer \xE8 una ", /*#__PURE__*/React.createElement("strong", null, "cucina"), ". Lo chef \xE8 la ", /*#__PURE__*/React.createElement("strong", null, "CPU"), ". Per cucinare gli servono ingredienti \u2014 ma deve prenderli dal posto giusto."), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 15,
-      color: PALETTE.inkSoft,
-      marginBottom: 22
-    }
-  }, "Tocca ", /*#__PURE__*/React.createElement("strong", null, "\"facciamo una torta\""), " per vedere come lavora."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: PALETTE.cream,
-      border: `2px solid ${PALETTE.ink}`,
-      borderRadius: 6,
-      padding: '20px 18px',
-      marginBottom: 18
-    }
+  }), /*#__PURE__*/React.createElement(OcchioSays, {entra: "m2"}, "Il lavoratore qui \u00e8 lo ", /*#__PURE__*/React.createElement("strong", null, "chef"), " \u2014 cio\u00e8 la ", /*#__PURE__*/React.createElement("strong", null, "CPU"), ". ", /*#__PURE__*/React.createElement("strong", null, "Tu dai l'ordine, lui corre."), " Ma gli ingredienti sono lontani, in dispensa: come fa a cucinare in fretta? Mandalo a lavorare e guarda."), /*#__PURE__*/React.createElement("p", {
+    style: { fontSize: 17, lineHeight: 1.6, marginBottom: 8 }
+  }, "Il computer \u00e8 una ", /*#__PURE__*/React.createElement("strong", null, "cucina"), ". La ", /*#__PURE__*/React.createElement("strong", null, "dispensa"), " (il disco) \u00e8 lontana; il ", /*#__PURE__*/React.createElement("strong", null, "banco"), " (la RAM) \u00e8 a portata di mano dello chef."), /*#__PURE__*/React.createElement("div", {
+    style: { background: PALETTE.cream, border: `2px solid ${PALETTE.ink}`, borderRadius: 6, padding: '20px 18px', marginBottom: 18 }
   }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr 1fr',
-      gap: 12,
-      alignItems: 'stretch'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: '#fff',
-      border: `2px solid ${PALETTE.amber}`,
-      borderRadius: 4,
-      padding: '12px 10px',
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: 180
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: FONT_MONO,
-      fontSize: 10,
-      color: PALETTE.amber,
-      fontWeight: 700,
-      letterSpacing: 1,
-      marginBottom: 6,
-      textAlign: 'center'
-    }
-  }, "DISPENSA", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: PALETTE.inkSoft,
-      fontWeight: 400
-    }
-  }, "(DISCO)")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      background: PALETTE.cream,
-      borderRadius: 3,
-      padding: 8,
-      display: 'grid',
-      gridTemplateColumns: 'repeat(2, 1fr)',
-      gap: 4,
-      alignContent: 'flex-start'
-    }
-  }, pantry.map((ing, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      fontSize: 22,
-      textAlign: 'center',
-      opacity: phase === 'shutdown' ? 1 : 1
-    }
-  }, ing))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 10,
-      textAlign: 'center',
-      color: PALETTE.inkSoft,
-      marginTop: 6,
-      fontStyle: 'italic'
-    }
-  }, phase === 'shutdown' ? '✓ resta piena' : 'tiene tutto')), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: '#fff',
-      border: `2px solid ${PALETTE.moss}`,
-      borderRadius: 4,
-      padding: '12px 10px',
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: 180
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: FONT_MONO,
-      fontSize: 10,
-      color: PALETTE.moss,
-      fontWeight: 700,
-      letterSpacing: 1,
-      marginBottom: 6,
-      textAlign: 'center'
-    }
-  }, "BANCO", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: PALETTE.inkSoft,
-      fontWeight: 400
-    }
-  }, "(RAM)")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      background: PALETTE.cream,
-      borderRadius: 3,
-      padding: 8,
-      display: 'flex',
-      flexWrap: 'wrap',
-      alignContent: 'flex-start',
-      gap: 4,
-      minHeight: 80
-    }
-  }, counter.map((ing, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      fontSize: 22,
-      animation: 'slideIn 0.4s ease'
-    }
-  }, ing))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 10,
-      textAlign: 'center',
-      color: PALETTE.inkSoft,
-      marginTop: 6,
-      fontStyle: 'italic'
-    }
-  }, phase === 'shutdown' ? '✗ si svuota!' : counter.length === 0 ? 'vuoto' : 'cose di adesso')), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: '#fff',
-      border: `2px solid ${PALETTE.rust}`,
-      borderRadius: 4,
-      padding: '12px 10px',
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: 180
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: FONT_MONO,
-      fontSize: 10,
-      color: PALETTE.rust,
-      fontWeight: 700,
-      letterSpacing: 1,
-      marginBottom: 6,
-      textAlign: 'center'
-    }
-  }, "CHEF", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: PALETTE.inkSoft,
-      fontWeight: 400
-    }
-  }, "(CPU)")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      background: PALETTE.cream,
-      borderRadius: 3,
-      padding: 8,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: 48
-    }
-  }, cake ? '🎂' : phase === 'cooking' ? '👨‍🍳' : '🧑‍🍳'), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 10,
-      textAlign: 'center',
-      color: PALETTE.inkSoft,
-      marginTop: 6,
-      fontStyle: 'italic'
-    }
-  }, cake ? 'torta pronta!' : phase === 'cooking' ? 'sta cucinando...' : 'aspetta'))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginTop: 16,
-      textAlign: 'center',
-      display: 'flex',
-      gap: 10,
-      justifyContent: 'center',
-      flexWrap: 'wrap'
-    }
-  }, phase === 'idle' && /*#__PURE__*/React.createElement("button", {
-    onClick: doCooking,
-    style: {
-      ...btnPrimary(),
-      background: PALETTE.moss,
-      boxShadow: `3px 3px 0 ${PALETTE.amber}`
-    }
-  }, "\uD83C\uDF82 facciamo una torta"), phase === 'cooking' && /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: FONT_MONO,
-      color: PALETTE.moss,
-      fontSize: 14,
-      fontWeight: 600
-    }
-  }, "\u23F3 ingredienti in arrivo dalla dispensa..."), phase === 'done' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
-    onClick: doShutdown,
-    style: {
-      ...btnGhost(),
-      borderColor: PALETTE.rust,
-      color: PALETTE.rust
-    }
-  }, "\u26A1 spegni il computer"), /*#__PURE__*/React.createElement("button", {
-    onClick: reset,
-    style: btnGhost()
-  }, "\u21BB rifai")), phase === 'shutdown' && /*#__PURE__*/React.createElement("button", {
-    onClick: reset,
-    style: btnPrimary()
-  }, "\u21BB riaccendi e rifai"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: phase === 'shutdown' ? `${PALETTE.rust}10` : PALETTE.creamDeep,
-      border: `1.5px dashed ${phase === 'shutdown' ? PALETTE.rust : PALETTE.ink}`,
-      padding: '14px 18px',
-      borderRadius: 4,
-      marginBottom: 20,
-      fontSize: 15,
-      lineHeight: 1.5
-    }
-  }, phase === 'idle' && /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", null, "Ecco la regola:"), " lo chef (CPU) non prende mai gli ingredienti direttamente dalla dispensa \u2014 \xE8 troppo lontana e ci mette tanto. Prima li porta sul banco di lavoro (RAM), poi cucina."), phase === 'cooking' && /*#__PURE__*/React.createElement("span", null, "Gli ingredienti dalla ", /*#__PURE__*/React.createElement("strong", {
-    style: {
-      color: PALETTE.amber
-    }
-  }, "dispensa"), " stanno arrivando sul ", /*#__PURE__*/React.createElement("strong", {
-    style: {
-      color: PALETTE.moss
-    }
-  }, "banco"), ". Solo da l\xEC lo chef pu\xF2 prenderli velocemente."), phase === 'done' && /*#__PURE__*/React.createElement("span", null, "\u2728 ", /*#__PURE__*/React.createElement("strong", null, "Fatto!"), " Adesso prova a spegnere il computer e guarda cosa succede al banco di lavoro..."), phase === 'shutdown' && /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", {
-    style: {
-      color: PALETTE.rust
-    }
-  }, "BOOM!"), " Il banco di lavoro (RAM) si \xE8 svuotato. ", /*#__PURE__*/React.createElement("strong", null, "Ecco perch\xE9"), " se non salvi un disegno sul computer e lo spegni, lo perdi! Il banco si svuota, ma la dispensa (disco) resta piena.")), /*#__PURE__*/React.createElement(NavButtons, {
+    style: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, alignItems: 'stretch' }
+  },
+  /*#__PURE__*/React.createElement("div", { style: colonnaStile(PALETTE.amber) },
+    /*#__PURE__*/React.createElement("div", { style: labelStile(PALETTE.amber) }, "DISPENSA", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", { style: { color: PALETTE.inkSoft, fontWeight: 400 } }, "(DISCO)")),
+    /*#__PURE__*/React.createElement("div", { style: { flex: 1, background: PALETTE.cream, borderRadius: 3, padding: 8, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 6, alignContent: 'flex-start' } },
+      pantry.map((ing, i) => /*#__PURE__*/React.createElement("div", { key: i, style: { textAlign: 'center', opacity: viaggio === ing ? 0.35 : 1, transition: 'opacity 0.3s' } }, /*#__PURE__*/React.createElement(Icon, { name: ing, size: 24, color: PALETTE.ink })))),
+    /*#__PURE__*/React.createElement("div", { style: statoStile }, spento ? '\u2713 resta piena' : 'tiene tutto')),
+  /*#__PURE__*/React.createElement("div", { style: colonnaStile(PALETTE.moss) },
+    /*#__PURE__*/React.createElement("div", { style: labelStile(PALETTE.moss) }, "BANCO", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", { style: { color: PALETTE.inkSoft, fontWeight: 400 } }, "(RAM)")),
+    /*#__PURE__*/React.createElement("div", { style: { flex: 1, background: PALETTE.cream, borderRadius: 3, padding: 8, display: 'flex', flexWrap: 'wrap', alignContent: 'flex-start', gap: 6, minHeight: 80 } },
+      counter.map((ing, i) => /*#__PURE__*/React.createElement("div", { key: i, style: { animation: 'arrivaSulBanco 0.45s ease' } }, /*#__PURE__*/React.createElement(Icon, { name: ing, size: 24, color: PALETTE.ink })))),
+    /*#__PURE__*/React.createElement("div", { style: statoStile }, spento ? '\u2717 si svuota!' : counter.length === 0 ? 'vuoto' : 'cose di adesso')),
+  /*#__PURE__*/React.createElement("div", { style: colonnaStile(PALETTE.rust) },
+    /*#__PURE__*/React.createElement("div", { style: labelStile(PALETTE.rust) }, "CHEF", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", { style: { color: PALETTE.inkSoft, fontWeight: 400 } }, "(CPU)")),
+    /*#__PURE__*/React.createElement("div", { style: { flex: 1, background: PALETTE.cream, borderRadius: 3, padding: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 } },
+      /*#__PURE__*/React.createElement("div", { style: { animation: viaggio ? 'chefViaggia 0.75s ease' : 'none' } }, cake ? /*#__PURE__*/React.createElement(Icon, { name: 'cake', size: 40, color: PALETTE.rust }) : /*#__PURE__*/React.createElement(Icon, { name: 'chef-hat', size: 40, color: PALETTE.rust })),
+      viaggio && /*#__PURE__*/React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 5, animation: 'inMano 0.4s ease' } }, /*#__PURE__*/React.createElement("span", { style: { fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.rust } }, "in mano:"), /*#__PURE__*/React.createElement(Icon, { name: viaggio, size: 20, color: PALETTE.ink }))),
+    /*#__PURE__*/React.createElement("div", { style: statoStile }, cake ? 'torta pronta!' : viaggio ? 'corre in dispensa...' : pieno ? 'pronto a cucinare' : 'aspetta i tuoi ordini'))),
+  /*#__PURE__*/React.createElement("div", {
+    style: { marginTop: 16, textAlign: 'center', display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }
+  },
+  !spento && !cake && !pieno && /*#__PURE__*/React.createElement("button", { onClick: portaIngrediente, disabled: !!viaggio, style: { ...btnPrimary(), background: PALETTE.moss, boxShadow: `3px 3px 0 ${PALETTE.amber}`, opacity: viaggio ? 0.55 : 1, cursor: viaggio ? 'default' : 'pointer' } }, viaggio ? "lo chef sta arrivando..." : counter.length === 0 ? "manda lo chef in dispensa \u2192" : `mandalo a prendere il prossimo (${counter.length}/${ingredients.length}) \u2192`),
+  !spento && !cake && pieno && /*#__PURE__*/React.createElement("button", { onClick: cucina, style: { ...btnPrimary(), background: PALETTE.rust, boxShadow: `3px 3px 0 ${PALETTE.amber}` } }, "ora lo chef cucina! \u2192"),
+  cake && !spento && /*#__PURE__*/React.createElement(React.Fragment, null,
+    /*#__PURE__*/React.createElement("button", { onClick: spegni, style: { ...btnGhost(), borderColor: PALETTE.rust, color: PALETTE.rust } }, "spegni il computer"),
+    /*#__PURE__*/React.createElement("button", { onClick: reset, style: btnGhost() }, "rifai")),
+  spento && /*#__PURE__*/React.createElement("button", { onClick: reset, style: btnPrimary() }, "riaccendi e rifai"))), /*#__PURE__*/React.createElement("div", {
+    style: { background: spento ? `${PALETTE.rust}10` : PALETTE.creamDeep, border: `1.5px dashed ${spento ? PALETTE.rust : PALETTE.ink}`, padding: '14px 18px', borderRadius: 4, marginBottom: 20, fontSize: 16, lineHeight: 1.55 }
+  },
+  spento ? /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", { style: { color: PALETTE.rust } }, "BOOM!"), " Il banco (RAM) si \u00e8 svuotato. ", /*#__PURE__*/React.createElement("strong", null, "Ecco perch\u00e9"), " se non salvi un disegno e spegni, lo perdi! Il banco si svuota, ma la dispensa (disco) resta piena.")
+  : cake ? /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", null, "Fatto!"), " Adesso prova a spegnere il computer e guarda cosa succede al ", /*#__PURE__*/React.createElement("strong", { style: { color: PALETTE.moss } }, "banco"), "...")
+  : viaggio ? /*#__PURE__*/React.createElement("span", null, "Guarda chi si muove: \u00e8 lo ", /*#__PURE__*/React.createElement("strong", { style: { color: PALETTE.rust } }, "chef"), " a correre in dispensa, prendere l'ingrediente e portarlo sul banco. ", /*#__PURE__*/React.createElement("strong", null, "Tu non lo tocchi"), ": hai solo dato l'ordine.")
+  : pieno ? /*#__PURE__*/React.createElement("span", null, "Tutto sul ", /*#__PURE__*/React.createElement("strong", { style: { color: PALETTE.moss } }, "banco"), "! Ora lo chef ha gli ingredienti vicini e cucina in un lampo. Tocca ", /*#__PURE__*/React.createElement("strong", null, "\u00abcucina\u00bb"), ".")
+  : counter.length > 0 ? /*#__PURE__*/React.createElement("span", null, "Un viaggio \u00e8 fatto. Lo chef ne fa ", /*#__PURE__*/React.createElement("strong", null, "uno alla volta"), ": rimandalo in dispensa a prendere il prossimo, finch\u00e9 li ha tutti sul banco.")
+  : /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", null, "La regola:"), " lo chef (CPU) non cucina con la dispensa lontana \u2014 ci metterebbe una vita. Prima fa dei viaggi e porta gli ingredienti sul banco (RAM); pensa a tutto lui, ", /*#__PURE__*/React.createElement("strong", null, "tu dai solo l'ordine"), ". Poi cucina.")), /*#__PURE__*/React.createElement(NavButtons, {
     goPrev: goPrev,
     goNext: goNext,
     nextLabel: "il viaggio di WhatsApp \u2192"
-  }), /*#__PURE__*/React.createElement("style", null, `@keyframes slideIn { from { opacity: 0; transform: translateY(-10px) scale(0.5); } to { opacity: 1; transform: translateY(0) scale(1); } }`));
+  }), /*#__PURE__*/React.createElement("style", null, `@keyframes arrivaSulBanco { from { opacity: 0; transform: translateX(-26px) scale(0.6); } to { opacity: 1; transform: translateX(0) scale(1); } } @keyframes inMano { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } } @keyframes chefViaggia { 0% { transform: translateX(0); } 35% { transform: translateX(-10px) rotate(-4deg); } 70% { transform: translateX(6px); } 100% { transform: translateX(0); } } @media (prefers-reduced-motion: reduce) { [style*="chefViaggia"], [style*="arrivaSulBanco"], [style*="inMano"] { animation: none !important; } }`));
 }
 
 // ----------------------------------------------------------------------------
@@ -4308,377 +4171,80 @@ function M2_JourneyPage({
   goNext,
   goPrev
 }) {
-  const [step, setStep] = useState(-1); // -1 = idle
-  const [playing, setPlaying] = useState(false);
-  const steps = [{
-    actor: 'finger',
-    message: 'Tocchi l\'icona di WhatsApp 👆'
-  }, {
-    actor: 'cpu',
-    message: 'CPU: "Ho ricevuto il comando!"'
-  }, {
-    actor: 'cpu-to-disk',
-    message: 'CPU chiede al disco: "trova WhatsApp"'
-  }, {
-    actor: 'disk',
-    message: 'Disco: "L\'ho trovato! Te lo passo."'
-  }, {
-    actor: 'disk-to-ram',
-    message: 'I dati di WhatsApp vanno nella RAM'
-  }, {
-    actor: 'ram',
-    message: 'RAM: "Pronto! Ho WhatsApp sul banco."'
-  }, {
-    actor: 'cpu-to-gpu',
-    message: 'CPU dice alla GPU: "disegnalo!"'
-  }, {
-    actor: 'gpu',
-    message: 'GPU disegna sullo schermo... ✨'
-  }, {
-    actor: 'done',
-    message: 'WhatsApp è aperto! ⚡ Tutto questo in MENO di un secondo!'
-  }];
-  const play = () => {
-    setStep(0);
-    setPlaying(true);
-    steps.forEach((_, idx) => {
-      setTimeout(() => {
-        setStep(idx);
-        if (idx === steps.length - 1) {
-          setPlaying(false);
-          markDone();
-        }
-      }, idx * 1100);
-    });
-  };
-  const reset = () => {
-    setStep(-1);
-    setPlaying(false);
-  };
+  const [step, setStep] = useState(-1);
+  const steps = [
+    { actor: 'finger', message: 'Tocchi l\'icona di WhatsApp.' },
+    { actor: 'cpu', message: 'La CPU riceve il comando: si parte!' },
+    { actor: 'cpu-to-disk', message: 'La CPU chiede al disco: "trovami WhatsApp".' },
+    { actor: 'disk', message: 'Il disco lo cerca fra le cose salvate... trovato!' },
+    { actor: 'disk-to-ram', message: 'I dati di WhatsApp arrivano nella RAM.' },
+    { actor: 'ram', message: 'Ora la RAM tiene WhatsApp a portata di mano.' },
+    { actor: 'cpu-to-gpu', message: 'La CPU dice alla GPU: "adesso disegnalo!"' },
+    { actor: 'gpu', message: 'La GPU dipinge WhatsApp sullo schermo.' },
+    { actor: 'done', message: 'Aperto! E tutto questo in meno di un secondo.' }
+  ];
+  const ultimo = steps.length - 1;
+  useEffect(() => { if (step === ultimo) markDone(); }, [step]);
   const isActive = actor => {
     if (step < 0) return false;
-    const s = steps[step].actor;
-    return s === actor || s.startsWith(actor + '-') || s.endsWith('-' + actor);
+    const a = steps[step].actor;
+    return a === actor || a.startsWith(actor + '-') || a.endsWith('-' + actor);
   };
+  const transit = step >= 0 ? steps[step].actor : '';
+  const dot = { 'cpu-to-disk': { x: 100, y: 70, anim: 'paccC2D' }, 'disk-to-ram': { x: 200, y: 70, anim: 'paccD2R' }, 'cpu-to-gpu': { x: 100, y: 70, anim: 'paccC2G' } }[transit];
+  const focusX = { finger: 330, cpu: 100, 'cpu-to-disk': 150, disk: 200, 'disk-to-ram': 250, ram: 300, 'cpu-to-gpu': 150, gpu: 200, done: 330 }[transit] || 200;
+  const bubbleLeft = Math.max(25, Math.min(75, focusX / 4));
+
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 4 di 7",
     title: "Il viaggio di WhatsApp",
     accent: PALETTE.moss
-  }), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 17,
-      lineHeight: 1.6,
-      marginBottom: 8
-    }
-  }, "Quando apri un'app, dentro al computer parte una ", /*#__PURE__*/React.createElement("strong", null, "staffetta veloce"), "."), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 15,
-      color: PALETTE.inkSoft,
-      marginBottom: 22
-    }
-  }, "Premi play e guarda cosa succede."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: PALETTE.ink,
-      borderRadius: 6,
-      padding: '24px 18px',
-      marginBottom: 14,
-      position: 'relative',
-      overflow: 'hidden',
-      minHeight: 280
-    }
-  }, /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 400 240",
-    width: "100%",
-    style: {
-      display: 'block'
-    }
-  }, /*#__PURE__*/React.createElement("line", {
-    x1: "100",
-    y1: "80",
-    x2: "200",
-    y2: "80",
-    stroke: isActive('cpu-to-disk') ? PALETTE.amber : PALETTE.inkSoft,
-    strokeWidth: isActive('cpu-to-disk') ? 3 : 1,
-    strokeDasharray: "4,3"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "200",
-    y1: "80",
-    x2: "300",
-    y2: "80",
-    stroke: isActive('disk-to-ram') ? PALETTE.amber : PALETTE.inkSoft,
-    strokeWidth: isActive('disk-to-ram') ? 3 : 1,
-    strokeDasharray: "4,3"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "100",
-    y1: "80",
-    x2: "200",
-    y2: "170",
-    stroke: isActive('cpu-to-gpu') ? PALETTE.amber : PALETTE.inkSoft,
-    strokeWidth: isActive('cpu-to-gpu') ? 3 : 1,
-    strokeDasharray: "4,3"
-  }), /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("rect", {
-    x: "50",
-    y: "50",
-    width: "100",
-    height: "60",
-    rx: "6",
-    fill: isActive('cpu') ? PALETTE.rust : '#2a3550',
-    stroke: isActive('cpu') ? PALETTE.amber : PALETTE.inkSoft,
-    strokeWidth: "2"
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "100",
-    y: "78",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "11",
-    fontWeight: "700",
-    fill: PALETTE.cream
-  }, "CPU"), /*#__PURE__*/React.createElement("text", {
-    x: "100",
-    y: "94",
-    textAnchor: "middle",
-    fontFamily: FONT_BODY,
-    fontSize: "9",
-    fill: PALETTE.cream,
-    opacity: "0.8"
-  }, "cervello"), isActive('cpu') && /*#__PURE__*/React.createElement("circle", {
-    cx: "100",
-    cy: "80",
-    r: "38",
-    fill: "none",
-    stroke: PALETTE.amber,
-    strokeWidth: "1.5",
-    opacity: "0.5"
-  }, /*#__PURE__*/React.createElement("animate", {
-    attributeName: "r",
-    values: "32;42;32",
-    dur: "1.2s",
-    repeatCount: "indefinite"
-  }))), /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("rect", {
-    x: "150",
-    y: "50",
-    width: "100",
-    height: "60",
-    rx: "6",
-    fill: isActive('disk') ? PALETTE.amber : '#2a3550',
-    stroke: isActive('disk') ? PALETTE.amber : PALETTE.inkSoft,
-    strokeWidth: "2"
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "200",
-    y: "78",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "11",
-    fontWeight: "700",
-    fill: PALETTE.cream
-  }, "DISCO"), /*#__PURE__*/React.createElement("text", {
-    x: "200",
-    y: "94",
-    textAnchor: "middle",
-    fontFamily: FONT_BODY,
-    fontSize: "9",
-    fill: PALETTE.cream,
-    opacity: "0.8"
-  }, "libreria")), /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("rect", {
-    x: "250",
-    y: "50",
-    width: "100",
-    height: "60",
-    rx: "6",
-    fill: isActive('ram') ? PALETTE.moss : '#2a3550',
-    stroke: isActive('ram') ? PALETTE.amber : PALETTE.inkSoft,
-    strokeWidth: "2"
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "300",
-    y: "78",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "11",
-    fontWeight: "700",
-    fill: PALETTE.cream
-  }, "RAM"), /*#__PURE__*/React.createElement("text", {
-    x: "300",
-    y: "94",
-    textAnchor: "middle",
-    fontFamily: FONT_BODY,
-    fontSize: "9",
-    fill: PALETTE.cream,
-    opacity: "0.8"
-  }, "scrivania")), /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("rect", {
-    x: "150",
-    y: "140",
-    width: "100",
-    height: "60",
-    rx: "6",
-    fill: isActive('gpu') ? PALETTE.ink : '#2a3550',
-    stroke: isActive('gpu') ? PALETTE.amber : PALETTE.inkSoft,
-    strokeWidth: "2"
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "200",
-    y: "168",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "11",
-    fontWeight: "700",
-    fill: PALETTE.cream
-  }, "GPU"), /*#__PURE__*/React.createElement("text", {
-    x: "200",
-    y: "184",
-    textAnchor: "middle",
-    fontFamily: FONT_BODY,
-    fontSize: "9",
-    fill: PALETTE.cream,
-    opacity: "0.8"
-  }, "pittore")), /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("rect", {
-    x: "280",
-    y: "135",
-    width: "100",
-    height: "70",
-    rx: "6",
-    fill: isActive('done') ? PALETTE.moss : '#2a3550',
-    stroke: isActive('done') ? PALETTE.amber : PALETTE.inkSoft,
-    strokeWidth: "2"
-  }), isActive('done') ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("text", {
-    x: "330",
-    y: "170",
-    textAnchor: "middle",
-    fontSize: "22"
-  }, "\uD83D\uDCAC"), /*#__PURE__*/React.createElement("text", {
-    x: "330",
-    y: "195",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "8",
-    fill: PALETTE.cream
-  }, "WHATSAPP")) : /*#__PURE__*/React.createElement("text", {
-    x: "330",
-    y: "175",
-    textAnchor: "middle",
-    fontFamily: FONT_BODY,
-    fontSize: "10",
-    fill: PALETTE.cream,
-    opacity: "0.6"
-  }, "schermo")), isActive('finger') && /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("text", {
-    x: "370",
-    y: "35",
-    textAnchor: "middle",
-    fontSize: "22"
-  }, "\uD83D\uDC46"), /*#__PURE__*/React.createElement("circle", {
-    cx: "370",
-    cy: "40",
-    r: "14",
-    fill: "none",
-    stroke: PALETTE.amber,
-    strokeWidth: "2"
-  }, /*#__PURE__*/React.createElement("animate", {
-    attributeName: "r",
-    values: "6;18;6",
-    dur: "0.8s",
-    repeatCount: "1"
-  }), /*#__PURE__*/React.createElement("animate", {
-    attributeName: "opacity",
-    values: "1;0;1",
-    dur: "0.8s",
-    repeatCount: "1"
-  }))), isActive('cpu-to-disk') && /*#__PURE__*/React.createElement("circle", {
-    r: "5",
-    fill: PALETTE.amber
-  }, /*#__PURE__*/React.createElement("animate", {
-    attributeName: "cx",
-    values: "100;200",
-    dur: "1s",
-    repeatCount: "indefinite"
-  }), /*#__PURE__*/React.createElement("animate", {
-    attributeName: "cy",
-    values: "80;80",
-    dur: "1s",
-    repeatCount: "indefinite"
-  })), isActive('disk-to-ram') && /*#__PURE__*/React.createElement("circle", {
-    r: "5",
-    fill: PALETTE.amber
-  }, /*#__PURE__*/React.createElement("animate", {
-    attributeName: "cx",
-    values: "200;300",
-    dur: "1s",
-    repeatCount: "indefinite"
-  }), /*#__PURE__*/React.createElement("animate", {
-    attributeName: "cy",
-    values: "80;80",
-    dur: "1s",
-    repeatCount: "indefinite"
-  })), isActive('cpu-to-gpu') && /*#__PURE__*/React.createElement("circle", {
-    r: "5",
-    fill: PALETTE.amber
-  }, /*#__PURE__*/React.createElement("animate", {
-    attributeName: "cx",
-    values: "100;200",
-    dur: "1s",
-    repeatCount: "indefinite"
-  }), /*#__PURE__*/React.createElement("animate", {
-    attributeName: "cy",
-    values: "80;170",
-    dur: "1s",
-    repeatCount: "indefinite"
-  })))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: PALETTE.cream,
-      border: `1.5px solid ${PALETTE.paperLine}`,
-      borderRadius: 4,
-      padding: '14px 18px',
-      marginBottom: 16,
-      minHeight: 52,
-      display: 'flex',
-      alignItems: 'center'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 16,
-      fontWeight: 500
-    }
-  }, step < 0 ? /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: PALETTE.inkSoft,
-      fontStyle: 'italic'
-    }
-  }, "Premi \"tocca WhatsApp\" per cominciare") : steps[step].message)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      textAlign: 'center',
-      display: 'flex',
-      gap: 10,
-      justifyContent: 'center',
-      flexWrap: 'wrap',
-      marginBottom: 20
-    }
-  }, !playing && step < 0 && /*#__PURE__*/React.createElement("button", {
-    onClick: play,
-    style: {
-      ...btnPrimary(),
-      background: PALETTE.moss,
-      boxShadow: `3px 3px 0 ${PALETTE.amber}`
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "play",
-    size: 14,
-    style: {
-      display: 'inline-block',
-      marginRight: 6,
-      verticalAlign: 'middle'
-    },
-    fill: "currentColor"
-  }), "tocca WhatsApp"), playing && /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: FONT_MONO,
-      fontSize: 13,
-      color: PALETTE.inkSoft
-    }
-  }, "\u23F3 in corso... (", step + 1, "/", steps.length, ")"), !playing && step >= 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
-    onClick: reset,
-    style: btnGhost()
-  }, "\u21BB rivedi"))), /*#__PURE__*/React.createElement(NavButtons, {
-    goPrev: goPrev,
-    goNext: goNext,
-    nextLabel: "la gara delle velocit\xE0 \u2192"
-  }));
+  }), /*#__PURE__*/React.createElement(OcchioSays, {entra: "m2"}, "Quando tocchi un'app, dentro parte una ", /*#__PURE__*/React.createElement("strong", null, "staffetta"), ": CPU, disco, RAM e GPU si passano il lavoro a turno \u2014 in meno di un secondo. Troppo veloce per l'occhio! Allora la guardiamo ", /*#__PURE__*/React.createElement("strong", null, "al rallentatore"), ": ti accompagno io, un passaggio alla volta. Tocca \u00abavanti\u00bb."), /*#__PURE__*/React.createElement("div", {
+    style: { background: PALETTE.ink, borderRadius: 6, padding: '18px 14px', marginBottom: 14, position: 'relative', overflow: 'hidden' }
+  }, /*#__PURE__*/React.createElement("div", { style: { position: 'relative', width: '100%' } },
+  /*#__PURE__*/React.createElement("svg", { viewBox: "0 0 400 320", width: "100%", style: { display: 'block' } },
+  /*#__PURE__*/React.createElement("line", { x1: "100", y1: "70", x2: "200", y2: "70", stroke: isActive('cpu-to-disk') ? PALETTE.amber : PALETTE.inkSoft, strokeWidth: isActive('cpu-to-disk') ? 3 : 1, strokeDasharray: "4,3" }),
+  /*#__PURE__*/React.createElement("line", { x1: "200", y1: "70", x2: "300", y2: "70", stroke: isActive('disk-to-ram') ? PALETTE.amber : PALETTE.inkSoft, strokeWidth: isActive('disk-to-ram') ? 3 : 1, strokeDasharray: "4,3" }),
+  /*#__PURE__*/React.createElement("line", { x1: "100", y1: "100", x2: "200", y2: "230", stroke: isActive('cpu-to-gpu') ? PALETTE.amber : PALETTE.inkSoft, strokeWidth: isActive('cpu-to-gpu') ? 3 : 1, strokeDasharray: "4,3" }),
+  /*#__PURE__*/React.createElement("rect", { x: "50", y: "40", width: "100", height: "60", rx: "6", fill: isActive('cpu') ? PALETTE.rust : '#2a3550', stroke: isActive('cpu') ? PALETTE.amber : PALETTE.inkSoft, strokeWidth: "2" }),
+  /*#__PURE__*/React.createElement("text", { x: "100", y: "68", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "13", fontWeight: "700", fill: PALETTE.cream }, "CPU"),
+  /*#__PURE__*/React.createElement("text", { x: "100", y: "85", textAnchor: "middle", fontFamily: FONT_BODY, fontSize: "11", fill: PALETTE.cream, opacity: "0.85" }, "cervello"),
+  /*#__PURE__*/React.createElement("rect", { x: "150", y: "40", width: "100", height: "60", rx: "6", fill: isActive('disk') ? PALETTE.amber : '#2a3550', stroke: isActive('disk') ? PALETTE.amber : PALETTE.inkSoft, strokeWidth: "2" }),
+  /*#__PURE__*/React.createElement("text", { x: "200", y: "68", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "13", fontWeight: "700", fill: PALETTE.cream }, "DISCO"),
+  /*#__PURE__*/React.createElement("text", { x: "200", y: "85", textAnchor: "middle", fontFamily: FONT_BODY, fontSize: "11", fill: PALETTE.cream, opacity: "0.85" }, "libreria"),
+  /*#__PURE__*/React.createElement("rect", { x: "250", y: "40", width: "100", height: "60", rx: "6", fill: isActive('ram') ? PALETTE.moss : '#2a3550', stroke: isActive('ram') ? PALETTE.amber : PALETTE.inkSoft, strokeWidth: "2" }),
+  /*#__PURE__*/React.createElement("text", { x: "300", y: "68", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "13", fontWeight: "700", fill: PALETTE.cream }, "RAM"),
+  /*#__PURE__*/React.createElement("text", { x: "300", y: "85", textAnchor: "middle", fontFamily: FONT_BODY, fontSize: "11", fill: PALETTE.cream, opacity: "0.85" }, "scrivania"),
+  /*#__PURE__*/React.createElement("rect", { x: "150", y: "230", width: "100", height: "60", rx: "6", fill: isActive('gpu') ? '#3a4a6a' : '#2a3550', stroke: isActive('gpu') ? PALETTE.amber : PALETTE.inkSoft, strokeWidth: "2" }),
+  /*#__PURE__*/React.createElement("text", { x: "200", y: "258", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "13", fontWeight: "700", fill: PALETTE.cream }, "GPU"),
+  /*#__PURE__*/React.createElement("text", { x: "200", y: "275", textAnchor: "middle", fontFamily: FONT_BODY, fontSize: "11", fill: PALETTE.cream, opacity: "0.85" }, "pittore"),
+  /*#__PURE__*/React.createElement("rect", { x: "280", y: "225", width: "100", height: "70", rx: "6", fill: isActive('done') ? PALETTE.moss : '#2a3550', stroke: isActive('done') ? PALETTE.amber : PALETTE.inkSoft, strokeWidth: "2" }),
+  isActive('done') ? /*#__PURE__*/React.createElement("g", null,
+    /*#__PURE__*/React.createElement("path", { d: "M312 242 h36 a6 6 0 0 1 6 6 v16 a6 6 0 0 1 -6 6 h-20 l-9 7 v-7 h-7 a6 6 0 0 1 -6 -6 v-16 a6 6 0 0 1 6 -6 z", fill: PALETTE.cream, stroke: PALETTE.ink, strokeWidth: "1.5", strokeLinejoin: "round" }),
+    /*#__PURE__*/React.createElement("text", { x: "330", y: "288", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "10", fill: PALETTE.cream }, "WHATSAPP")) : /*#__PURE__*/React.createElement("text", { x: "330", y: "265", textAnchor: "middle", fontFamily: FONT_BODY, fontSize: "11", fill: PALETTE.cream, opacity: "0.6" }, "schermo"),
+  isActive('finger') && /*#__PURE__*/React.createElement("g", { className: "jpulse", style: { transformBox: 'fill-box', transformOrigin: 'center' } },
+    /*#__PURE__*/React.createElement("circle", { cx: "368", cy: "30", r: "9", fill: "none", stroke: PALETTE.amber, strokeWidth: "2.5" }),
+    /*#__PURE__*/React.createElement("circle", { cx: "368", cy: "30", r: "3", fill: PALETTE.amber }),
+    /*#__PURE__*/React.createElement("text", { x: "368", y: "52", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "9", fill: PALETTE.amber }, "TAP")),
+  dot && /*#__PURE__*/React.createElement("g", { key: step, style: { animation: `${dot.anim} 0.8s ease forwards` } },
+    /*#__PURE__*/React.createElement("circle", { cx: dot.x, cy: dot.y, r: "6", fill: PALETTE.amber, stroke: PALETTE.cream, strokeWidth: "1.5" }))),
+  step >= 0 && /*#__PURE__*/React.createElement("div", {
+    className: "occhioGuida",
+    style: { position: 'absolute', left: `${bubbleLeft}%`, top: '50%', transform: 'translate(-50%, -50%)', width: '52%', maxWidth: 258, background: PALETTE.cream, border: `2px solid ${PALETTE.ink}`, borderRadius: 8, boxShadow: `3px 3px 0 ${PALETTE.rust}`, padding: '11px 13px', display: 'flex', gap: 9, alignItems: 'flex-start', pointerEvents: 'none' }
+  }, /*#__PURE__*/React.createElement("div", { style: { flexShrink: 0 } }, /*#__PURE__*/React.createElement(EyeBitAvatar, { size: 34 })),
+    /*#__PURE__*/React.createElement("div", null,
+      /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_MONO, fontSize: 10, letterSpacing: 1, color: PALETTE.rust, fontWeight: 700, marginBottom: 3 } }, "L'OCCHIO racconta"),
+      /*#__PURE__*/React.createElement("div", { style: { fontSize: 16, lineHeight: 1.4, color: PALETTE.ink } }, steps[step].message)))),
+  /*#__PURE__*/React.createElement("style", null, `@keyframes paccC2D { from { transform: translate(0px,0px); } to { transform: translate(100px,0px); } } @keyframes paccD2R { from { transform: translate(0px,0px); } to { transform: translate(100px,0px); } } @keyframes paccC2G { from { transform: translate(0px,0px); } to { transform: translate(100px,160px); } } @keyframes jpulse { 0% { transform: scale(.7); opacity: 1; } 60% { transform: scale(1.25); opacity: .3; } 100% { transform: scale(.7); opacity: 1; } } .jpulse { animation: jpulse 1s ease-in-out infinite; } .occhioGuida { transition: left 0.45s cubic-bezier(.4,0,.2,1); } @media (prefers-reduced-motion: reduce) { [style*="paccC2D"], [style*="paccD2R"], [style*="paccC2G"], .jpulse { animation: none !important; } .occhioGuida { transition: none !important; } }`)),
+  /*#__PURE__*/React.createElement("div", {
+    style: { textAlign: 'center', display: 'flex', gap: 10, justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', marginBottom: 20 }
+  },
+  step < 0 && /*#__PURE__*/React.createElement("button", { onClick: () => setStep(0), style: { ...btnPrimary(), background: PALETTE.moss, boxShadow: `3px 3px 0 ${PALETTE.amber}` } }, /*#__PURE__*/React.createElement(Icon, { name: "play", size: 14, style: { display: 'inline-block', marginRight: 6, verticalAlign: 'middle' }, fill: "currentColor" }), "tocca WhatsApp"),
+  step > 0 && /*#__PURE__*/React.createElement("button", { onClick: () => setStep(x => Math.max(0, x - 1)), style: btnGhost() }, "\u2190 indietro"),
+  step >= 0 && step < ultimo && /*#__PURE__*/React.createElement("span", { style: { fontFamily: FONT_MONO, fontSize: 13, color: PALETTE.inkSoft } }, step + 1, "/", steps.length),
+  step >= 0 && step < ultimo && /*#__PURE__*/React.createElement("button", { onClick: () => setStep(x => Math.min(ultimo, x + 1)), style: { ...btnPrimary(), background: PALETTE.moss, boxShadow: `3px 3px 0 ${PALETTE.amber}` } }, "avanti \u2192"),
+  step === ultimo && /*#__PURE__*/React.createElement("button", { onClick: () => setStep(-1), style: btnGhost() }, "rivedi da capo")),
+  /*#__PURE__*/React.createElement(NavButtons, { goPrev: goPrev, goNext: goNext, nextLabel: "la gara delle velocit\u00e0 \u2192" }));
 }
 
 // ----------------------------------------------------------------------------
@@ -4691,294 +4257,77 @@ function M2_SpeedRacePage({
   goPrev
 }) {
   const [racing, setRacing] = useState(false);
-  const [quizStep, setQuizStep] = useState(0);
-  const [quizAnswers, setQuizAnswers] = useState([]);
-  const startRace = () => {
-    setRacing(true);
-    setTimeout(() => setRacing(false), 8500);
-  };
+  const [qi, setQi] = useState(0);
+  const [chosen, setChosen] = useState(null);
+  const [finito, setFinito] = useState(false);
+  const reduce = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const startRace = () => { setRacing(true); setTimeout(() => setRacing(false), reduce ? 400 : 8500); };
   const quiz = [{
     q: 'Stai scrivendo una lettera al computer. Le parole che hai appena scritto, dove sono ADESSO?',
-    options: [{
-      text: 'Nel cervello (CPU)',
-      correct: false,
-      why: 'No, la CPU pensa veloce ma non immagazzina.'
-    }, {
-      text: 'Sulla scrivania (RAM)',
-      correct: true,
-      why: 'Sì! Mentre lavori, le cose stanno sul banco veloce.'
-    }, {
-      text: 'Nella libreria (Disco)',
-      correct: false,
-      why: 'No, lì vanno solo dopo che le salvi.'
-    }]
+    options: [{ text: 'Nel cervello (CPU)', correct: false, why: 'No: la CPU pensa veloce ma non tiene le cose.' }, { text: 'Sulla scrivania (RAM)', correct: true, why: 'S\u00ec! Mentre lavori, le cose stanno sul banco veloce.' }, { text: 'Nella libreria (Disco)', correct: false, why: 'No: l\u00ec ci vanno solo dopo che le salvi.' }]
   }, {
     q: 'Hai salvato la lettera e spento il computer. Dove sta adesso?',
-    options: [{
-      text: 'Sulla scrivania (RAM)',
-      correct: false,
-      why: 'No! Ricordi? La RAM si svuota allo spegnimento.'
-    }, {
-      text: 'Nella libreria (Disco)',
-      correct: true,
-      why: 'Esatto! Solo il disco tiene le cose anche da spento.'
-    }, {
-      text: 'Si è persa',
-      correct: false,
-      why: 'Niente paura, l\'hai salvata! Sta nel disco.'
-    }]
+    options: [{ text: 'Sulla scrivania (RAM)', correct: false, why: 'No! Ricordi? La RAM si svuota quando spegni.' }, { text: 'Nella libreria (Disco)', correct: true, why: 'Esatto! Solo il disco tiene le cose anche da spento.' }, { text: 'Si \u00e8 persa', correct: false, why: 'Niente paura: l\'hai salvata, sta nel disco.' }]
   }, {
-    q: 'Apri un gioco. Per giocare veloce, dove viene caricato?',
-    options: [{
-      text: 'Nella libreria (Disco)',
-      correct: false,
-      why: 'Il disco è lento per giocare. Va caricato altrove.'
-    }, {
-      text: 'Sulla scrivania (RAM)',
-      correct: true,
-      why: 'Sì! La RAM è veloce, perfetta per i giochi.'
-    }, {
-      text: 'In un altro computer',
-      correct: false,
-      why: 'Nope, tutto sta nel tuo computer.'
-    }]
+    q: 'Apri un gioco. Per farlo girare veloce, dove viene caricato?',
+    options: [{ text: 'Nella libreria (Disco)', correct: false, why: 'Il disco \u00e8 lento per giocare: va caricato altrove.' }, { text: 'Sulla scrivania (RAM)', correct: true, why: 'S\u00ec! La RAM \u00e8 veloce, perfetta per i giochi.' }, { text: 'In un altro computer', correct: false, why: 'No: tutto sta nel tuo computer.' }]
   }];
-  const handleAnswer = idx => {
-    const newAnswers = [...quizAnswers, idx];
-    setQuizAnswers(newAnswers);
-    if (newAnswers.length === quiz.length) markDone();
-  };
-  const resetQuiz = () => {
-    setQuizStep(0);
-    setQuizAnswers([]);
-  };
+  const q = quiz[qi];
+  const rispondi = i => { if (chosen === null) setChosen(i); };
+  const avanti = () => { if (qi < quiz.length - 1) { setQi(qi + 1); setChosen(null); } else { setFinito(true); markDone(); } };
+  const rifai = () => { setQi(0); setChosen(null); setFinito(false); };
+
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 5 di 7",
-    title: "La gara delle velocit\xE0",
+    title: "La gara delle velocit\u00e0",
     accent: PALETTE.moss
-  }), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 17,
-      lineHeight: 1.6,
-      marginBottom: 8
-    }
-  }, "Lo chef (", /*#__PURE__*/React.createElement("strong", null, "CPU"), ") \xE8 velocissimo. Il banco (", /*#__PURE__*/React.createElement("strong", null, "RAM"), ") \xE8 veloce. La dispensa (", /*#__PURE__*/React.createElement("strong", null, "Disco"), ") \xE8 lenta."), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 15,
-      color: PALETTE.inkSoft,
-      marginBottom: 22
-    }
-  }, "Quanto lenta? Fai partire la gara per scoprirlo."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: PALETTE.cream,
-      border: `2px solid ${PALETTE.ink}`,
-      borderRadius: 6,
-      padding: '20px 16px',
-      marginBottom: 18,
-      overflow: 'hidden'
-    }
-  }, /*#__PURE__*/React.createElement(SpeedRaceTrack, {
-    racing: racing
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      textAlign: 'center',
-      marginTop: 14
-    }
-  }, !racing ? /*#__PURE__*/React.createElement("button", {
-    onClick: startRace,
-    style: {
-      ...btnPrimary(),
-      background: PALETTE.moss,
-      boxShadow: `3px 3px 0 ${PALETTE.amber}`
-    }
-  }, "\uD83C\uDFC1 via alla gara!") : /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: FONT_MONO,
-      color: PALETTE.moss,
-      fontSize: 14,
-      fontWeight: 600
-    }
-  }, "\u23F1 corsa in corso..."))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: `${PALETTE.amber}15`,
-      border: `1.5px dashed ${PALETTE.amber}`,
-      padding: '14px 18px',
-      borderRadius: 4,
-      marginBottom: 22,
-      fontSize: 15,
-      lineHeight: 1.5
-    }
-  }, "\uD83E\uDD2F ", /*#__PURE__*/React.createElement("strong", null, "La differenza vera:"), " se la CPU aspetta la RAM, \xE8 come aspettare ", /*#__PURE__*/React.createElement("strong", null, "30 minuti"), ". Se aspetta il disco, \xE8 come aspettare ", /*#__PURE__*/React.createElement("strong", null, "6 mesi!"), " Per questo il computer fa di tutto per non disturbare il disco."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginBottom: 18
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: FONT_MONO,
-      fontSize: 11,
-      color: PALETTE.inkSoft,
-      letterSpacing: 2,
-      fontWeight: 700,
-      marginBottom: 12
-    }
-  }, "\u2591 DOMANDA DA SCIENZIATO (", Math.min(quizAnswers.length + 1, quiz.length), " di ", quiz.length, ") \u2591"), quizAnswers.length < quiz.length ? /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: '#fff',
-      border: `2px solid ${PALETTE.ink}`,
-      borderRadius: 4,
-      padding: '18px 20px'
-    }
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      margin: '0 0 14px',
-      fontSize: 16,
-      fontWeight: 500,
-      lineHeight: 1.4
-    }
-  }, quiz[quizAnswers.length].q), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 8
-    }
-  }, quiz[quizAnswers.length].options.map((opt, i) => /*#__PURE__*/React.createElement("button", {
-    key: i,
-    onClick: () => handleAnswer(i),
-    style: {
-      ...btnGhost(),
-      textAlign: 'left',
-      padding: '12px 16px',
-      fontSize: 15
-    }
-  }, opt.text)))) : /*#__PURE__*/React.createElement("div", null, quiz.map((q, qi) => {
-    const ai = quizAnswers[qi];
-    const opt = q.options[ai];
-    return /*#__PURE__*/React.createElement("div", {
-      key: qi,
-      style: {
-        background: opt.correct ? `${PALETTE.moss}15` : `${PALETTE.rust}15`,
-        border: `1.5px solid ${opt.correct ? PALETTE.moss : PALETTE.rust}`,
-        padding: '12px 16px',
-        borderRadius: 4,
-        marginBottom: 10,
-        fontSize: 14,
-        lineHeight: 1.4
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: 8
-      }
-    }, /*#__PURE__*/React.createElement(Icon, {
-      name: "check-circle",
-      size: 16,
-      color: opt.correct ? PALETTE.moss : PALETTE.rust,
-      style: {
-        flexShrink: 0,
-        marginTop: 2
-      }
-    }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontWeight: 600,
-        marginBottom: 4
-      }
-    }, q.q), /*#__PURE__*/React.createElement("div", null, "Hai detto: ", /*#__PURE__*/React.createElement("em", null, opt.text), " \u2014 ", opt.why))));
-  }), /*#__PURE__*/React.createElement("button", {
-    onClick: resetQuiz,
-    style: {
-      ...btnGhost(),
-      marginTop: 8
-    }
-  }, "\u21BB rifai il quiz"))), /*#__PURE__*/React.createElement(NavButtons, {
-    goPrev: goPrev,
-    goNext: goNext,
-    nextLabel: "anche nel telefono! \u2192"
-  }));
+  }), /*#__PURE__*/React.createElement(OcchioSays, {entra: "m2"}, "Ti ricordi lo chef, il banco e la dispensa? Sono tutti veloci... ma ", /*#__PURE__*/React.createElement("strong", null, "non allo stesso modo"), ". Facciamoli correre fino al traguardo e guarda chi arriva prima. Poi ti faccio qualche domanda da scienziato."), /*#__PURE__*/React.createElement("p", {
+    style: { fontSize: 17, lineHeight: 1.6, marginBottom: 18 }
+  }, "Lo chef (", /*#__PURE__*/React.createElement("strong", null, "CPU"), ") \u00e8 velocissimo. Il banco (", /*#__PURE__*/React.createElement("strong", null, "RAM"), ") \u00e8 veloce. La dispensa (", /*#__PURE__*/React.createElement("strong", null, "Disco"), ") \u00e8 lenta. Quanto? Via alla gara."), /*#__PURE__*/React.createElement("div", {
+    style: { background: PALETTE.cream, border: `2px solid ${PALETTE.ink}`, borderRadius: 6, padding: '20px 16px', marginBottom: 18, overflow: 'hidden' }
+  }, /*#__PURE__*/React.createElement(SpeedRaceTrack, { racing: racing }), /*#__PURE__*/React.createElement("div", {
+    style: { textAlign: 'center', marginTop: 14 }
+  }, !racing ? /*#__PURE__*/React.createElement("button", { onClick: startRace, style: { ...btnPrimary(), background: PALETTE.moss, boxShadow: `3px 3px 0 ${PALETTE.amber}` } }, "via alla gara!") : /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_MONO, color: PALETTE.moss, fontSize: 15, fontWeight: 600 } }, "corsa in corso..."))), /*#__PURE__*/React.createElement("div", {
+    style: { background: `${PALETTE.amber}15`, border: `1.5px dashed ${PALETTE.amber}`, padding: '14px 16px', borderRadius: 4, marginBottom: 24, display: 'flex', gap: 11, alignItems: 'flex-start' }
+  }, /*#__PURE__*/React.createElement(Icon, { name: "zap", size: 22, color: PALETTE.rust, fill: PALETTE.amber, style: { flexShrink: 0, marginTop: 2 } }), /*#__PURE__*/React.createElement("div", { style: { fontSize: 16, lineHeight: 1.55 } }, /*#__PURE__*/React.createElement("strong", null, "La differenza vera:"), " se la CPU aspetta la RAM, \u00e8 come aspettare ", /*#__PURE__*/React.createElement("strong", null, "30 minuti"), ". Se aspetta il disco, \u00e8 come aspettare ", /*#__PURE__*/React.createElement("strong", null, "6 mesi!"), " Per questo il computer fa di tutto per non disturbare il disco.")),
+  /*#__PURE__*/React.createElement("div", { style: { marginBottom: 18 } },
+    /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_MONO, fontSize: 12, color: PALETTE.inkSoft, letterSpacing: 2, fontWeight: 700, marginBottom: 12 } }, "\u2591 DOMANDA DA SCIENZIATO (", Math.min(qi + 1, quiz.length), " di ", quiz.length, ") \u2591"),
+    finito ? /*#__PURE__*/React.createElement("div", { style: { background: `${PALETTE.moss}15`, border: `2px solid ${PALETTE.moss}`, borderRadius: 6, padding: '18px 20px' } },
+      /*#__PURE__*/React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 } }, /*#__PURE__*/React.createElement(Icon, { name: "check-circle", size: 22, color: PALETTE.moss }), /*#__PURE__*/React.createElement("span", { style: { fontFamily: FONT_DISPLAY, fontSize: 18, fontWeight: 600 } }, "Domande finite!")),
+      /*#__PURE__*/React.createElement("p", { style: { margin: '0 0 12px', fontSize: 15, lineHeight: 1.5 } }, "Hai messo alla prova quello che hai capito su CPU, RAM e disco. Se vuoi riprovare, rifai pure."),
+      /*#__PURE__*/React.createElement("button", { onClick: rifai, style: btnGhost() }, "rifai le domande"))
+    : /*#__PURE__*/React.createElement("div", { style: { background: '#fff', border: `2px solid ${PALETTE.ink}`, borderRadius: 6, padding: '18px 20px' } },
+      /*#__PURE__*/React.createElement("p", { style: { margin: '0 0 16px', fontSize: 17, fontWeight: 500, lineHeight: 1.45 } }, q.q),
+      /*#__PURE__*/React.createElement("div", { style: { display: 'flex', flexDirection: 'column', gap: 9 } }, q.options.map((opt, i) => {
+        if (chosen === null) return /*#__PURE__*/React.createElement("button", { key: i, onClick: () => rispondi(i), style: { ...btnGhost(), textAlign: 'left', padding: '13px 16px', fontSize: 16 } }, opt.text);
+        const isChosen = i === chosen;
+        const bd = opt.correct ? PALETTE.moss : isChosen ? PALETTE.rust : PALETTE.paperLine;
+        const bg = opt.correct ? `${PALETTE.moss}15` : isChosen ? `${PALETTE.rust}15` : '#fff';
+        return /*#__PURE__*/React.createElement("div", { key: i, style: { display: 'flex', alignItems: 'center', gap: 10, border: `2px solid ${bd}`, background: bg, borderRadius: 8, padding: '12px 14px', opacity: opt.correct || isChosen ? 1 : 0.5 } },
+          opt.correct ? /*#__PURE__*/React.createElement(Icon, { name: "check-circle", size: 20, color: PALETTE.moss, style: { flexShrink: 0 } }) : isChosen ? /*#__PURE__*/React.createElement(Icon, { name: "x-circle", size: 20, color: PALETTE.rust, style: { flexShrink: 0 } }) : /*#__PURE__*/React.createElement("span", { style: { width: 20, flexShrink: 0 } }),
+          /*#__PURE__*/React.createElement("span", { style: { fontSize: 16, fontWeight: opt.correct || isChosen ? 600 : 400 } }, opt.text));
+      })),
+      chosen !== null && /*#__PURE__*/React.createElement("div", { style: { marginTop: 14, padding: '12px 16px', borderRadius: 6, background: q.options[chosen].correct ? `${PALETTE.moss}12` : `${PALETTE.amber}18`, fontSize: 16, lineHeight: 1.5 } },
+        /*#__PURE__*/React.createElement("strong", null, q.options[chosen].correct ? "Esatto. " : "Quasi. "), q.options[chosen].why),
+      chosen !== null && /*#__PURE__*/React.createElement("div", { style: { textAlign: 'right', marginTop: 14 } }, /*#__PURE__*/React.createElement("button", { onClick: avanti, style: { ...btnPrimary(), background: PALETTE.moss, boxShadow: `3px 3px 0 ${PALETTE.amber}` } }, qi < quiz.length - 1 ? "prossima domanda \u2192" : "ho finito \u2192")))),
+  /*#__PURE__*/React.createElement(NavButtons, { goPrev: goPrev, goNext: goNext, nextLabel: "anche nel telefono! \u2192" }));
 }
-function SpeedRaceTrack({
-  racing
-}) {
+function SpeedRaceTrack({ racing }) {
+  const reduce = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   return /*#__PURE__*/React.createElement("div", null, [{
-    name: 'CPU',
-    emoji: '🏃‍♂️💨',
-    label: 'velocissima',
-    color: PALETTE.rust,
-    duration: '1.5s'
+    name: 'CPU', icon: 'rabbit', label: 'velocissima', color: PALETTE.rust, duration: '1.5s'
   }, {
-    name: 'RAM',
-    emoji: '🚶',
-    label: 'veloce',
-    color: PALETTE.moss,
-    duration: '4s'
+    name: 'RAM', icon: 'turtle', label: 'veloce', color: PALETTE.moss, duration: '4s'
   }, {
-    name: 'Disco',
-    emoji: '🐢',
-    label: 'lentino',
-    color: PALETTE.amber,
-    duration: '8s'
-  }].map((lane, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      marginBottom: 14
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: 10,
-      marginBottom: 4
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 60,
-      fontFamily: FONT_MONO,
-      fontSize: 11,
-      color: lane.color,
-      fontWeight: 700,
-      letterSpacing: 1
-    }
-  }, lane.name), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      position: 'relative',
-      height: 32,
-      background: '#fff',
-      borderRadius: 16,
-      border: `1.5px solid ${PALETTE.paperLine}`,
-      overflow: 'hidden'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'absolute',
-      inset: 0,
-      backgroundImage: `linear-gradient(90deg, transparent 0, transparent calc(100% - 20px), ${PALETTE.paperLine} calc(100% - 20px), ${PALETTE.paperLine} 100%)`
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'absolute',
-      right: 4,
-      top: '50%',
-      transform: 'translateY(-50%)',
-      fontSize: 18
-    }
-  }, "\uD83C\uDFC1"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'absolute',
-      left: racing ? 'calc(100% - 50px)' : 8,
-      top: '50%',
-      transform: 'translateY(-50%)',
-      fontSize: 18,
-      transition: racing ? `left ${lane.duration} linear` : 'none'
-    }
-  }, lane.emoji)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 80,
-      fontSize: 11,
-      color: PALETTE.inkSoft,
-      fontStyle: 'italic'
-    }
-  }, lane.label)))));
+    name: 'Disco', icon: 'snail', label: 'lentina', color: PALETTE.amber, duration: '8s'
+  }].map((lane, i) => /*#__PURE__*/React.createElement("div", { key: i, style: { marginBottom: 16 } },
+    /*#__PURE__*/React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 10 } },
+      /*#__PURE__*/React.createElement("div", { style: { width: 66, fontFamily: FONT_MONO, fontSize: 13, color: lane.color, fontWeight: 700, letterSpacing: 1 } }, lane.name),
+      /*#__PURE__*/React.createElement("div", { style: { flex: 1, position: 'relative', height: 40, background: '#fff', borderRadius: 20, border: `1.5px solid ${PALETTE.paperLine}`, overflow: 'hidden' } },
+        /*#__PURE__*/React.createElement("div", { style: { position: 'absolute', inset: 0, backgroundImage: `linear-gradient(90deg, transparent 0, transparent calc(100% - 26px), ${PALETTE.paperLine} calc(100% - 26px), ${PALETTE.paperLine} 100%)` } }),
+        /*#__PURE__*/React.createElement("div", { style: { position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)' } }, /*#__PURE__*/React.createElement(Icon, { name: "flag", size: 22, color: PALETTE.ink })),
+        /*#__PURE__*/React.createElement("div", { style: { position: 'absolute', left: racing ? 'calc(100% - 56px)' : 10, top: '50%', transform: 'translateY(-50%)', transition: racing && !reduce ? `left ${lane.duration} linear` : 'none' } }, /*#__PURE__*/React.createElement(Icon, { name: lane.icon, size: 28, color: lane.color }))),
+      /*#__PURE__*/React.createElement("div", { style: { width: 92, fontSize: 13, color: PALETTE.inkSoft, fontStyle: 'italic' } }, lane.label)))));
 }
 
 // ----------------------------------------------------------------------------
@@ -4991,93 +4340,53 @@ function M2_SmartphonePage({
   goPrev
 }) {
   const [xray, setXray] = useState(false);
-  useEffect(() => {
-    if (xray) markDone();
-  }, [xray]);
+  const [rivelato1, setRivelato1] = useState(false);
+  const [sensori, setSensori] = useState(() => new Set());
+  useEffect(() => { if (xray) markDone(); }, [xray]);
+  const toggleSensore = i => setSensori(prev => { const n = new Set(prev); n.has(i) ? n.delete(i) : n.add(i); return n; });
+  const sensoriData = [
+    { nome: 'GPS', spiega: 'parla con i satelliti e capisce dove ti trovi sulla Terra.' },
+    { nome: 'Accelerometro', spiega: 'sente quando lo muovi o lo giri (per questo lo schermo ruota).' },
+    { nome: 'Fotocamera', spiega: 'trasforma la luce in numeri \u2014 e i numeri in 0 e 1!' },
+    { nome: 'Microfono', spiega: 'trasforma il suono in numeri.' }
+  ];
+
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 6 di 7",
     title: "Anche nel telefono!",
     accent: PALETTE.moss
-  }), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 17,
-      lineHeight: 1.6,
-      marginBottom: 8
-    }
-  }, "Il tuo smartphone \xE8 un computer in miniatura. Ha ", /*#__PURE__*/React.createElement("strong", null, "gli stessi pezzi"), ", solo piccolissimi."), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 15,
-      color: PALETTE.inkSoft,
-      marginBottom: 22
-    }
-  }, "Tocca per vedere dentro al telefono."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: PALETTE.cream,
-      border: `1.5px solid ${PALETTE.paperLine}`,
-      borderRadius: 6,
-      padding: '24px 16px',
-      marginBottom: 18,
-      textAlign: 'center'
-    }
-  }, /*#__PURE__*/React.createElement(SmartphoneXray, {
-    xray: xray
-  }), /*#__PURE__*/React.createElement("button", {
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m2" }, "Hai visto cosa c'\u00e8 dentro un computer. E dentro al telefono che tieni in tasca? Prima la tua scommessa, poi guardiamo dentro davvero."), /*#__PURE__*/React.createElement(Indovina, {
+    domanda: "Dentro lo smartphone, secondo te, cosa c'\u00e8?",
+    opzioni: [{ label: 'Pezzi tutti diversi da quelli del computer' }, { label: 'Solo lo schermo, niente altro' }, { label: 'Gli stessi pezzi del computer (CPU, RAM, disco), ma piccolissimi', giusta: true }],
+    rivela: /*#__PURE__*/React.createElement("span", null, "Proprio cos\u00ec: ", /*#__PURE__*/React.createElement("strong", null, "gli stessi pezzi"), ", solo in miniatura. Non ci credi? Guarda dentro qui sotto."),
+    accent: PALETTE.rust,
+    onScelto: () => setRivelato1(true)
+  }), rivelato1 && /*#__PURE__*/React.createElement("div", { className: "reveal-pop" }, /*#__PURE__*/React.createElement(OcchioSays, { nome: "L'OCCHIO \u2014 e adesso guarda dentro!" }, "Toccalo: diventa trasparente e vedi i pezzi. Sono gli stessi del computer, solo minuscoli."), /*#__PURE__*/React.createElement("div", {
+    style: { background: PALETTE.cream, border: `1.5px solid ${PALETTE.paperLine}`, borderRadius: 6, padding: '24px 16px', marginBottom: 18, textAlign: 'center' }
+  }, /*#__PURE__*/React.createElement(SmartphoneXray, { xray: xray }), /*#__PURE__*/React.createElement("button", {
     onClick: () => setXray(!xray),
-    style: {
-      ...btnPrimary(),
-      marginTop: 18,
-      background: xray ? PALETTE.amber : PALETTE.ink,
-      color: xray ? PALETTE.ink : PALETTE.cream,
-      boxShadow: `3px 3px 0 ${PALETTE.moss}`
-    }
-  }, xray ? '👁 nascondi i pezzi' : '🔬 guarda dentro!')), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: PALETTE.creamDeep,
-      border: `2px solid ${PALETTE.ink}`,
-      borderRadius: 4,
-      padding: '16px 18px',
-      marginBottom: 14
-    }
+    style: { ...btnPrimary(), marginTop: 18, background: xray ? PALETTE.amber : PALETTE.ink, color: xray ? PALETTE.ink : PALETTE.cream, boxShadow: `3px 3px 0 ${PALETTE.moss}` }
+  }, xray ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Icon, { name: 'eye', size: 16, style: { verticalAlign: '-3px', marginRight: 6 } }), 'nascondi i pezzi') : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Icon, { name: 'microscope', size: 16, style: { verticalAlign: '-3px', marginRight: 6 } }), 'guarda dentro!')))), /*#__PURE__*/React.createElement(Indovina, {
+    domanda: "Il chip del tuo telefono, secondo te, com'\u00e8 rispetto al computer che nel 1969 port\u00f2 gli uomini sulla Luna?",
+    opzioni: [{ label: 'Molto meno potente' }, { label: 'Pi\u00f9 o meno uguale' }, { label: 'Molto pi\u00f9 potente', giusta: true }],
+    rivela: /*#__PURE__*/React.createElement("span", null, "Incredibile ma vero: ", /*#__PURE__*/React.createElement("strong", null, "molto pi\u00f9 potente"), ". Un intero computer della NASA del 1969, oggi, sta \u2014 pi\u00f9 forte \u2014 nella tua tasca."),
+    accent: PALETTE.amber
+  }), /*#__PURE__*/React.createElement("div", {
+    style: { background: PALETTE.creamDeep, border: `2px solid ${PALETTE.ink}`, borderRadius: 6, padding: '16px 18px', marginBottom: 22 }
   }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: FONT_MONO,
-      fontSize: 11,
-      color: PALETTE.inkSoft,
-      fontWeight: 700,
-      letterSpacing: 2,
-      marginBottom: 10
-    }
-  }, "\u2591 CURIOSIT\xC0 INCREDIBILE \u2591"), /*#__PURE__*/React.createElement("p", {
-    style: {
-      margin: 0,
-      fontSize: 16,
-      lineHeight: 1.5
-    }
-  }, "\uD83D\uDE80 Il chip del tuo telefono \xE8 ", /*#__PURE__*/React.createElement("strong", null, "pi\xF9 potente"), " del computer della NASA che ha portato gli astronauti sulla ", /*#__PURE__*/React.createElement("strong", null, "Luna nel 1969"), ". Tutto in un oggetto che sta in tasca.")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: PALETTE.creamDeep,
-      border: `2px solid ${PALETTE.ink}`,
-      borderRadius: 4,
-      padding: '16px 18px',
-      marginBottom: 22
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: FONT_MONO,
-      fontSize: 11,
-      color: PALETTE.inkSoft,
-      fontWeight: 700,
-      letterSpacing: 2,
-      marginBottom: 10
-    }
-  }, "\u2591 IN PI\xD9, IL TELEFONO HA... \u2591"), /*#__PURE__*/React.createElement("ul", {
-    style: {
-      margin: 0,
-      paddingLeft: 18,
-      fontSize: 15,
-      lineHeight: 1.7
-    }
-  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "GPS:"), " sa dove sei sulla Terra, parlando con i satelliti"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Accelerometro:"), " sente quando lo sposti o lo giri"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Fotocamera:"), " trasforma la luce in numeri (e poi in 0 e 1!)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("strong", null, "Microfono:"), " trasforma il suono in numeri"))), /*#__PURE__*/React.createElement(NavButtons, {
+    style: { fontFamily: FONT_MONO, fontSize: 12, color: PALETTE.inkSoft, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }
+  }, "\u2591 I SENSI IN PI\u00d9 DEL TELEFONO \u2591"), /*#__PURE__*/React.createElement("p", {
+    style: { margin: '0 0 14px', fontSize: 15, color: PALETTE.inkSoft, lineHeight: 1.5 }
+  }, "Un computer da tavolo di solito non li ha. Tocca ognuno per scoprire cosa fa."), /*#__PURE__*/React.createElement("div", {
+    style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }
+  }, sensoriData.map((sn, i) => {
+    const rev = sensori.has(i);
+    return /*#__PURE__*/React.createElement("button", {
+      key: i, onClick: () => toggleSensore(i),
+      style: { textAlign: 'left', background: rev ? `${PALETTE.moss}14` : '#fff', border: `2px solid ${rev ? PALETTE.moss : PALETTE.paperLine}`, borderRadius: 8, padding: '12px 14px', cursor: 'pointer', fontFamily: FONT_BODY }
+    }, /*#__PURE__*/React.createElement("div", { style: { fontWeight: 700, fontSize: 16, color: PALETTE.ink, marginBottom: rev ? 6 : 2 } }, sn.nome),
+      rev ? /*#__PURE__*/React.createElement("div", { style: { fontSize: 15, lineHeight: 1.45, color: PALETTE.ink } }, sn.spiega) : /*#__PURE__*/React.createElement("div", { style: { fontSize: 14, color: PALETTE.inkSoft, fontStyle: 'italic' } }, "cosa fa? \u2192"));
+  }))), /*#__PURE__*/React.createElement(NavButtons, {
     goPrev: goPrev,
     goNext: goNext,
     nextLabel: "hai finito! \u2192",
@@ -5087,260 +4396,37 @@ function M2_SmartphonePage({
 function SmartphoneXray({
   xray
 }) {
+  const apps = [
+    { x: 62, y: 110, icon: 'smartphone' }, { x: 110, y: 110, icon: 'message-circle' }, { x: 158, y: 110, icon: 'camera' },
+    { x: 62, y: 185, icon: 'music' }, { x: 110, y: 185, icon: 'gamepad' }, { x: 158, y: 185, icon: 'map' }
+  ];
   return /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 160 280",
-    width: "140",
-    height: "245",
-    style: {
-      display: 'inline-block'
-    }
-  }, /*#__PURE__*/React.createElement("rect", {
-    x: "10",
-    y: "10",
-    width: "140",
-    height: "260",
-    rx: "18",
-    fill: xray ? PALETTE.cream : PALETTE.ink,
-    stroke: PALETTE.ink,
-    strokeWidth: "3",
-    style: {
-      transition: 'fill 0.5s ease'
-    }
-  }), /*#__PURE__*/React.createElement("rect", {
-    x: "20",
-    y: "30",
-    width: "120",
-    height: "220",
-    rx: "4",
-    fill: xray ? '#fff' : PALETTE.inkSoft,
-    stroke: PALETTE.ink,
-    strokeWidth: "1",
-    style: {
-      transition: 'fill 0.5s ease'
-    }
-  }), /*#__PURE__*/React.createElement("rect", {
-    x: "65",
-    y: "18",
-    width: "30",
-    height: "4",
-    rx: "2",
-    fill: PALETTE.cream
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "50",
-    cy: "20",
-    r: "2",
-    fill: PALETTE.cream
-  }), !xray ? /*#__PURE__*/React.createElement("g", null, [{
-    x: 35,
-    y: 50,
-    label: '📱',
-    name: 'home'
-  }, {
-    x: 80,
-    y: 50,
-    label: '💬',
-    name: 'msg'
-  }, {
-    x: 125,
-    y: 50,
-    label: '📷',
-    name: 'cam'
-  }, {
-    x: 35,
-    y: 100,
-    label: '🎵',
-    name: 'music'
-  }, {
-    x: 80,
-    y: 100,
-    label: '🎮',
-    name: 'game'
-  }, {
-    x: 125,
-    y: 100,
-    label: '🗺️',
-    name: 'map'
-  }].map((app, i) => /*#__PURE__*/React.createElement("text", {
-    key: i,
-    x: app.x,
-    y: app.y + 10,
-    textAnchor: "middle",
-    fontSize: "22"
-  }, app.label))) : /*#__PURE__*/React.createElement("g", {
-    style: {
-      animation: 'fadeIn 0.5s ease'
-    }
-  }, /*#__PURE__*/React.createElement("rect", {
-    x: "55",
-    y: "50",
-    width: "50",
-    height: "40",
-    rx: "3",
-    fill: PALETTE.rust,
-    stroke: PALETTE.ink,
-    strokeWidth: "1.5"
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "80",
-    y: "72",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "8",
-    fill: "#fff",
-    fontWeight: "700"
-  }, "CPU"), /*#__PURE__*/React.createElement("text", {
-    x: "80",
-    y: "83",
-    textAnchor: "middle",
-    fontFamily: FONT_BODY,
-    fontSize: "6",
-    fill: "#fff"
-  }, "cervello"), /*#__PURE__*/React.createElement("rect", {
-    x: "30",
-    y: "100",
-    width: "40",
-    height: "20",
-    rx: "2",
-    fill: PALETTE.moss,
-    stroke: PALETTE.ink,
-    strokeWidth: "1.5"
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "50",
-    y: "113",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "7",
-    fill: "#fff",
-    fontWeight: "700"
-  }, "RAM"), /*#__PURE__*/React.createElement("rect", {
-    x: "90",
-    y: "100",
-    width: "40",
-    height: "20",
-    rx: "2",
-    fill: PALETTE.amber,
-    stroke: PALETTE.ink,
-    strokeWidth: "1.5"
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "110",
-    y: "113",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "7",
-    fill: PALETTE.ink,
-    fontWeight: "700"
-  }, "DISCO"), /*#__PURE__*/React.createElement("rect", {
-    x: "30",
-    y: "130",
-    width: "100",
-    height: "14",
-    rx: "2",
-    fill: PALETTE.ink,
-    stroke: PALETTE.ink,
-    strokeWidth: "1.5"
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "80",
-    y: "140",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "7",
-    fill: PALETTE.cream,
-    fontWeight: "700"
-  }, "GPU (pittore)"), /*#__PURE__*/React.createElement("rect", {
-    x: "30",
-    y: "155",
-    width: "100",
-    height: "20",
-    rx: "2",
-    fill: PALETTE.cream,
-    stroke: PALETTE.ink,
-    strokeWidth: "1.5"
-  }), /*#__PURE__*/React.createElement("rect", {
-    x: "32",
-    y: "157",
-    width: "70",
-    height: "16",
-    fill: PALETTE.moss
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "80",
-    y: "169",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "7",
-    fill: PALETTE.ink,
-    fontWeight: "700"
-  }, "\uD83D\uDD0B BATTERIA"), /*#__PURE__*/React.createElement("circle", {
-    cx: "45",
-    cy: "195",
-    r: "8",
-    fill: PALETTE.warmGray,
-    stroke: PALETTE.ink,
-    strokeWidth: "1.2"
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "45",
-    y: "198",
-    textAnchor: "middle",
-    fontSize: "9"
-  }, "\uD83D\uDCCD"), /*#__PURE__*/React.createElement("text", {
-    x: "45",
-    y: "215",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "6",
-    fill: PALETTE.ink
-  }, "GPS"), /*#__PURE__*/React.createElement("circle", {
-    cx: "80",
-    cy: "195",
-    r: "8",
-    fill: PALETTE.warmGray,
-    stroke: PALETTE.ink,
-    strokeWidth: "1.2"
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "80",
-    y: "198",
-    textAnchor: "middle",
-    fontSize: "9"
-  }, "\uD83C\uDFA4"), /*#__PURE__*/React.createElement("text", {
-    x: "80",
-    y: "215",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "6",
-    fill: PALETTE.ink
-  }, "MIC"), /*#__PURE__*/React.createElement("circle", {
-    cx: "115",
-    cy: "195",
-    r: "8",
-    fill: PALETTE.warmGray,
-    stroke: PALETTE.ink,
-    strokeWidth: "1.2"
-  }), /*#__PURE__*/React.createElement("text", {
-    x: "115",
-    y: "198",
-    textAnchor: "middle",
-    fontSize: "9"
-  }, "\uD83D\uDCF7"), /*#__PURE__*/React.createElement("text", {
-    x: "115",
-    y: "215",
-    textAnchor: "middle",
-    fontFamily: FONT_MONO,
-    fontSize: "6",
-    fill: PALETTE.ink
-  }, "CAM"), /*#__PURE__*/React.createElement("text", {
-    x: "80",
-    y: "240",
-    textAnchor: "middle",
-    fontFamily: FONT_BODY,
-    fontSize: "7",
-    fontStyle: "italic",
-    fill: PALETTE.inkSoft
-  }, "tutto in 1cm\xB2!")), /*#__PURE__*/React.createElement("circle", {
-    cx: "80",
-    cy: "262",
-    r: "5",
-    fill: PALETTE.cream,
-    stroke: PALETTE.ink,
-    strokeWidth: "1"
-  }));
+    viewBox: "0 0 220 380", width: "100%", style: { display: 'block', maxWidth: 250, height: 'auto', margin: '0 auto' }
+  },
+  /*#__PURE__*/React.createElement("rect", { x: "12", y: "12", width: "196", height: "356", rx: "26", fill: xray ? PALETTE.cream : PALETTE.ink, stroke: PALETTE.ink, strokeWidth: "3", style: { transition: 'fill 0.5s ease' } }),
+  /*#__PURE__*/React.createElement("rect", { x: "26", y: "44", width: "168", height: "300", rx: "6", fill: xray ? '#fff' : PALETTE.inkSoft, stroke: PALETTE.ink, strokeWidth: "1", style: { transition: 'fill 0.5s ease' } }),
+  /*#__PURE__*/React.createElement("rect", { x: "92", y: "26", width: "36", height: "5", rx: "2.5", fill: PALETTE.cream }),
+  /*#__PURE__*/React.createElement("circle", { cx: "72", cy: "28", r: "2.5", fill: PALETTE.cream }),
+  !xray ? /*#__PURE__*/React.createElement("g", null, apps.map((app, i) => /*#__PURE__*/React.createElement("g", {
+    key: i, transform: `translate(${app.x - 17}, ${app.y - 17}) scale(1.42)`, stroke: PALETTE.cream, fill: "none", strokeWidth: 1.6, strokeLinecap: "round", strokeLinejoin: "round"
+  }, ICONS[app.icon])))
+  : /*#__PURE__*/React.createElement("g", { style: { animation: 'fadeIn 0.5s ease' } },
+    /*#__PURE__*/React.createElement("rect", { x: "64", y: "62", width: "92", height: "58", rx: "5", fill: PALETTE.rust, stroke: PALETTE.ink, strokeWidth: "1.5" }),
+    /*#__PURE__*/React.createElement("text", { x: "110", y: "90", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "18", fill: "#fff", fontWeight: "700" }, "CPU"),
+    /*#__PURE__*/React.createElement("text", { x: "110", y: "107", textAnchor: "middle", fontFamily: FONT_BODY, fontSize: "12", fill: "#fff" }, "cervello"),
+    /*#__PURE__*/React.createElement("rect", { x: "38", y: "140", width: "66", height: "40", rx: "3", fill: PALETTE.moss, stroke: PALETTE.ink, strokeWidth: "1.5" }),
+    /*#__PURE__*/React.createElement("text", { x: "71", y: "165", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "15", fill: "#fff", fontWeight: "700" }, "RAM"),
+    /*#__PURE__*/React.createElement("rect", { x: "116", y: "140", width: "66", height: "40", rx: "3", fill: PALETTE.amber, stroke: PALETTE.ink, strokeWidth: "1.5" }),
+    /*#__PURE__*/React.createElement("text", { x: "149", y: "165", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "14", fill: PALETTE.ink, fontWeight: "700" }, "DISCO"),
+    /*#__PURE__*/React.createElement("rect", { x: "38", y: "198", width: "144", height: "32", rx: "3", fill: PALETTE.ink, stroke: PALETTE.ink, strokeWidth: "1.5" }),
+    /*#__PURE__*/React.createElement("text", { x: "110", y: "219", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "13", fill: PALETTE.cream, fontWeight: "700" }, "GPU \u2014 il pittore"),
+    /*#__PURE__*/React.createElement("rect", { x: "38", y: "248", width: "144", height: "34", rx: "3", fill: `${PALETTE.moss}30`, stroke: PALETTE.ink, strokeWidth: "1.5" }),
+    /*#__PURE__*/React.createElement("rect", { x: "52", y: "259", width: "20", height: "12", rx: "2", fill: "none", stroke: PALETTE.ink, strokeWidth: "1.5" }),
+    /*#__PURE__*/React.createElement("rect", { x: "72", y: "262", width: "3", height: "6", fill: PALETTE.ink }),
+    /*#__PURE__*/React.createElement("rect", { x: "54", y: "261", width: "13", height: "8", fill: PALETTE.moss }),
+    /*#__PURE__*/React.createElement("text", { x: "120", y: "270", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "13", fill: PALETTE.ink, fontWeight: "700" }, "BATTERIA"),
+    /*#__PURE__*/React.createElement("text", { x: "110", y: "312", textAnchor: "middle", fontFamily: FONT_BODY, fontSize: "13", fontStyle: "italic", fill: PALETTE.inkSoft }, "gli stessi pezzi... in 1 cm\u00B2!")),
+  /*#__PURE__*/React.createElement("circle", { cx: "110", cy: "356", r: "6", fill: PALETTE.cream, stroke: PALETTE.ink, strokeWidth: "1" }));
 }
 
 // ----------------------------------------------------------------------------
@@ -5548,6 +4634,7 @@ function ModuleThreeView({
     component: M3_CompletePage
   }];
   const Current = pages[page].component;
+  useEffect(() => { window.scrollTo(0, 0); }, [page]);
   const done = new Set(progress.module3.pagesDone);
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -6886,6 +5973,7 @@ function ModuleFourView({
     component: M4_CompletePage
   }];
   const Current = pages[page].component;
+  useEffect(() => { window.scrollTo(0, 0); }, [page]);
   const done = new Set(progress.module4.pagesDone);
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -6956,12 +6044,26 @@ function ModuleFourView({
       padding: '36px 32px',
       minHeight: 460
     }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "pagina-stagger",
+    key: page
   }, /*#__PURE__*/React.createElement(Current, {
     progress: progress,
     markDone: () => markPageDone(page),
     goNext: () => setPage(Math.min(page + 1, pages.length - 1)),
     goPrev: () => setPage(Math.max(page - 1, 0))
-  })));
+  })), /*#__PURE__*/React.createElement("style", null, `
+    .pagina-stagger > div > * { animation: paginaSu 500ms cubic-bezier(.2,.75,.3,1) both; }
+    .pagina-stagger > div > *:nth-child(1){animation-delay:40ms}
+    .pagina-stagger > div > *:nth-child(2){animation-delay:130ms}
+    .pagina-stagger > div > *:nth-child(3){animation-delay:220ms}
+    .pagina-stagger > div > *:nth-child(4){animation-delay:310ms}
+    .pagina-stagger > div > *:nth-child(5){animation-delay:400ms}
+    .pagina-stagger > div > *:nth-child(6){animation-delay:490ms}
+    .pagina-stagger > div > *:nth-child(n+7){animation-delay:580ms}
+    @keyframes paginaSu { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .pagina-stagger > div > * { animation: none !important; } }
+  `)));
 }
 
 // --- Componente griglia robot riutilizzabile ---

@@ -88,13 +88,13 @@
   .subtitle .hl{background:linear-gradient(transparent 55%, var(--yellow) 55% 94%, transparent 94%);padding:0 3px}
 
   .manifesto{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap}
-  .manifesto span{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.5px;color:#fff;padding:6px 13px;border-radius:20px}
+  .manifesto span{font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:.5px;color:#fff;padding:6px 13px;border-radius:20px}
   .manifesto .a{background:var(--green)} .manifesto .b{background:var(--orange)} .manifesto .c{background:var(--blue)}
 
   .shelf{padding:46px 0 10px;position:relative}
   .shelf-head{display:flex;align-items:center;gap:14px;margin-bottom:30px}
   .shelf-head .bar{flex:1;height:3px;background:repeating-linear-gradient(90deg,var(--ink) 0 9px,transparent 9px 16px);opacity:.4}
-  .shelf-head span{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--ink-soft);font-weight:700}
+  .shelf-head span{font-family:var(--mono);font-size:16px;letter-spacing:2px;color:var(--ink-soft);font-weight:700}
 
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:28px}
   @media(max-width:760px){.cards{grid-template-columns:1fr;gap:34px}}
@@ -108,12 +108,12 @@
     background:rgba(255,196,31,.6);border:1px dashed rgba(33,27,18,.4)}
   .card.caso .tape{background:rgba(19,176,161,.5)}
   .card .tagrow{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}
-  .pill{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1px;padding:4px 9px;border-radius:3px;color:#fff}
+  .pill{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;padding:4px 9px;border-radius:3px;color:#fff}
   .pill.orange{background:var(--orange)}.pill.red{background:var(--red)}.pill.green{background:var(--green)}.pill.teal{background:var(--teal)}
   .pill.ghost{background:#fff;color:var(--ink-soft);border:1.5px solid var(--line)}
-  .card h2{font-family:var(--display);font-weight:900;font-size:clamp(28px,3.6vw,38px);line-height:.98;letter-spacing:-.01em;margin-bottom:9px}
-  .card .kind{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--ink-soft);margin-bottom:13px}
-  .card p{font-size:16px;line-height:1.55;color:#3c3325;flex-grow:1}
+  .card h2{font-family:var(--display);font-weight:900;font-size:clamp(28px,3.6vw,45px);line-height:.98;letter-spacing:-.01em;margin-bottom:9px}
+  .card .kind{font-family:var(--mono);font-size:13px;line-height:1.4;letter-spacing:.5px;color:var(--ink-soft);margin-bottom:13px;min-height:2.8em}
+  .card p{font-size:18px;line-height:1.55;color:#3c3325;flex-grow:1}
   .card .enter{margin-top:18px;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:16px}
   .card.bit .enter{color:#c96905}.card.caso .enter{color:var(--red)}
   .card .arr{transition:transform .18s ease}.card:hover .arr{transform:translateX(7px)}
@@ -129,7 +129,7 @@
   .bollini{display:flex;gap:11px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
   .bollino{display:inline-flex;align-items:center;gap:7px;background:var(--card);
     border:2px solid var(--ink);border-radius:6px;padding:8px 13px;
-    font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--ink)}
+    font-family:var(--mono);font-size:16px;font-weight:700;letter-spacing:.4px;color:var(--ink)}
   .bollino svg{width:15px;height:15px;flex-shrink:0}
   .bollino:nth-child(odd){transform:rotate(-1.4deg)}
   .bollino:nth-child(even){transform:rotate(1.4deg)}
@@ -140,7 +140,7 @@
   .bollino.o{box-shadow:3px 3px 0 var(--orange)} .bollino.o svg{color:var(--orange)}
   .pergenitori{max-width:62ch;margin:0 auto;background:rgba(255,255,255,.6);
     border:1.5px dashed var(--line);border-radius:8px;padding:15px 22px;
-    font-size:16.5px;line-height:1.62;color:#41372a}
+    font-size:18px;line-height:1.62;color:#41372a}
   .pergenitori b{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:var(--ink-soft);
     display:block;margin-bottom:6px;text-transform:uppercase}
   .pergenitori p{margin:0 0 14px}
@@ -235,11 +235,11 @@
     </section>
 
     <section class="shelf" id="officine">
-      <div class="shelf-head rise d4"><span>DUE OFFICINE APERTE</span><div class="bar"></div></div>
+      <div class="shelf-head rise d4"><span>OFFICINE APERTE</span><div class="bar"></div></div>
       <div class="cards">
         <a class="card bit rise d5" href="officina-dei-bit.html">
           <span class="tape"></span>
-          <div class="tagrow"><span class="pill orange">INFORMATICA</span><span class="pill ghost">4 / 8 MODULI</span></div>
+          <div class="tagrow"><span class="pill orange">INFORMATICA DI BASE</span><span class="pill ghost">4 MODULI · ALTRI IN ARRIVO </span></div>
           <h2>L'Officina<br/>dei Bit</h2>
           <div class="kind">come funziona davvero un computer</div>
           <p>Dal codice segreto fatto di 0 e 1, alla scatola aperta, ai colori che nascono dai numeri,
@@ -259,7 +259,7 @@
     </section>
 
     <section class="coming">
-      <div class="lbl rise d5">…altri in costruzione nel laboratorio</div>
+      <div class="lbl rise d5">…altre officine in arrivo!</div>
       <div class="chips rise d6">
         <span class="chip">La Grande Ragnatela · internet</span>
         <span class="chip">Lo Scudo Segreto · password</span>
