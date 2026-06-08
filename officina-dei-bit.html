@@ -5191,7 +5191,7 @@ function M3_ZoomPage({
     eyebrow: "Pagina 4 di 7",
     title: "Zoom nella foto",
     accent: PALETTE.rust
-  }), /*#__PURE__*/React.createElement("p", {
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Questa foto sembra liscia. Ma ricordi cosa hai trovato avvicinandoti allo schermo? Zooma fino in fondo e guarda se succede di nuovo."), /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 16,
       lineHeight: 1.55,
@@ -5244,7 +5244,7 @@ function M3_ZoomPage({
       fontFamily: FONT_MONO,
       marginBottom: 4
     }
-  }, /*#__PURE__*/React.createElement("span", null, "\uD83D\uDC41 tutta la foto"), /*#__PURE__*/React.createElement("span", null, "super zoom \uD83D\uDD2C")), /*#__PURE__*/React.createElement("input", {
+  }, /*#__PURE__*/React.createElement("span", null, "tutta la foto"), /*#__PURE__*/React.createElement("span", null, "super zoom")), /*#__PURE__*/React.createElement("input", {
     type: "range",
     min: "1",
     max: "4",
@@ -5266,7 +5266,7 @@ function M3_ZoomPage({
       fontSize: 15,
       lineHeight: 1.5
     }
-  }, zoom < 2.5 ? /*#__PURE__*/React.createElement("span", null, "Da lontano sembra una foto normale. Continua a zoomare...") : /*#__PURE__*/React.createElement("span", null, "\uD83E\uDD2F ", /*#__PURE__*/React.createElement("strong", null, "Ecco il segreto!"), " Anche le sfumature del cielo e dell'erba sono fatte di ", /*#__PURE__*/React.createElement("strong", null, "quadratini"), ". Ogni quadratino \xE8 un pixel di un colore preciso. ", /*#__PURE__*/React.createElement("strong", null, "Ogni foto del mondo \xE8 fatta cos\xEC."))), /*#__PURE__*/React.createElement(NavButtons, {
+  }, zoom < 2.5 ? /*#__PURE__*/React.createElement("span", null, "Da lontano sembra una foto normale. Continua a zoomare...") : /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement(Icon, { name: "zap", size: 16, color: PALETTE.rust, fill: PALETTE.amber, style: { verticalAlign: "-3px", marginRight: 6 } }), /*#__PURE__*/React.createElement("strong", null, "Ecco il segreto!"), " Anche le sfumature del cielo e dell'erba sono fatte di ", /*#__PURE__*/React.createElement("strong", null, "quadratini"), ". Ogni quadratino \xE8 un pixel di un colore preciso. ", /*#__PURE__*/React.createElement("strong", null, "Ogni foto del mondo \xE8 fatta cos\xEC."))), /*#__PURE__*/React.createElement(NavButtons, {
     goPrev: goPrev,
     goNext: goNext,
     nextLabel: "quanti puntini? \u2192",
@@ -5323,7 +5323,7 @@ function M3_ResolutionPage({
     eyebrow: "Pagina 5 di 7",
     title: "Quanti puntini?",
     accent: PALETTE.rust
-  }), /*#__PURE__*/React.createElement("p", {
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Quanti pixel servono per un'immagine ben nitida? Provalo tu: dai al cerchio prima pochi pixel, poi tanti, e guarda cosa cambia."), /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 16,
       lineHeight: 1.55,
@@ -5395,7 +5395,7 @@ function M3_ResolutionPage({
       fontSize: 15,
       lineHeight: 1.5
     }
-  }, "\uD83D\uDCF1 ", /*#__PURE__*/React.createElement("strong", null, "Ecco i megapixel!"), " Quando senti \"fotocamera da 12 megapixel\" vuol dire che ogni foto ha ", /*#__PURE__*/React.createElement("strong", null, "12 milioni di pixel"), ". Ecco perch\xE9 le foto del telefono sono cos\xEC nitide."), /*#__PURE__*/React.createElement(NavButtons, {
+  }, /*#__PURE__*/React.createElement(Icon, { name: "smartphone", size: 16, color: PALETTE.amber, style: { verticalAlign: "-3px", marginRight: 6 } }), /*#__PURE__*/React.createElement("strong", null, "Ecco i megapixel!"), " Quando senti \"fotocamera da 12 megapixel\" vuol dire che ogni foto ha ", /*#__PURE__*/React.createElement("strong", null, "12 milioni di pixel"), ". Ecco perch\xE9 le foto del telefono sono cos\xEC nitide."), /*#__PURE__*/React.createElement(NavButtons, {
     goPrev: goPrev,
     goNext: goNext,
     nextLabel: "il grande segreto \u2192",
@@ -5425,7 +5425,7 @@ function M3_NumbersPage({
     eyebrow: "Pagina 6 di 7",
     title: "Il grande segreto",
     accent: PALETTE.rust
-  }), /*#__PURE__*/React.createElement("p", {
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Adesso lego tutto insieme: un pixel, un colore, tre numeri... e i numeri li conosci dal primo modulo. Guarda dove arriviamo."), /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 16,
       lineHeight: 1.55,
@@ -5566,159 +5566,38 @@ function M3_CompletePage({
   progress,
   goPrev
 }) {
-  useEffect(() => {
-    markDone();
-  }, []);
+  useEffect(() => { markDone(); }, []);
   const name = progress.module1.userName || 'Esploratore';
   const art = progress.module3.pixelArt;
   const hasArt = art && art.some(c => c !== null);
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      textAlign: 'center',
-      padding: '10px 0'
-    }
-  }, /*#__PURE__*/React.createElement(PageHeader, {
+  const [firmato, setFirmato] = useState(false);
+  return /*#__PURE__*/React.createElement("div", { style: { padding: '4px 0' } }, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 7 di 7",
-    title: "Hai imparato!",
+    title: "Il sigillo",
     centered: true,
     accent: PALETTE.rust
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginBottom: 12
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "trophy",
-    size: 68,
-    strokeWidth: 1.5,
-    color: PALETTE.rust
-  })), /*#__PURE__*/React.createElement("h3", {
-    style: {
-      fontFamily: FONT_DISPLAY,
-      fontSize: 32,
-      fontWeight: 800,
-      margin: '0 0 8px',
-      letterSpacing: '-0.01em'
-    }
-  }, "Sei un pittore di pixel, ", name, "!"), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 17,
-      color: PALETTE.inkSoft,
-      marginBottom: 24,
-      maxWidth: 500,
-      margin: '0 auto 24px'
-    }
-  }, "Adesso quando guardi uno schermo sai cosa c'\xE8 davvero: ", /*#__PURE__*/React.createElement("strong", null, "milioni di puntini"), ", ognuno fatto di numeri."), hasArt && /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginBottom: 24
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: FONT_MONO,
-      fontSize: 11,
-      color: PALETTE.inkSoft,
-      letterSpacing: 1.5,
-      marginBottom: 8
-    }
-  }, "\u2591 IL TUO CAPOLAVORO \u2591"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'inline-grid',
-      gridTemplateColumns: 'repeat(16, 1fr)',
-      width: 160,
-      height: 160,
-      gap: 0,
-      border: `2px solid ${PALETTE.ink}`,
-      boxShadow: `3px 3px 0 ${PALETTE.ink}`
-    }
-  }, art.map((c, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      background: c || PALETTE.cream
-    }
-  })))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: PALETTE.cream,
-      border: `1.5px solid ${PALETTE.paperLine}`,
-      borderRadius: 6,
-      padding: '22px 24px',
-      marginBottom: 28,
-      textAlign: 'left',
-      maxWidth: 540,
-      marginLeft: 'auto',
-      marginRight: 'auto'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: FONT_MONO,
-      fontSize: 11,
-      color: PALETTE.inkSoft,
-      letterSpacing: 2,
-      marginBottom: 12,
-      fontWeight: 700
-    }
-  }, "\u2591 COSA HAI IMPARATO \u2591"), /*#__PURE__*/React.createElement("ul", {
-    style: {
-      listStyle: 'none',
-      padding: 0,
-      margin: 0,
-      fontSize: 16,
-      lineHeight: 1.9
-    }
-  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement(Icon, {
-    name: "star",
-    size: 14,
-    fill: PALETTE.rust,
-    color: PALETTE.rust,
-    style: {
-      verticalAlign: 'middle',
-      marginRight: 8
-    }
-  }), " Le immagini sono fatte di ", /*#__PURE__*/React.createElement("strong", null, "pixel"), " (puntini)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement(Icon, {
-    name: "star",
-    size: 14,
-    fill: PALETTE.rust,
-    color: PALETTE.rust,
-    style: {
-      verticalAlign: 'middle',
-      marginRight: 8
-    }
-  }), " Ogni colore = Rosso + Verde + Blu (RGB)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement(Icon, {
-    name: "star",
-    size: 14,
-    fill: PALETTE.rust,
-    color: PALETTE.rust,
-    style: {
-      verticalAlign: 'middle',
-      marginRight: 8
-    }
-  }), " Pi\xF9 pixel = immagine pi\xF9 nitida (megapixel)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement(Icon, {
-    name: "star",
-    size: 14,
-    fill: PALETTE.rust,
-    color: PALETTE.rust,
-    style: {
-      verticalAlign: 'middle',
-      marginRight: 8
-    }
-  }), " Ogni pixel \xE8 fatto di 0 e 1 (torna il Modulo 1!)"), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement(Icon, {
-    name: "star",
-    size: 14,
-    fill: PALETTE.rust,
-    color: PALETTE.rust,
-    style: {
-      verticalAlign: 'middle',
-      marginRight: 8
-    }
-  }), " Una foto = milioni di numeri che viaggiano"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontStyle: 'italic',
-      fontSize: 15,
-      color: PALETTE.inkSoft,
-      marginBottom: 20
-    }
-  }, "Hai finito il ", /*#__PURE__*/React.createElement("strong", null, "Capitolo 1"), "! Il prossimo modulo sar\xE0", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("strong", null, "Le Istruzioni Magiche"), ": come si comanda un computer."), /*#__PURE__*/React.createElement(NavButtons, {
-    goPrev: goPrev,
-    hideNext: true
-  }));
+  }), /*#__PURE__*/React.createElement("div", { style: { maxWidth: 560, margin: '0 auto 18px' } }, /*#__PURE__*/React.createElement(OcchioSays, null, "Ce l'hai fatta. Adesso quando guardi uno schermo sai cosa c'\u00e8 davvero: ", /*#__PURE__*/React.createElement("strong", null, "milioni di puntini"), ", ognuno fatto di numeri. E non l'hai imparato a memoria: l'hai ", /*#__PURE__*/React.createElement("strong", null, "dipinto e zoomato tu"), ". Firma il sigillo.")),
+  hasArt && /*#__PURE__*/React.createElement("div", { style: { textAlign: 'center', marginBottom: 20 } },
+    /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_MONO, fontSize: 11, color: PALETTE.inkSoft, letterSpacing: 1.5, marginBottom: 8 } }, "\u2591 IL TUO CAPOLAVORO \u2591"),
+    /*#__PURE__*/React.createElement("div", { style: { display: 'inline-grid', gridTemplateColumns: 'repeat(16, 1fr)', width: 160, height: 160, gap: 0, border: `2px solid ${PALETTE.ink}`, boxShadow: `3px 3px 0 ${PALETTE.ink}` } }, art.map((c, i) => /*#__PURE__*/React.createElement("div", { key: i, style: { background: c || PALETTE.cream } })))),
+  /*#__PURE__*/React.createElement("div", {
+    style: { maxWidth: 560, margin: '0 auto', background: firmato ? '#fff' : PALETTE.cream, border: `2.5px solid ${firmato ? PALETTE.amber : PALETTE.ink}`, borderRadius: 8, padding: '22px 24px', boxShadow: firmato ? `6px 6px 0 ${PALETTE.amber}` : 'none', transition: 'box-shadow .25s ease, border-color .25s ease' }
+  }, /*#__PURE__*/React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 6 } },
+    /*#__PURE__*/React.createElement("span", { style: { fontFamily: FONT_MONO, fontSize: 11, letterSpacing: 2, fontWeight: 700, color: PALETTE.amber } }, "ATTESTATO \xB7 MODULO 03"),
+    /*#__PURE__*/React.createElement("span", { style: { fontFamily: FONT_MONO, fontSize: 10, letterSpacing: 1, color: PALETTE.inkSoft } }, "L'OFFICINA DEI BIT")),
+    /*#__PURE__*/React.createElement("p", { style: { fontFamily: FONT_DISPLAY, fontWeight: 500, fontSize: 19, lineHeight: 1.45, color: PALETTE.ink, margin: '0 0 18px' } }, "So che le immagini sono fatte di ", /*#__PURE__*/React.createElement("strong", null, "pixel"), ", che ogni colore \u00e8 ", /*#__PURE__*/React.createElement("strong", null, "Rosso + Verde + Blu"), ", e che ogni pixel \u2014 alla fine \u2014 \u00e8 fatto di ", /*#__PURE__*/React.createElement("strong", null, "0 e 1"), ". Una foto \u00e8 milioni di numeri che viaggiano."),
+    /*#__PURE__*/React.createElement("div", { style: { borderTop: `1.5px dashed ${PALETTE.paperLine}`, paddingTop: 12 } },
+      /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_MONO, fontSize: 10, letterSpacing: 1.5, color: PALETTE.inkSoft, marginBottom: 4 } }, "FIRMA"),
+      firmato ? /*#__PURE__*/React.createElement("div", { className: "reveal-pop", style: { fontFamily: FONT_HAND, fontSize: 42, fontWeight: 700, color: PALETTE.ink, lineHeight: 1 } }, name) : /*#__PURE__*/React.createElement("div", { style: { height: 46, borderBottom: `2px solid ${PALETTE.paperLine}` } })),
+    !firmato && /*#__PURE__*/React.createElement("button", { onClick: () => setFirmato(true), style: { ...btnPrimary(), marginTop: 16 } }, "Firma qui")),
+  firmato && /*#__PURE__*/React.createElement("div", { className: "reveal-pop", style: { maxWidth: 560, margin: '20px auto 0' } },
+    /*#__PURE__*/React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'center', background: `${PALETTE.moss}16`, border: `2px dashed ${PALETTE.moss}`, borderRadius: 8, padding: '12px 16px', marginBottom: 18 } },
+      /*#__PURE__*/React.createElement(Icon, { name: "sparkles", size: 24, color: PALETTE.moss }),
+      /*#__PURE__*/React.createElement("div", { style: { textAlign: 'left' } },
+        /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_MONO, fontSize: 10, letterSpacing: 1.5, color: PALETTE.inkSoft } }, "DISTINTIVO SBLOCCATO"),
+        /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 16, color: PALETTE.ink } }, "N\xB003 \xB7 I Pixel Magici"))),
+    /*#__PURE__*/React.createElement(OcchioSays, null, "Bravo, ", name, " \u2014 il sigillo l'hai messo tu. Lo trovi nel ", /*#__PURE__*/React.createElement("strong", null, "taccuino"), ", terzo distintivo. Hai chiuso il ", /*#__PURE__*/React.createElement("strong", null, "Capitolo 1"), "! Il prossimo modulo \u00e8 ", /*#__PURE__*/React.createElement("strong", null, "Le Istruzioni Magiche"), ": come si comanda un computer. Torna all'officina.")),
+  /*#__PURE__*/React.createElement(NavButtons, { goPrev: goPrev, hideNext: true }));
 }
 
 // ============================================================================
