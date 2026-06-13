@@ -1110,6 +1110,7 @@ function App() {
       resetModule('module2');
       setModule2Page(0);
     },
+    profileName: activeProfile ? activeProfile.name : '',
     onExit: () => setView('hub')
   }), activeId && view === 'module3' && /*#__PURE__*/React.createElement(ModuleThreeView, {
     page: module3Page,
@@ -1121,6 +1122,7 @@ function App() {
       setModule3Page(0);
     },
     updatePixelArt: updatePixelArt,
+    profileName: activeProfile ? activeProfile.name : '',
     onExit: () => setView('hub')
   }), activeId && view === 'module4' && /*#__PURE__*/React.createElement(ModuleFourView, {
     page: module4Page,
@@ -1131,6 +1133,7 @@ function App() {
       resetModule('module4');
       setModule4Page(0);
     },
+    profileName: activeProfile ? activeProfile.name : '',
     onExit: () => setView('hub')
   })));
 }
@@ -2283,6 +2286,9 @@ function ModuleOneView({
       padding: '36px 32px',
       minHeight: 460
     }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "pagina-stagger",
+    key: page
   }, /*#__PURE__*/React.createElement(Current, {
     progress: progress,
     markDone: () => markPageDone(page),
@@ -2291,7 +2297,18 @@ function ModuleOneView({
     profileName: profileName,
     goNext: () => setPage(Math.min(page + 1, pages.length - 1)),
     goPrev: () => setPage(Math.max(page - 1, 0))
-  })));
+  })), /*#__PURE__*/React.createElement("style", null, `
+    .pagina-stagger > div > * { animation: paginaSu 500ms cubic-bezier(.2,.75,.3,1) both; }
+    .pagina-stagger > div > *:nth-child(1){animation-delay:40ms}
+    .pagina-stagger > div > *:nth-child(2){animation-delay:130ms}
+    .pagina-stagger > div > *:nth-child(3){animation-delay:220ms}
+    .pagina-stagger > div > *:nth-child(4){animation-delay:310ms}
+    .pagina-stagger > div > *:nth-child(5){animation-delay:400ms}
+    .pagina-stagger > div > *:nth-child(6){animation-delay:490ms}
+    .pagina-stagger > div > *:nth-child(n+7){animation-delay:580ms}
+    @keyframes paginaSu { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .pagina-stagger > div > * { animation: none !important; } }
+  `)));
 }
 
 // ----------------------------------------------------------------------------
@@ -2423,7 +2440,7 @@ function LightbulbsPage({
     nome: "L'OCCHIO \u2014 e adesso guarda!"
   }, "Eccole. Guarda bene: sotto ogni lampadina c'\xE8 un ", /*#__PURE__*/React.createElement("strong", null, "numero"), ". Se la accendi, quel numero ", /*#__PURE__*/React.createElement("strong", null, "conta"), "; se \xE8 spenta, conta ", /*#__PURE__*/React.createElement("strong", null, "0"), ". Il numero che fai \xE8 semplicemente la ", /*#__PURE__*/React.createElement("strong", null, "somma"), " di tutte quelle accese. Prova: accendine qualcuna e guarda il totale salire."), /*#__PURE__*/React.createElement("p", {
     style: {
-      fontSize: 15,
+      fontSize: 16,
       color: PALETTE.inkSoft,
       marginBottom: 24
     }
@@ -2476,7 +2493,7 @@ function LightbulbsPage({
     }
   }, b))), /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 15,
+      fontSize: 16,
       color: PALETTE.inkSoft,
       marginTop: 12
     }
@@ -2488,7 +2505,7 @@ function LightbulbsPage({
       color: PALETTE.ink,
       verticalAlign: 'middle'
     }
-  }, total)))), !sfidaAttiva && tocchi >= 4 && /*#__PURE__*/React.createElement("div", {
+  }, total)))), total === 255 && /*#__PURE__*/React.createElement("div", { className: "reveal-pop", style: { background: `${PALETTE.moss}14`, border: `2px dashed ${PALETTE.moss}`, borderRadius: 8, padding: '16px 18px', marginBottom: 18 } }, /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1", nome: "L'OCCHIO \u2014 occhio al trucco!" }, "Le hai accese ", /*#__PURE__*/React.createElement("strong", null, "tutte"), " e viene ", /*#__PURE__*/React.createElement("strong", null, "255"), ", non 256! Strano, eh? Ma non mi sono sbagliato. Il segreto \u00e8 lo ", /*#__PURE__*/React.createElement("strong", null, "zero"), ": tutte spente fa ", /*#__PURE__*/React.createElement("strong", null, "0"), ", che \u00e8 un numero anche lui. Allora conta da zero: ", /*#__PURE__*/React.createElement("strong", null, "0, 1, 2... fino a 255"), ". Quanti numeri sono in tutto? Proprio ", /*#__PURE__*/React.createElement("strong", null, "256"), ". 255 \u00e8 il pi\u00f9 ", /*#__PURE__*/React.createElement("em", null, "grande"), "; 256 \u00e8 ", /*#__PURE__*/React.createElement("em", null, "quanti"), " sono.")), !sfidaAttiva && tocchi >= 4 && /*#__PURE__*/React.createElement("div", {
     className: "reveal-pop",
     style: {
       background: `${PALETTE.amber}14`,
@@ -2554,7 +2571,7 @@ function LightbulbsPage({
     style: btnPrimary()
   }, "prossima sfida \u2192") : /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 16,
+      fontSize: 17,
       color: PALETTE.ink,
       marginTop: 6
     }
@@ -2722,7 +2739,7 @@ function FingersPage({
     rivela: /*#__PURE__*/React.createElement("span", null, "Fino a ", /*#__PURE__*/React.createElement("strong", null, "31"), " \u2014 sei volte le dita che hai! Non ci credi? Alzale tu e guarda.")
   }), /*#__PURE__*/React.createElement("p", {
     style: {
-      fontSize: 16,
+      fontSize: 17,
       color: PALETTE.inkSoft,
       marginBottom: 24
     }
@@ -2776,7 +2793,7 @@ function FingersPage({
     }
   }, f))), /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 15,
+      fontSize: 16,
       color: PALETTE.inkSoft,
       marginTop: 12
     }
@@ -2808,13 +2825,13 @@ function FingersPage({
   }, "\u2591 SFIDA \u2591"), /*#__PURE__*/React.createElement("p", {
     style: {
       margin: 0,
-      fontSize: 16
+      fontSize: 17
     }
   }, "Prova ad alzare ", /*#__PURE__*/React.createElement("strong", null, "tutte e 5 le dita"), ". Che numero viene?"), total === 31 && /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 12,
       color: PALETTE.moss,
-      fontSize: 16,
+      fontSize: 17,
       fontWeight: 600
     }
   }, /*#__PURE__*/React.createElement(Icon, {
@@ -2910,7 +2927,7 @@ function FingerToggle({
   }, name), /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: FONT_MONO,
-      fontSize: 16,
+      fontSize: 17,
       fontWeight: 700,
       color: up ? PALETTE.amber : PALETTE.warmGray
     }
@@ -3065,9 +3082,7 @@ function DecodePage({
       setFeedback(null);
       if (roundIdx + 1 >= rounds.length) {
         setFinished(true);
-        const finalScore = score + (correct ? 1 : 0);
-        updateBestDecode(finalScore);
-        if (finalScore >= 4) markDone();
+        markDone();
       } else {
         setRoundIdx(roundIdx + 1);
       }
@@ -3095,7 +3110,7 @@ function DecodePage({
       color: PALETTE.inkSoft,
       marginBottom: 22
     }
-  }, "Round ", roundIdx + 1, " di ", rounds.length, " \xB7 punteggio: ", score), /*#__PURE__*/React.createElement("div", {
+  }, "Round ", roundIdx + 1, " di ", rounds.length), /*#__PURE__*/React.createElement("div", {
     style: {
       background: PALETTE.ink,
       borderRadius: 6,
@@ -3169,7 +3184,7 @@ function DecodePage({
       marginBottom: 12
     }
   }, /*#__PURE__*/React.createElement(Icon, {
-    name: score >= 4 ? 'trophy' : 'star',
+    name: 'sparkles',
     size: 48,
     color: PALETTE.amber
   })), /*#__PURE__*/React.createElement("h3", {
@@ -3179,20 +3194,13 @@ function DecodePage({
       fontWeight: 800,
       margin: '0 0 8px'
     }
-  }, "Hai fatto ", score, " su ", rounds.length, "!"), /*#__PURE__*/React.createElement("p", {
+  }, "Decifrato!"), /*#__PURE__*/React.createElement("p", {
     style: {
-      fontSize: 16,
+      fontSize: 17,
       color: PALETTE.inkSoft,
-      marginBottom: 6
-    }
-  }, score >= 5 ? 'Sei un decifratore esperto.' : score >= 4 ? 'Ottimo lavoro!' : score >= 2 ? 'Bel tentativo, puoi rifarlo.' : 'Riprova, ci prendi la mano!'), progress.module1.bestDecode > 0 && /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 13,
-      color: PALETTE.warmGray,
-      fontFamily: FONT_MONO,
       marginBottom: 22
     }
-  }, "record: ", progress.module1.bestDecode, " / ", rounds.length), /*#__PURE__*/React.createElement("div", {
+  }, "Ogni messaggio era nascosto dentro 0 e 1 \u2014 e tu l'hai riportato alla luce. Ne rifai un altro giro, o andiamo avanti?"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       gap: 10,
@@ -3245,8 +3253,8 @@ function TriviaPage({
     back: 'Quando scatti una foto, ogni puntino (pixel) viene salvato come un numero. Una foto del cellulare ha milioni di puntini = milioni di numeri = miliardi di 0 e 1!',
     icon: 'image'
   }, {
-    front: 'Quanto è 1 byte?',
-    back: '8 bit insieme si chiamano "byte". Con 1 byte puoi scrivere 256 cose diverse (lettere, numeri, simboli). Il tuo nome è circa 5 byte. Un libro intero pesa qualche milione di byte!',
+    front: 'Cos\'è un byte?',
+    back: 'Ti ricordi le 8 lampadine? Otto bit in fila, messi insieme, fanno UN "byte". È il pacchetto con cui il computer conta di solito. Un byte dà 256 combinazioni diverse: bastano per una lettera, un numero o un simbolo. Così ogni lettera che scrivi è un byte. Il tuo nome? Pochi byte. Un libro intero? Milioni!',
     icon: 'memory-stick'
   }, {
     front: 'Anche la musica è 0 e 1',
@@ -3263,7 +3271,7 @@ function TriviaPage({
     title: "Lo sapevi che..."
   }), /*#__PURE__*/React.createElement("p", {
     style: {
-      fontSize: 16,
+      fontSize: 17,
       color: PALETTE.inkSoft,
       marginBottom: 20,
       fontStyle: 'italic'
@@ -3470,7 +3478,7 @@ function CompletePage({
     style: {
       fontFamily: FONT_DISPLAY,
       fontWeight: 700,
-      fontSize: 16,
+      fontSize: 17,
       color: PALETTE.ink
     }
   }, "N\xB001 \xB7 Il Linguaggio Segreto"))), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m1" }, "Bravo, ", name, " \u2014 e adesso \xE8 scritto, l'hai scritto tu. Lo trovi nel tuo ", /*#__PURE__*/React.createElement("strong", null, "taccuino"), ", primo distintivo. Ma una domanda mi resta in testa: questi 0 e 1... ", /*#__PURE__*/React.createElement("em", null, "dove"), " stanno, davvero? Dentro che cosa? Torna all'officina \u2014 nel prossimo modulo apriamo la scatola e andiamo a guardare.")), /*#__PURE__*/React.createElement(NavButtons, {
@@ -3488,6 +3496,7 @@ function ModuleTwoView({
   setPage,
   progress,
   markPageDone,
+  profileName,
   onExit,
   onResetModule
 }) {
@@ -3584,6 +3593,7 @@ function ModuleTwoView({
   }, /*#__PURE__*/React.createElement(Current, {
     progress: progress,
     markDone: () => markPageDone(page),
+    profileName: profileName,
     goNext: () => setPage(Math.min(page + 1, pages.length - 1)),
     goPrev: () => setPage(Math.max(page - 1, 0))
   })), /*#__PURE__*/React.createElement("style", null, `
@@ -4411,6 +4421,8 @@ function SmartphoneXray({
     key: i, transform: `translate(${app.x - 17}, ${app.y - 17}) scale(1.42)`, stroke: PALETTE.cream, fill: "none", strokeWidth: 1.6, strokeLinecap: "round", strokeLinejoin: "round"
   }, ICONS[app.icon])))
   : /*#__PURE__*/React.createElement("g", { style: { animation: 'fadeIn 0.5s ease' } },
+    /*#__PURE__*/React.createElement("rect", { x: "30", y: "58", width: "160", height: "238", rx: "8", fill: `${PALETTE.moss}14`, stroke: PALETTE.moss, strokeWidth: "1.5", strokeDasharray: "5 4" }),
+    /*#__PURE__*/React.createElement("text", { x: "110", y: "53", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "9.5", letterSpacing: "1.5", fontWeight: "700", fill: PALETTE.moss }, "SCHEDA MADRE"),
     /*#__PURE__*/React.createElement("rect", { x: "64", y: "62", width: "92", height: "58", rx: "5", fill: PALETTE.rust, stroke: PALETTE.ink, strokeWidth: "1.5" }),
     /*#__PURE__*/React.createElement("text", { x: "110", y: "90", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "18", fill: "#fff", fontWeight: "700" }, "CPU"),
     /*#__PURE__*/React.createElement("text", { x: "110", y: "107", textAnchor: "middle", fontFamily: FONT_BODY, fontSize: "12", fill: "#fff" }, "cervello"),
@@ -4425,7 +4437,7 @@ function SmartphoneXray({
     /*#__PURE__*/React.createElement("rect", { x: "72", y: "262", width: "3", height: "6", fill: PALETTE.ink }),
     /*#__PURE__*/React.createElement("rect", { x: "54", y: "261", width: "13", height: "8", fill: PALETTE.moss }),
     /*#__PURE__*/React.createElement("text", { x: "120", y: "270", textAnchor: "middle", fontFamily: FONT_MONO, fontSize: "13", fill: PALETTE.ink, fontWeight: "700" }, "BATTERIA"),
-    /*#__PURE__*/React.createElement("text", { x: "110", y: "312", textAnchor: "middle", fontFamily: FONT_BODY, fontSize: "13", fontStyle: "italic", fill: PALETTE.inkSoft }, "gli stessi pezzi... in 1 cm\u00B2!")),
+    /*#__PURE__*/React.createElement("text", { x: "110", y: "312", textAnchor: "middle", fontFamily: FONT_BODY, fontSize: "13", fontStyle: "italic", fill: PALETTE.inkSoft }, "gli stessi pezzi del computer, minuscoli, tutti su una piastrina!")),
   /*#__PURE__*/React.createElement("circle", { cx: "110", cy: "356", r: "6", fill: PALETTE.cream, stroke: PALETTE.ink, strokeWidth: "1" }));
 }
 
@@ -4436,10 +4448,11 @@ function SmartphoneXray({
 function M2_CompletePage({
   markDone,
   progress,
-  goPrev
+  goPrev,
+  profileName
 }) {
   useEffect(() => { markDone(); }, []);
-  const name = progress.module1.userName || 'Esploratore';
+  const name = profileName && profileName.trim() || progress.module1.userName || 'Esploratore';
   const [firmato, setFirmato] = useState(false);
   return /*#__PURE__*/React.createElement("div", { style: { padding: '4px 0' } }, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 7 di 7",
@@ -4451,7 +4464,7 @@ function M2_CompletePage({
   }, /*#__PURE__*/React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 6 } },
     /*#__PURE__*/React.createElement("span", { style: { fontFamily: FONT_MONO, fontSize: 11, letterSpacing: 2, fontWeight: 700, color: PALETTE.amber } }, "ATTESTATO \xB7 MODULO 02"),
     /*#__PURE__*/React.createElement("span", { style: { fontFamily: FONT_MONO, fontSize: 10, letterSpacing: 1, color: PALETTE.inkSoft } }, "L'OFFICINA DEI BIT")),
-    /*#__PURE__*/React.createElement("p", { style: { fontFamily: FONT_DISPLAY, fontWeight: 500, fontSize: 19, lineHeight: 1.45, color: PALETTE.ink, margin: '0 0 18px' } }, "So cosa c'\u00e8 dentro un computer: ", /*#__PURE__*/React.createElement("strong", null, "CPU, RAM, disco e GPU"), ". So che la RAM si svuota quando spengo, e che aprire un'app \u00e8 una ", /*#__PURE__*/React.createElement("strong", null, "staffetta"), " tra i pezzi. L'ho visto con i miei occhi."),
+    /*#__PURE__*/React.createElement("p", { style: { fontFamily: FONT_DISPLAY, fontWeight: 500, fontSize: 19, lineHeight: 1.45, color: PALETTE.ink, margin: '0 0 18px' } }, "So cosa c'\u00e8 dentro un computer: ", /*#__PURE__*/React.createElement("strong", null, "CPU, RAM, disco, GPU \u2014 e la scheda madre che li tiene insieme"), ". So che la RAM si svuota quando spengo, e che aprire un'app \u00e8 una ", /*#__PURE__*/React.createElement("strong", null, "staffetta"), " tra i pezzi. L'ho visto con i miei occhi."),
     /*#__PURE__*/React.createElement("div", { style: { borderTop: `1.5px dashed ${PALETTE.paperLine}`, paddingTop: 12 } },
       /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_MONO, fontSize: 10, letterSpacing: 1.5, color: PALETTE.inkSoft, marginBottom: 4 } }, "FIRMA"),
       firmato ? /*#__PURE__*/React.createElement("div", { className: "reveal-pop", style: { fontFamily: FONT_HAND, fontSize: 42, fontWeight: 700, color: PALETTE.ink, lineHeight: 1 } }, name) : /*#__PURE__*/React.createElement("div", { style: { height: 46, borderBottom: `2px solid ${PALETTE.paperLine}` } })),
@@ -4517,6 +4530,7 @@ function ModuleThreeView({
   progress,
   markPageDone,
   updatePixelArt,
+  profileName,
   onExit,
   onResetModule
 }) {
@@ -4607,13 +4621,28 @@ function ModuleThreeView({
       padding: '36px 32px',
       minHeight: 460
     }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "pagina-stagger",
+    key: page
   }, /*#__PURE__*/React.createElement(Current, {
     progress: progress,
     markDone: () => markPageDone(page),
     updatePixelArt: updatePixelArt,
+    profileName: profileName,
     goNext: () => setPage(Math.min(page + 1, pages.length - 1)),
     goPrev: () => setPage(Math.max(page - 1, 0))
-  })));
+  })), /*#__PURE__*/React.createElement("style", null, `
+    .pagina-stagger > div > * { animation: paginaSu 500ms cubic-bezier(.2,.75,.3,1) both; }
+    .pagina-stagger > div > *:nth-child(1){animation-delay:40ms}
+    .pagina-stagger > div > *:nth-child(2){animation-delay:130ms}
+    .pagina-stagger > div > *:nth-child(3){animation-delay:220ms}
+    .pagina-stagger > div > *:nth-child(4){animation-delay:310ms}
+    .pagina-stagger > div > *:nth-child(5){animation-delay:400ms}
+    .pagina-stagger > div > *:nth-child(6){animation-delay:490ms}
+    .pagina-stagger > div > *:nth-child(n+7){animation-delay:580ms}
+    @keyframes paginaSu { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .pagina-stagger > div > * { animation: none !important; } }
+  `)));
 }
 
 // ----------------------------------------------------------------------------
@@ -4655,17 +4684,31 @@ function PixelZoomReveal() {
     if (!cv || !src || !tmp) return;
     const ctx = cv.getContext('2d');
     const e = t * t * (3 - 2 * t);
-    const N = Math.max(11, Math.round(SRC - (SRC - 12) * e)); // quadrati: 240 -> 12
-    const region = SRC * (1 - 0.86 * e); // zoom verso il centro
-    const off = (SRC - region) / 2;
+    const N = Math.max(10, Math.round(SRC - (SRC - 10) * e)); // quadrati: 240 -> 10
+    const region = SRC * (1 - 0.9 * e); // zoom profondo
+    const fx = SRC * 0.37, fy = SRC * 0.44; // a fuoco su un OCCHIO (zona con contrasto), non il giallo piatto
+    let offX = Math.max(0, Math.min(SRC - region, fx - region / 2));
+    let offY = Math.max(0, Math.min(SRC - region, fy - region / 2));
     tmp.width = N; tmp.height = N;
     const tctx = tmp.getContext('2d');
     tctx.imageSmoothingEnabled = true;
     tctx.clearRect(0, 0, N, N);
-    tctx.drawImage(src, off, off, region, region, 0, 0, N, N);
+    tctx.drawImage(src, offX, offY, region, region, 0, 0, N, N);
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, W, W);
     ctx.drawImage(tmp, 0, 0, N, N, 0, 0, W, W);
+    if (e > 0.4) { // griglia tra i pixel quando sei vicino
+      const a = Math.min(0.33, (e - 0.4) * 0.95);
+      ctx.strokeStyle = `rgba(20,28,45,${a})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let i = 1; i < N; i++) {
+        const p = Math.round(i * W / N) + 0.5;
+        ctx.moveTo(p, 0); ctx.lineTo(p, W);
+        ctx.moveTo(0, p); ctx.lineTo(W, p);
+      }
+      ctx.stroke();
+    }
   };
   const animate = target => {
     cancelAnimationFrame(rafRef.current);
@@ -4782,7 +4825,7 @@ function M3_StudioPage({
     accent: PALETTE.rust
   }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Hai visto i pixel da vicino. Adesso il pittore sei ", /*#__PURE__*/React.createElement("strong", null, "tu"), ": scegli un colore e disegna. Ogni quadratino che tocchi \u00e8 un pixel."), /*#__PURE__*/React.createElement("p", {
     style: {
-      fontSize: 16,
+      fontSize: 17,
       lineHeight: 1.55,
       marginBottom: 6
     }
@@ -4981,7 +5024,7 @@ function M3_ColorMixerPage({
     accent: PALETTE.rust
   }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Ogni colore che vedi nasce da ", /*#__PURE__*/React.createElement("strong", null, "tre luci"), ": rossa, verde, blu. Mescolale tu coi cursori e prova a centrare i colori delle sfide qui sotto."), /*#__PURE__*/React.createElement("p", {
     style: {
-      fontSize: 16,
+      fontSize: 17,
       lineHeight: 1.55,
       marginBottom: 6
     }
@@ -5048,7 +5091,7 @@ function M3_ColorMixerPage({
   }), /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: FONT_MONO,
-      fontSize: 15,
+      fontSize: 16,
       fontWeight: 700,
       marginTop: 10,
       color: PALETTE.ink
@@ -5150,107 +5193,38 @@ function M3_ZoomPage({
   goNext,
   goPrev
 }) {
-  const [zoom, setZoom] = useState(1);
-  const landscape = React.useMemo(() => makeLandscape(), []);
-  useEffect(() => {
-    if (zoom >= 4) markDone();
-  }, [zoom]);
+  const img = React.useMemo(() => makeLandscape(), []);
   const W = 16;
-  const view = Math.max(4, Math.round(W / zoom)); // celle visibili per lato
-  const start = Math.floor((W - view) / 2);
-  const showBorders = zoom >= 2.5;
-
-  // Estrai la finestra centrale
-  const cells = [];
-  for (let y = start; y < start + view; y++) {
-    for (let x = start; x < start + view; x++) {
-      cells.push(landscape[y * W + x]);
-    }
-  }
+  const [sel, setSel] = useState(null);
+  useEffect(() => { if (sel !== null) markDone(); }, [sel]);
+  const selColor = sel !== null ? img[sel] : null;
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 4 di 7",
-    title: "Zoom nella foto",
+    title: "Dentro un pixel",
     accent: PALETTE.rust
-  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Questa foto sembra liscia. Ma ricordi cosa hai trovato avvicinandoti allo schermo? Zooma fino in fondo e guarda se succede di nuovo."), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 16,
-      lineHeight: 1.55,
-      marginBottom: 6
-    }
-  }, "Ecco una piccola ", /*#__PURE__*/React.createElement("strong", null, "foto"), ": un prato con il sole e dei fiori. Sembra liscia, vero?"), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 14,
-      color: PALETTE.inkSoft,
-      marginBottom: 18,
-      fontStyle: 'italic'
-    }
-  }, "Muovi la lente e zooma fino in fondo. Cosa scopri?"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      justifyContent: 'center',
-      marginBottom: 16
-    }
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Sai che le immagini sono fatte di quadratini. Ma cosa c'\u00e8 ", /*#__PURE__*/React.createElement("strong", null, "dentro"), " un quadratino? Tocca un pixel di questa foto e guardiamolo da vicinissimo."), /*#__PURE__*/React.createElement("p", {
+    style: { fontSize: 17, lineHeight: 1.55, marginBottom: 6 }
+  }, "Questa \u00e8 una piccola ", /*#__PURE__*/React.createElement("strong", null, "foto"), ": un prato con il sole. \u00c8 fatta di pixel, uno accanto all'altro."), /*#__PURE__*/React.createElement("p", {
+    style: { fontSize: 14, color: PALETTE.inkSoft, marginBottom: 16, fontStyle: 'italic' }
+  }, "Toccane uno qualsiasi."), /*#__PURE__*/React.createElement("div", {
+    style: { display: 'flex', justifyContent: 'center', marginBottom: 18 }
   }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 'min(100%, 320px)',
-      aspectRatio: '1/1',
-      border: `3px solid ${PALETTE.ink}`,
-      borderRadius: 4,
-      overflow: 'hidden',
-      boxShadow: `4px 4px 0 ${PALETTE.ink}`,
-      display: 'grid',
-      gridTemplateColumns: `repeat(${view}, 1fr)`,
-      gap: showBorders ? 1 : 0,
-      background: PALETTE.ink
-    }
-  }, cells.map((c, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      background: c,
-      width: '100%',
-      height: '100%'
-    }
-  })))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      maxWidth: 360,
-      margin: '0 auto 18px'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      fontSize: 12,
-      color: PALETTE.inkSoft,
-      fontFamily: FONT_MONO,
-      marginBottom: 4
-    }
-  }, /*#__PURE__*/React.createElement("span", null, "tutta la foto"), /*#__PURE__*/React.createElement("span", null, "super zoom")), /*#__PURE__*/React.createElement("input", {
-    type: "range",
-    min: "1",
-    max: "4",
-    step: "0.1",
-    value: zoom,
-    onChange: e => setZoom(parseFloat(e.target.value)),
-    style: {
-      width: '100%',
-      accentColor: PALETTE.rust,
-      height: 28
-    }
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: zoom >= 2.5 ? `${PALETTE.rust}12` : PALETTE.creamDeep,
-      border: `1.5px dashed ${zoom >= 2.5 ? PALETTE.rust : PALETTE.ink}`,
-      padding: '14px 18px',
-      borderRadius: 4,
-      marginBottom: 20,
-      fontSize: 15,
-      lineHeight: 1.5
-    }
-  }, zoom < 2.5 ? /*#__PURE__*/React.createElement("span", null, "Da lontano sembra una foto normale. Continua a zoomare...") : /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement(Icon, { name: "zap", size: 16, color: PALETTE.rust, fill: PALETTE.amber, style: { verticalAlign: "-3px", marginRight: 6 } }), /*#__PURE__*/React.createElement("strong", null, "Ecco il segreto!"), " Anche le sfumature del cielo e dell'erba sono fatte di ", /*#__PURE__*/React.createElement("strong", null, "quadratini"), ". Ogni quadratino \xE8 un pixel di un colore preciso. ", /*#__PURE__*/React.createElement("strong", null, "Ogni foto del mondo \xE8 fatta cos\xEC."))), /*#__PURE__*/React.createElement(NavButtons, {
+    style: { width: 'min(100%, 300px)', aspectRatio: '1 / 1', display: 'grid', gridTemplateColumns: `repeat(${W}, 1fr)`, gap: 1, background: PALETTE.ink, border: `3px solid ${PALETTE.ink}`, borderRadius: 4, boxShadow: `4px 4px 0 ${PALETTE.ink}` } },
+    img.map((c, i) => /*#__PURE__*/React.createElement("div", {
+      key: i, onClick: () => setSel(i),
+      style: { background: c, cursor: 'pointer', outline: sel === i ? `3px solid ${PALETTE.rust}` : 'none', outlineOffset: -1, position: 'relative', zIndex: sel === i ? 2 : 1 }
+    })))), sel !== null ? /*#__PURE__*/React.createElement("div", {
+    className: "reveal-pop",
+    style: { display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', background: PALETTE.cream, border: `2px solid ${PALETTE.ink}`, borderRadius: 6, padding: '16px 18px', marginBottom: 18 }
+  }, /*#__PURE__*/React.createElement("div", { style: { width: 96, height: 96, flexShrink: 0, background: selColor, border: `3px solid ${PALETTE.ink}`, borderRadius: 4 } }), /*#__PURE__*/React.createElement("div", { style: { maxWidth: 280, textAlign: 'left' } }, /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 18, marginBottom: 4 } }, "Questo \u00e8 UN pixel."), /*#__PURE__*/React.createElement("div", { style: { fontSize: 16, lineHeight: 1.5 } }, "Dentro non c'\u00e8 un disegno: \u00e8 ", /*#__PURE__*/React.createElement("strong", null, "un solo colore"), ", pieno pieno. \u00c8 il mattoncino pi\u00f9 piccolo di ogni immagine \u2014 pi\u00f9 piccolo di cos\u00ec non si va."))) : /*#__PURE__*/React.createElement("div", {
+    style: { textAlign: 'center', color: PALETTE.inkSoft, fontStyle: 'italic', fontSize: 15, marginBottom: 18 }
+  }, "\u2191 scegli un pixel e guarda cosa c'\u00e8 dentro"), /*#__PURE__*/React.createElement("div", {
+    style: { background: `${PALETTE.amber}15`, border: `1.5px dashed ${PALETTE.amber}`, padding: '14px 18px', borderRadius: 4, marginBottom: 20, fontSize: 16, lineHeight: 1.55 }
+  }, /*#__PURE__*/React.createElement(Icon, { name: "lightbulb", size: 16, color: PALETTE.amber, style: { verticalAlign: "-3px", marginRight: 6 } }), "Un pixel = un colore. E ti ricordi da dove vengono i colori? ", /*#__PURE__*/React.createElement("strong", null, "Rosso + Verde + Blu"), ". Anche questo pixel \u00e8 fatto cos\u00ec. E quei tre, alla fine, sono dei... ", /*#__PURE__*/React.createElement("strong", null, "numeri"), " \u2014 lo scoprirai tra poche pagine."), /*#__PURE__*/React.createElement(NavButtons, {
     goPrev: goPrev,
     goNext: goNext,
     nextLabel: "quanti puntini? \u2192",
-    disableNext: zoom < 4
+    disableNext: sel === null
   }));
 }
 
@@ -5263,123 +5237,61 @@ function M3_ResolutionPage({
   goNext,
   goPrev
 }) {
-  const [res, setRes] = useState(4);
-  useEffect(() => {
-    if (res >= 16) markDone();
-  }, [res]);
-
-  // Disegna un cerchio (faccina sole) a risoluzione variabile
-  const renderCircle = n => {
-    const cells = [];
-    const c = (n - 1) / 2;
-    const radius = n / 2;
-    for (let y = 0; y < n; y++) {
-      for (let x = 0; x < n; x++) {
-        const dx = x - c,
-          dy = y - c;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        cells.push(dist <= radius - 0.3 ? '#e8a317' : PALETTE.cream);
-      }
+  const [res, setRes] = useState(6);
+  const canvasRef = React.useRef(null);
+  const srcRef = React.useRef(null);
+  const tmpRef = React.useRef(null);
+  const W = 220, SRC = 256;
+  const drawRes = n => {
+    const cv = canvasRef.current, src = srcRef.current, tmp = tmpRef.current;
+    if (!cv || !src || !tmp) return;
+    const ctx = cv.getContext('2d');
+    tmp.width = n; tmp.height = n;
+    const tctx = tmp.getContext('2d');
+    tctx.imageSmoothingEnabled = true; tctx.clearRect(0, 0, n, n);
+    tctx.drawImage(src, 0, 0, SRC, SRC, 0, 0, n, n);
+    ctx.imageSmoothingEnabled = false; ctx.clearRect(0, 0, W, W);
+    ctx.drawImage(tmp, 0, 0, n, n, 0, 0, W, W);
+    if (n <= 14) {
+      ctx.strokeStyle = 'rgba(20,28,45,0.18)'; ctx.lineWidth = 1; ctx.beginPath();
+      for (let i = 1; i < n; i++) { const p = Math.round(i * W / n) + 0.5; ctx.moveTo(p, 0); ctx.lineTo(p, W); ctx.moveTo(0, p); ctx.lineTo(W, p); }
+      ctx.stroke();
     }
-    return /*#__PURE__*/React.createElement("div", {
-      style: {
-        display: 'grid',
-        gridTemplateColumns: `repeat(${n}, 1fr)`,
-        width: 200,
-        height: 200,
-        gap: 1,
-        background: PALETTE.paperLine,
-        border: `2px solid ${PALETTE.ink}`
-      }
-    }, cells.map((col, i) => /*#__PURE__*/React.createElement("div", {
-      key: i,
-      style: {
-        background: col
-      }
-    })));
   };
-  const resLabel = res <= 4 ? 'pochi pixel' : res <= 8 ? 'qualche pixel' : res <= 16 ? 'tanti pixel' : 'tantissimi';
+  React.useEffect(() => {
+    const sc = document.createElement('canvas'); sc.width = SRC; sc.height = SRC;
+    const ctx = sc.getContext('2d'); const TAU = Math.PI * 2;
+    ctx.fillStyle = PALETTE.cream; ctx.fillRect(0, 0, SRC, SRC);
+    const cx = SRC / 2, cy = SRC / 2, r = SRC * 0.40;
+    const g = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.3, r * 0.2, cx, cy, r);
+    g.addColorStop(0, '#ffd059'); g.addColorStop(1, '#e8941a');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r, 0, TAU); ctx.fill();
+    srcRef.current = sc; tmpRef.current = document.createElement('canvas');
+    drawRes(res);
+  }, []);
+  React.useEffect(() => { drawRes(res); if (res >= 28) markDone(); }, [res]);
+  const resLabel = res <= 6 ? 'pochi pixel: sgranata' : res <= 14 ? 'qualche pixel' : res <= 28 ? 'tanti pixel' : 'tantissimi: liscia!';
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(PageHeader, {
     eyebrow: "Pagina 5 di 7",
     title: "Quanti puntini?",
     accent: PALETTE.rust
-  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Quanti pixel servono per un'immagine ben nitida? Provalo tu: dai al cerchio prima pochi pixel, poi tanti, e guarda cosa cambia."), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 16,
-      lineHeight: 1.55,
-      marginBottom: 6
-    }
-  }, "Pi\xF9 pixel ci sono, pi\xF9 l'immagine \xE8 ", /*#__PURE__*/React.createElement("strong", null, "nitida"), ". Prova a disegnare un cerchio con pochi o tanti pixel."), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 14,
-      color: PALETTE.inkSoft,
-      marginBottom: 18,
-      fontStyle: 'italic'
-    }
-  }, "Sposta il cursore e guarda il cerchio diventare pi\xF9 liscio."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      justifyContent: 'center',
-      marginBottom: 12
-    }
-  }, renderCircle(res)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      textAlign: 'center',
-      marginBottom: 16
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontFamily: FONT_MONO,
-      fontSize: 15,
-      fontWeight: 700,
-      color: PALETTE.rust
-    }
-  }, res, " \xD7 ", res, " = ", res * res, " pixel"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 13,
-      color: PALETTE.inkSoft,
-      marginLeft: 8
-    }
-  }, "(", resLabel, ")")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      maxWidth: 360,
-      margin: '0 auto 18px'
-    }
-  }, /*#__PURE__*/React.createElement("input", {
-    type: "range",
-    min: "4",
-    max: "32",
-    step: "2",
-    value: res,
-    onChange: e => setRes(parseInt(e.target.value, 10)),
-    style: {
-      width: '100%',
-      accentColor: PALETTE.rust,
-      height: 28
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      fontSize: 12,
-      color: PALETTE.inkSoft,
-      fontFamily: FONT_MONO
-    }
-  }, /*#__PURE__*/React.createElement("span", null, "4\xD74 sgranato"), /*#__PURE__*/React.createElement("span", null, "32\xD732 liscio"))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: `${PALETTE.amber}15`,
-      border: `1.5px dashed ${PALETTE.amber}`,
-      padding: '14px 18px',
-      borderRadius: 4,
-      marginBottom: 20,
-      fontSize: 15,
-      lineHeight: 1.5
-    }
-  }, /*#__PURE__*/React.createElement(Icon, { name: "smartphone", size: 16, color: PALETTE.amber, style: { verticalAlign: "-3px", marginRight: 6 } }), /*#__PURE__*/React.createElement("strong", null, "Ecco i megapixel!"), " Quando senti \"fotocamera da 12 megapixel\" vuol dire che ogni foto ha ", /*#__PURE__*/React.createElement("strong", null, "12 milioni di pixel"), ". Ecco perch\xE9 le foto del telefono sono cos\xEC nitide."), /*#__PURE__*/React.createElement(NavButtons, {
+  }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Se i pixel sono pochi, l'immagine viene a blocchi; se sono tanti, diventa liscia. Quanti ne servono? Prova tu a darne pochi, poi tanti, e guarda il sole cambiare."), /*#__PURE__*/React.createElement("p", {
+    style: { fontSize: 17, lineHeight: 1.55, marginBottom: 6 }
+  }, "Pi\u00f9 pixel ci sono, pi\u00f9 l'immagine \u00e8 ", /*#__PURE__*/React.createElement("strong", null, "nitida"), ". \u00c8 questa la ", /*#__PURE__*/React.createElement("strong", null, "risoluzione"), "."), /*#__PURE__*/React.createElement("p", {
+    style: { fontSize: 14, color: PALETTE.inkSoft, marginBottom: 18, fontStyle: 'italic' }
+  }, "Sposta il cursore e guarda il sole diventare liscio."), /*#__PURE__*/React.createElement("div", {
+    style: { display: 'flex', justifyContent: 'center', marginBottom: 12 }
+  }, /*#__PURE__*/React.createElement("div", { style: { width: 'min(100%, 220px)', aspectRatio: '1 / 1', border: `3px solid ${PALETTE.ink}`, borderRadius: 4, boxShadow: `4px 4px 0 ${PALETTE.ink}`, overflow: 'hidden' } }, /*#__PURE__*/React.createElement("canvas", { ref: canvasRef, width: W, height: W, style: { width: '100%', height: '100%', display: 'block' } }))), /*#__PURE__*/React.createElement("div", {
+    style: { textAlign: 'center', marginBottom: 14 }
+  }, /*#__PURE__*/React.createElement("span", { style: { fontFamily: FONT_MONO, fontSize: 17, fontWeight: 700, color: PALETTE.rust } }, res, " \u00d7 ", res, " = ", res * res, " pixel"), /*#__PURE__*/React.createElement("span", { style: { fontSize: 13, color: PALETTE.inkSoft, marginLeft: 8 } }, "(", resLabel, ")")), /*#__PURE__*/React.createElement("div", {
+    style: { maxWidth: 360, margin: '0 auto 18px' }
+  }, /*#__PURE__*/React.createElement("input", { type: "range", min: "4", max: "96", step: "2", value: res, onChange: e => setRes(parseInt(e.target.value, 10)), style: { width: '100%', accentColor: PALETTE.rust, height: 28 } }), /*#__PURE__*/React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', fontSize: 12, color: PALETTE.inkSoft, fontFamily: FONT_MONO } }, /*#__PURE__*/React.createElement("span", null, "pochi"), /*#__PURE__*/React.createElement("span", null, "tantissimi"))), /*#__PURE__*/React.createElement("div", {
+    style: { background: res >= 28 ? `${PALETTE.moss}15` : `${PALETTE.amber}15`, border: `1.5px dashed ${res >= 28 ? PALETTE.moss : PALETTE.amber}`, padding: '14px 18px', borderRadius: 4, marginBottom: 20, fontSize: 16, lineHeight: 1.55 }
+  }, res >= 28 ? /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement(Icon, { name: "sparkles", size: 16, color: PALETTE.moss, style: { verticalAlign: "-3px", marginRight: 6 } }), "Liscio! Eppure \u00e8 ", /*#__PURE__*/React.createElement("strong", null, "sempre fatto di quadratini"), " \u2014 solo cos\u00ec piccoli che l'occhio li fonde. Le foto vere ne hanno ", /*#__PURE__*/React.createElement("strong", null, "milioni"), ".") : /*#__PURE__*/React.createElement("span", null, "Con pochi pixel il cerchio viene ", /*#__PURE__*/React.createElement("strong", null, "a blocchi"), ". Continua ad aggiungerne e guarda il bordo diventare liscio...")), /*#__PURE__*/React.createElement(NavButtons, {
     goPrev: goPrev,
     goNext: goNext,
     nextLabel: "il grande segreto \u2192",
-    disableNext: res < 16
+    disableNext: res < 24
   }));
 }
 
@@ -5407,7 +5319,7 @@ function M3_NumbersPage({
     accent: PALETTE.rust
   }), /*#__PURE__*/React.createElement(OcchioSays, { entra: "m3" }, "Adesso lego tutto insieme: un pixel, un colore, tre numeri... e i numeri li conosci dal primo modulo. Guarda dove arriviamo."), /*#__PURE__*/React.createElement("p", {
     style: {
-      fontSize: 16,
+      fontSize: 17,
       lineHeight: 1.55,
       marginBottom: 18
     }
@@ -5523,7 +5435,7 @@ function M3_NumbersPage({
   }, "\u2591 FACCIAMO I CONTI \u2591"), /*#__PURE__*/React.createElement("p", {
     style: {
       margin: 0,
-      fontSize: 16,
+      fontSize: 17,
       lineHeight: 1.6
     }
   }, "1 pixel = ", /*#__PURE__*/React.createElement("strong", null, "24"), " bit.", /*#__PURE__*/React.createElement("br", null), "Una foto del telefono = ", /*#__PURE__*/React.createElement("strong", null, "12 milioni"), " di pixel.", /*#__PURE__*/React.createElement("br", null), "Quindi una sola foto = ", /*#__PURE__*/React.createElement("strong", {
@@ -5544,10 +5456,11 @@ function M3_NumbersPage({
 function M3_CompletePage({
   markDone,
   progress,
-  goPrev
+  goPrev,
+  profileName
 }) {
   useEffect(() => { markDone(); }, []);
-  const name = progress.module1.userName || 'Esploratore';
+  const name = profileName && profileName.trim() || progress.module1.userName || 'Esploratore';
   const art = progress.module3.pixelArt;
   const hasArt = art && art.some(c => c !== null);
   const [firmato, setFirmato] = useState(false);
@@ -5575,7 +5488,7 @@ function M3_CompletePage({
       /*#__PURE__*/React.createElement(Icon, { name: "sparkles", size: 24, color: PALETTE.moss }),
       /*#__PURE__*/React.createElement("div", { style: { textAlign: 'left' } },
         /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_MONO, fontSize: 10, letterSpacing: 1.5, color: PALETTE.inkSoft } }, "DISTINTIVO SBLOCCATO"),
-        /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 16, color: PALETTE.ink } }, "N\xB003 \xB7 I Pixel Magici"))),
+        /*#__PURE__*/React.createElement("div", { style: { fontFamily: FONT_DISPLAY, fontWeight: 700, fontSize: 17, color: PALETTE.ink } }, "N\xB003 \xB7 I Pixel Magici"))),
     /*#__PURE__*/React.createElement(OcchioSays, null, "Bravo, ", name, " \u2014 il sigillo l'hai messo tu. Lo trovi nel ", /*#__PURE__*/React.createElement("strong", null, "taccuino"), ", terzo distintivo. Hai chiuso il ", /*#__PURE__*/React.createElement("strong", null, "Capitolo 1"), "! Il prossimo modulo \u00e8 ", /*#__PURE__*/React.createElement("strong", null, "Le Istruzioni Magiche"), ": come si comanda un computer. Torna all'officina.")),
   /*#__PURE__*/React.createElement(NavButtons, { goPrev: goPrev, hideNext: true }));
 }
@@ -5715,6 +5628,7 @@ function ModuleFourView({
   setPage,
   progress,
   markPageDone,
+  profileName,
   onExit,
   onResetModule
 }) {
@@ -5811,6 +5725,7 @@ function ModuleFourView({
   }, /*#__PURE__*/React.createElement(Current, {
     progress: progress,
     markDone: () => markPageDone(page),
+    profileName: profileName,
     goNext: () => setPage(Math.min(page + 1, pages.length - 1)),
     goPrev: () => setPage(Math.max(page - 1, 0))
   })), /*#__PURE__*/React.createElement("style", null, `
@@ -6756,12 +6671,13 @@ function M4_ConditionPage({
 function M4_CompletePage({
   markDone,
   progress,
-  goPrev
+  goPrev,
+  profileName
 }) {
   useEffect(() => {
     markDone();
   }, []);
-  const name = progress.module1.userName || 'Esploratore';
+  const name = profileName && profileName.trim() || progress.module1.userName || 'Esploratore';
   return /*#__PURE__*/React.createElement("div", {
     style: {
       textAlign: 'center',
